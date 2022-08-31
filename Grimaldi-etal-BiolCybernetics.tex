@@ -1,39 +1,84 @@
-% !TeX TS-program = Lualatex
-% !TeX encoding = UTF-8 Unicode
-% !TeX spellcheck = en
-% !BIB TS-program = bibtex
+%!TeX TS-program = pdfLaTeX
+%!TeX encoding = UTF-8 Unicode
+%!TeX spellcheck = en-US
+%!BIB TS-program = bibtex
 % -*- coding: UTF-8; -*-
 % vim: set fenc=utf-8
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-% CONF: https://2022.ieeeicip.org/
-% dates: https://2022.ieeeicip.org/important-dates/
-%
-% paper kit: https://cmsworkshops.com/ICIP2022/papers/paper_kit.php#Templates
-% actual submission : https://cmsworkshops.com/icip2022/Papers/Submission.asp
-%
-% 4 pages + one of references
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%Review #0357
-%
-%*General Comments to Authors*
-%This paper proposes a model for detection of temporal spiking motifs, which can potentially improve the performance of spiking neural networks (SNN). The topic is out of my research scope. However, I am not sure how this paper is related to ICIP. The authors applied the proposed model in motion detection. Such motion is captured by imaging or not? The overall presentation of the paper is acceptable, but I would suggest the authors to more explicitly represent the contribution of the proposed model and how it is expected to benefit image processing studies.
-%
-%-----------
-%Review #1B91
-%
-%*General Comments to Authors*
-%The authors propose a Spiking Neural Network-like method that consists of a single layer of spiking neurons aiming to learn the heterosexual-synaptic delays in order to detect motion. The learning happens in a supervised way as the authors transform the Motion Cloud dataset into spike trains in order to control the direction of motion which is the ground-truth information. The authors considered 8 different directions of motion that are assigned to the 8 learnt kernels they introduce in their model. According to the experimental results, the model is able to capture the direction of motion which is evident to the selectivity along the specific axes of the different kernels. Last but not least, The authors assess their model in terms of the classification accuracy as a function of the computational cost. They show that on the one hand, their method is able to highly reduce the computational load by thresholding some of the weights but at the same time achieve the same performance to computationally more greedy algorithms. The paper is very interesting and promising as this method can be easily extended to hardware.
-%
-%Some suggestions to improve the presentation of the results are given below:
-%1. Figure 2 is a bit confusing. First of all, in (b) it's not that evident the different size of the radius but in few cases - maybe another example could be selected. In addition, if (a)-(b) and (c) is a single experiment how the delay is related to the time we observe the spike trains? Maybe that could be better explained in the text too.
-%
-%Last but not least, are these 8 directions enough to capture every motion? Could we use this model in real data or the computational cost would increase as one should consider much higher number of motion directions and as a results much larger set of kernels to be trained?
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%\documentclass[referee,sn-basic]{sn-jnl}% referee option is meant for double line spacing
+
+%%=======================================================%%
+%% to print line numbers in the margin use lineno option %%
+%%=======================================================%%
+
+%%\documentclass[lineno,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%======================================================%%
+%% to compile with pdflatex/xelatex use pdflatex option %%
+%%======================================================%%
+
+%%\documentclass[pdflatex,sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+
+%%\documentclass[sn-basic]{sn-jnl}% Basic Springer Nature Reference Style/Chemistry Reference Style
+%%\documentclass[sn-mathphys]{sn-jnl}% Math and Physical Sciences Reference Style
+%%\documentclass[sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
+%%\documentclass[sn-vancouver]{sn-jnl}% Vancouver Reference Style
+%%\documentclass[sn-apa]{sn-jnl}% APA Reference Style
+%%\documentclass[sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
+%%\documentclass[sn-standardnature]{sn-jnl}% Standard Nature Portfolio Reference Style
+%%\documentclass[default]{sn-jnl}% Default
+%%\documentclass[default,iicol]{sn-jnl}% Default with double column layout
+\documentclass[iicol]{sn-jnl}
+
+%%%% Standard Packages
+%%<additional latex packages if required can be included here>
+\usepackage[lofdepth,lotdepth,position=top]{subfig}
+\usepackage{tabularx}
+%%%%
+
+%%%%%=============================================================================%%%%
+%%%%  Remarks: This template is provided to aid authors with the preparation
+%%%%  of original research articles intended for submission to journals published 
+%%%%  by Springer Nature. The guidance has been prepared in partnership with 
+%%%%  production teams to conform to Springer Nature technical requirements. 
+%%%%  Editorial and presentation requirements differ among journal portfolios and 
+%%%%  research disciplines. You may find sections in this template are irrelevant 
+%%%%  to your work and are empowered to omit any such section if allowed by the 
+%%%%  journal you intend to submit to. The submission guidelines and policies 
+%%%%  of the journal take precedence. A detailed User Manual is available in the 
+%%%%  template package for technical guidance.
+%%%%%=============================================================================%%%%
+
+\jyear{2022}%
+
+%% as per the requirement new theorem styles can be included as shown below
+\theoremstyle{thmstyleone}%
+\newtheorem{theorem}{Theorem}%  meant for continuous numbers
+%%\newtheorem{theorem}{Theorem}[section]% meant for sectionwise numbers
+%% optional argument [theorem] produces theorem numbering sequence instead of independent numbers for Proposition
+\newtheorem{proposition}[theorem]{Proposition}% 
+%%\newtheorem{proposition}{Proposition}% to get separate numbers for theorem and proposition etc.
+
+\theoremstyle{thmstyletwo}%
+\newtheorem{example}{Example}%
+\newtheorem{remark}{Remark}%
+
+\theoremstyle{thmstylethree}%
+\newtheorem{definition}{Definition}%
+
+\raggedbottom
+%%\unnumbered% uncomment this for unnumbered level heads
+
+%%\unnumbered% uncomment this for unnumbered level heads%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\Title}{
 Learning hetero-synaptic delays for motion detection in a single layer of spiking neurons
 %FAST MOTION DETECTION USING HETERO-SYNAPTIC DELAYS IN A LAYER OF SPIKING NEURONS
@@ -61,9 +106,6 @@ The response of a biological neuron depends on the precise timing of afferent sp
 A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass{article}
-\usepackage{spconf,amsmath,graphicx}
-
 \usepackage[utf8]{inputenc}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -133,13 +175,13 @@ A CC-BY public copyright license has been applied by the authors to the present 
 \newcommand{\seeFig}[1]{see Fig.~\ref{fig:#1}}%{see Figure~\ref{fig:#1}}
 %% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 %\usepackage{cite}
-\usepackage[usenames,dvipsnames]{xcolor} %The package starts from the basic facilities of the color package, and provides easy driver-independent access to several kinds of color tints, shades, tones, and mixes of arbitrary colors.
-\usepackage{tcolorbox} % define boxes that can be customed, has to be loaded after xcolor package
+%\usepackage[usenames,dvipsnames]{xcolor} %The package starts from the basic facilities of the color package, and provides easy driver-independent access to several kinds of color tints, shades, tones, and mixes of arbitrary colors.
+%\usepackage{tcolorbox} % define boxes that can be customed, has to be loaded after xcolor package
 \usepackage{amsmath,amssymb,amsfonts} % amsmath and amssymb packages, useful for mathematical formulas and symbols
 \usepackage{float} %allows me to use [H] with figures to insert figures in multicol env (poster)
 %\usepackage{ulem} %The package provides an \ul (underline) command which will break over line ends; this technique may be used to replace \em (both in that form and as the \emph command), so as to make output look as if it comes from a typewrite. Caution: with this package, bibliography will make unbreakable and underlined journal titles
-\usepackage[switch]{lineno} % add line numbers
-\modulolinenumbers[5]
+%\usepackage[switch]{lineno} % add line numbers
+%\modulolinenumbers[5]
 \usepackage{physics} %The  goal  of  this  package  is  to  make  typesetting  equations  for  physics  simpler,  faster,  and  more  human-readable.
 %\usepackage{lineno} %Adds line numbers to selected paragraphs with reference possible through the LaTeX \ref and \pageref cross reference mechanism.
 \usepackage{hyperref} %The hyperref package is used to handle cross-referencing commands in LaTeX to produce hypertext links in the document
@@ -159,35 +201,15 @@ A CC-BY public copyright license has been applied by the authors to the present 
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%\usepackage%[disable]	% uncomment to hide all the notes
+%	{todonotes}
+%\newcommand{\noteAG}[1]{\todo[color=green!40, author=\textbf{Antoine}, inline]{#1}}
+%\newcommand{\noteLP}[1]{\todo[color=red!20, author=\textbf{Laurent}, inline]{#1}}
+%\newcommand{\modif}[1]{\todo[color=orange!20, author=\textbf{Proposition}, inline]{#1}}
 
-\usepackage%[disable]	% uncomment to hide all the notes
-	{todonotes}
-\newcommand{\noteAG}[1]{\todo[color=green!40, author=\textbf{Antoine}, inline]{#1}}
-\newcommand{\noteLP}[1]{\todo[color=red!20, author=\textbf{Laurent}, inline]{#1}}
-\newcommand{\modif}[1]{\todo[color=orange!20, author=\textbf{Proposition}, inline]{#1}}
 
-%\newcommand{\mycaption}[1]{\captionof{figure}{#1}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \usepackage{orcidlink}
-
-%\bibliography{references}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% \newcommand{\mycaption}[1]{\caption*{#1}}
-
-\usepackage{titlesec}
-% \titlespacing*{<command>}{<left>}{<before-sep>}{<after-sep>}
-\titlespacing*{\section}
-{0pt}{1.5ex}{0.8ex}
-\titlespacing*{\subsection}
-{0pt}{0.9ex}{0.4ex}
-\titlespacing*{\subsubsection}
-{0pt}{0.5ex}{0.3ex}
-\titlespacing*{\paragraph}{%
-  0pt}{%              left margin
-  0.0\baselineskip}{% space before (vertical)
-  1em}%               space after (horizontal)
-
-\usepackage{setspace}
+\begin{document}
 %%%-----------------------------------------------------------------
 % Title.
 % ------
@@ -195,24 +217,27 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %
 % Single address.
 % ---------------
-\name{
-\AuthorAG, \AuthorLP
-\thanks{\Acknowledgments}
-}
-\address{\Affiliation}
+
+\author*[1]{\fnm{Antoine} \sur{Grimaldi}}\email{antoine.grimaldi@univ-amu.fr}
+
+\author[2]{\fnm{Amélie} \sur{Gruel}}\email{amelie.gruel@univ-cotedazur.fr}
+
+\author[2]{\fnm{Jean} \sur{Martinet}}\email{jean.martinet@univ-cotedazur.fr}
+
+\author[1]{\fnm{Laurent} \sur{Perrinet}}\email{laurent.perrinet@univ-amu.fr}
+
+\affil[1]{\orgdiv{Department}, \orgname{\Affiliation}, \orgaddress{\street{\Street}, \city{Marseille}, \postcode{13005}, \country{France}}}
+\affil[2]{\orgdiv{SPARKS}, \orgname{Université Côte d'Azur, CNRS, I3S}, \orgaddress{\street{2000 Rte des Lucioles}, \city{Sophia-Antipolis}, \postcode{06900}, \country{France}}}
+
 %
-\begin{document}
 %\ninept
 %
+%
+\abstract{\Abstract}
+%
+\keywords{\Keywords}
+%
 \maketitle
-%
-\begin{abstract}
-\Abstract
-\end{abstract}
-%
-\begin{keywords}
-\Keywords
-\end{keywords}
 %%%%%%%%% BODY TEXT
 \section{Introduction}
 \label{sec:intro}
@@ -305,12 +330,14 @@ We may now define a layer of neurons $\postsynaddr \in \postsynaddrspace$ by fir
 The corresponding input presynaptic spikes $\event$ will be integrated by this synaptic set and notably by the respective delays, which will multiplex in time all possible patterns.
 For each time $\timev$ the integration of $\event$ is defined by a list of weights $\activeweights^\postsynaddr$ linked to the synapses that match a precise spatio-temporal motif as input:
 $
-\activeweights^\postsynaddr(t) = \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}
+toto
+%\activeweights^\postsynaddr(t) = \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}
 $.
 %
 The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
 $
-Pr(k=\postsynaddr \; | \; \timev) =
+toto
+%Pr(k=\postsynaddr \; | \; \timev) =
 \frac 1 Z
 {\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
 $ 
@@ -379,6 +406,6 @@ Note that this supervised learning scheme can be extended to a variety of tasks.
 %
 
 
-\bibliographystyle{IEEEbib}
-\bibliography{references}
+\bibliographystyle{apalike}
+\bibliography{Grimaldi-etal-BiolCybernetics}
 \end{document}
