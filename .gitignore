@@ -1,0 +1,15 @@
+.DS_Store
+2022-07-11_Grimaldi-etal-ICIP.pdf
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.synctex(busy)
+2022-02-18_Grimaldi-etal-ICIP.pdf
+rebuttal.pdf
