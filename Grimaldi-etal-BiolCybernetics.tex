@@ -4,6 +4,96 @@
 %!BIB TS-program = bibtex
 % -*- coding: UTF-8; -*-
 % vim: set fenc=utf-8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\Title}{
+Learning hetero-synaptic delays for motion detection in a single layer of spiking neurons
+%FAST MOTION DETECTION USING HETERO-SYNAPTIC DELAYS IN A LAYER OF SPIKING NEURONS
+}
+\newcommand{\AuthorAG}{Antoine Grimaldi}
+\newcommand{\AuthorCB}{Camille Besnainou}
+\newcommand{\AuthorHL}{Hugo Ladret}
+\newcommand{\AuthorLP}{Laurent U Perrinet}
+\newcommand{\EmailLP}{laurent.perrinet@univ-amu.fr}
+\newcommand{\EmailAG}{antoine.grimaldi@univ-amu.fr}
+\newcommand{\EmailHL}{hugo.ladret@univ-amu.fr}
+\newcommand{\orcidLP}{0000-0002-9536-010X}
+\newcommand{\orcidHL}{0000-0001-7999-3751}
+\newcommand{\orcidAG}{0000-0002-3107-4788}
+\newcommand{\Address}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS; Marseille, France}%
+\newcommand{\Affiliation}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS;}%
+\newcommand{\CityLP}{Marseille, France}%
+\newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
+\newcommand{\Abstract}{
+The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neuronal code is essential in understanding information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neuronal models do not take advantage of this minute temporal dimension and here, we develop a model for the efficient detection of temporal spiking motifs based on a layer of neurons with hetero-synaptic delays. Indeed, the variety of synaptic delays on the dendritic tree allows to synchronize synaptic inputs as they reach the basal dendritic tree. We show this can be formalized as a time-invariant logistic regression which can be trained using labelled data. We apply this model to solve the specific computer vision problem of motion detection, and demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how its accuracy can vary with the total computational load. This end-to-end event-driven computational brick could help improve the performance of future Spiking Neural Network (SNN) algorithms and their prospective use in neuromorphic chips.
+}
+\newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
+}
+\newcommand{\Acknowledgments}{This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). %HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}{AgileNeuroBot}''). HL received funding from a University of Montreal Artificial Intelligence scholarship. For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
+A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTATIONS
+% Pixel world
+\newcommand{\presynaddr}{a} % pre address
+\newcommand{\postsynaddr}{n} % post address
+\newcommand{\numevent}{N_{ev}} % total number of events
+\newcommand{\presynaddrspace}{\mathcal{A}} %presynaptic address space
+\newcommand{\postsynaddrspace}{\mathcal{B}} %postsynaptic address space
+\newcommand{\Npol}{N_\text{p}} % number of polarity
+\newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
+\newcommand{\arank}{r} % address index
+\newcommand{\bias}{b} % bias for the MLR model
+\newcommand{\synapse}{\sigma} % synapse
+\newcommand{\synapticweight}{w} % synaptic weight
+\newcommand{\synapticdelay}{\delta} % synaptic delay
+\newcommand{\ranksyn}{s} % synapse index
+\newcommand{\Nsyn}{N_{s}} % total number of synapses
+\newcommand{\activeweights}{\mathcal{W}} 
+\newcommand{\timev}{t} % time
+\newcommand{\polev}{p} % polarity
+\newcommand{\event}{\epsilon} % event
+\newcommand{\eventstream}{\xi} % stream of events
+\newcommand{\TS}{S} % time surface
+\newcommand{\neuron}{\mathbf{n}} % neuron in the SNN (defined by the spatial position and the channel)
+\newcommand{\postneuron}{\mathbf{m}} % post synaptic neuron in the SNN (defined by the spatial position and the kernel)
+\newcommand{\channel}{\mathbf{p}} % channel
+\newcommand{\layer}{\mathbf{L}} % layer
+\newcommand{\ms}{\si{\milli\second}}%
+\newcommand{\us}{\si{\micro\second}}%
+\newcommand{\timecontext}{T} % time context (cf HOTS) matrice gathering last event times
+\newcommand{\current}{I} % post synaptic current
+\newcommand{\volt}{u} % membrane potential
+\newcommand{\volts}{V} % matrix of membrane potentials
+\newcommand{\gain}{\gamma} % homeostatic gain
+\newcommand{\simil}{\beta} % similarity value
+\newcommand{\Nclass}{N_\text{class}} % number of classes for MLR:
+\newcommand{\Nx}{N_\text{X}}
+\newcommand{\Ny}{N_\text{Y}}
+\newcommand{\Ntime}{N_\text{t}}
+\newcommand{\kernel}{K} % convolution kernel
+%\newcommand{\kernelind}{\mathbf{k}} % indice of the kernel
+\newcommand{\kernelind}{k} % indice of the kernel
+\newcommand{\Kx}{K_\text{x}}
+\newcommand{\Ky}{K_\text{y}}
+\newcommand{\Ktime}{K_\text{t}}
+\newcommand{\classiflayer}{\mathbf{C}}
+\newcommand{\class}{c} % class k of the MLR
+\newcommand{\lrweights}{\theta} % matrix of MLR weights
+\newcommand{\lrtrue}{y} % true value of the prediction for MLR
+\newcommand{\loss}{J} % cost function for MLR
+\newcommand{\softmax}{\sigma}
+\newcommand{\actfreq}{f}
+\newcommand{\decision}{\hat{y}}
+\newcommand{\colorsec}{black}
+\newcommand{\colorsubsec}{black}
+\newcommand{\speed}{v}
+\newcommand{\Nspeed}{N_v}
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                 %%
 %% Please do not use \input{...} to include other tex files.       %%
@@ -78,121 +168,30 @@
 \raggedbottom
 %%\unnumbered% uncomment this for unnumbered level heads
 
-%%\unnumbered% uncomment this for unnumbered level heads%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\Title}{
-Learning hetero-synaptic delays for motion detection in a single layer of spiking neurons
-%FAST MOTION DETECTION USING HETERO-SYNAPTIC DELAYS IN A LAYER OF SPIKING NEURONS
-}
-\newcommand{\AuthorAG}{Antoine Grimaldi}
-\newcommand{\AuthorCB}{Camille Besnainou}
-\newcommand{\AuthorHL}{Hugo Ladret}
-\newcommand{\AuthorLP}{Laurent U Perrinet}
-\newcommand{\EmailLP}{laurent.perrinet@univ-amu.fr}
-\newcommand{\EmailAG}{antoine.grimaldi@univ-amu.fr}
-\newcommand{\EmailHL}{hugo.ladret@univ-amu.fr}
-\newcommand{\orcidLP}{0000-0002-9536-010X}
-\newcommand{\orcidHL}{0000-0001-7999-3751}
-\newcommand{\orcidAG}{0000-0002-3107-4788}
-\newcommand{\Address}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS; Marseille, France}%
-\newcommand{\Affiliation}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS;}%
-\newcommand{\CityLP}{Marseille, France}%
-\newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
-\newcommand{\Abstract}{
-The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neuronal code is essential in understanding information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neuronal models do not take advantage of this minute temporal dimension and here, we develop a model for the efficient detection of temporal spiking motifs based on a layer of neurons with hetero-synaptic delays. Indeed, the variety of synaptic delays on the dendritic tree allows to synchronize synaptic inputs as they reach the basal dendritic tree. We show this can be formalized as a time-invariant logistic regression which can be trained using labelled data. We apply this model to solve the specific computer vision problem of motion detection, and demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how its accuracy can vary with the total computational load. This end-to-end event-driven computational brick could help improve the performance of future Spiking Neural Network (SNN) algorithms and their prospective use in neuromorphic chips.
-}
-\newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
-}
-\newcommand{\Acknowledgments}{This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). %HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}{AgileNeuroBot}''). HL received funding from a University of Montreal Artificial Intelligence scholarship. For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
-A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
-}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage[utf8]{inputenc}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% NOTATIONS
-% Pixel world
-\newcommand{\presynaddr}{a} % pre address
-\newcommand{\postsynaddr}{n} % post address
-\newcommand{\numevent}{N_{ev}} % total number of events
-\newcommand{\presynaddrspace}{\mathcal{A}} %presynaptic address space
-\newcommand{\postsynaddrspace}{\mathcal{B}} %postsynaptic address space
-\newcommand{\Npol}{N_\text{p}} % number of polarity
-\newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
-\newcommand{\arank}{r} % address index
-\newcommand{\bias}{b} % bias for the MLR model
-\newcommand{\synapse}{\sigma} % synapse
-\newcommand{\synapticweight}{w} % synaptic weight
-\newcommand{\synapticdelay}{\delta} % synaptic delay
-\newcommand{\ranksyn}{s} % synapse index
-\newcommand{\Nsyn}{N_{s}} % total number of synapses
-\newcommand{\activeweights}{\mathcal{W}} 
-\newcommand{\timev}{t} % time
-\newcommand{\polev}{p} % polarity
-\newcommand{\event}{\epsilon} % event
-\newcommand{\eventstream}{\xi} % stream of events
-\newcommand{\TS}{S} % time surface
-\newcommand{\neuron}{\mathbf{n}} % neuron in the SNN (defined by the spatial position and the channel)
-\newcommand{\postneuron}{\mathbf{m}} % post synaptic neuron in the SNN (defined by the spatial position and the kernel)
-\newcommand{\channel}{\mathbf{p}} % channel
-\newcommand{\layer}{\mathbf{L}} % layer
-\newcommand{\ms}{\si{\milli\second}}%
-\newcommand{\us}{\si{\micro\second}}%
-\newcommand{\timecontext}{T} % time context (cf HOTS) matrice gathering last event times
-\newcommand{\current}{I} % post synaptic current
-\newcommand{\volt}{u} % membrane potential
-\newcommand{\volts}{V} % matrix of membrane potentials
-\newcommand{\gain}{\gamma} % homeostatic gain
-\newcommand{\simil}{\beta} % similarity value
-\newcommand{\Nclass}{N_\text{class}} % number of classes for MLR:
-\newcommand{\Nx}{N_\text{X}}
-\newcommand{\Ny}{N_\text{Y}}
-\newcommand{\Ntime}{N_\text{t}}
-\newcommand{\kernel}{K} % convolution kernel
-%\newcommand{\kernelind}{\mathbf{k}} % indice of the kernel
-\newcommand{\kernelind}{k} % indice of the kernel
-\newcommand{\Kx}{K_\text{x}}
-\newcommand{\Ky}{K_\text{y}}
-\newcommand{\Ktime}{K_\text{t}}
-\newcommand{\classiflayer}{\mathbf{C}}
-\newcommand{\class}{c} % class k of the MLR
-\newcommand{\lrweights}{\theta} % matrix of MLR weights
-\newcommand{\lrtrue}{y} % true value of the prediction for MLR
-\newcommand{\loss}{J} % cost function for MLR
-\newcommand{\softmax}{\sigma}
-\newcommand{\actfreq}{f}
-\newcommand{\decision}{\hat{y}}
-\newcommand{\colorsec}{black}
-\newcommand{\colorsubsec}{black}
-\newcommand{\speed}{v}
-\newcommand{\Nspeed}{N_v}
-% Example definitions.
-% --------------------
-\def\x{{\mathbf x}}
-\def\L{{\cal L}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\citep}[1]{\cite{#1}}
-\newcommand{\citet}[1]{\cite{#1}}
+%%\unnumbered% uncomment this for unnumbered level heads
+%\newcommand{\citep}[1]{\cite{#1}}
+%\newcommand{\citet}[1]{\cite{#1}}
 \newcommand{\seeFig}[1]{see Fig.~\ref{fig:#1}}%{see Figure~\ref{fig:#1}}
 %% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 %\usepackage{cite}
 %\usepackage[usenames,dvipsnames]{xcolor} %The package starts from the basic facilities of the color package, and provides easy driver-independent access to several kinds of color tints, shades, tones, and mixes of arbitrary colors.
 %\usepackage{tcolorbox} % define boxes that can be customed, has to be loaded after xcolor package
 \usepackage{amsmath,amssymb,amsfonts} % amsmath and amssymb packages, useful for mathematical formulas and symbols
-\usepackage{float} %allows me to use [H] with figures to insert figures in multicol env (poster)
+%%\usepackage{float} %allows me to use [H] with figures to insert figures in multicol env (poster)
 %\usepackage{ulem} %The package provides an \ul (underline) command which will break over line ends; this technique may be used to replace \em (both in that form and as the \emph command), so as to make output look as if it comes from a typewrite. Caution: with this package, bibliography will make unbreakable and underlined journal titles
 %\usepackage[switch]{lineno} % add line numbers
 %\modulolinenumbers[5]
 \usepackage{physics} %The  goal  of  this  package  is  to  make  typesetting  equations  for  physics  simpler,  faster,  and  more  human-readable.
 %\usepackage{lineno} %Adds line numbers to selected paragraphs with reference possible through the LaTeX \ref and \pageref cross reference mechanism.
-\usepackage{hyperref} %The hyperref package is used to handle cross-referencing commands in LaTeX to produce hypertext links in the document
-\hypersetup{
-    colorlinks = false,
-    hidelinks
-    %linkbordercolor = {white},
-}
+%\usepackage{hyperref} %The hyperref package is used to handle cross-referencing commands in LaTeX to produce hypertext links in the document
+%\hypersetup{
+%    colorlinks = false,
+%    hidelinks
+%    %linkbordercolor = {white},
+%}
 %\usepackage{array} %An extended implementation of the array and tabular environments which extends the options for column formats, and provides “programmable” format specifications.
-\usepackage{multicol} %Multicol defines a multicols environment which typesets text in multiple columns
-%\usepackage{wrapfig} %Allows figures or tables to have text wrapped around them. wrapfig is used when calling multicols
+%\usepackage{multicol} %Multicol defines a multicols environment which typesets text in multiple columns
+%%\usepackage{wrapfig} %Allows figures or tables to have text wrapped around them. wrapfig is used when calling multicols
 % \usepackage[position=top]{subfig} %The package provides support for the manipulation and reference of small or ‘sub’ figures and tables within a single figure or table environment. Linked to subfloat.
 % for units
 \usepackage{siunitx}%The siunitx package provides a  set  of  tools  for  authors  to  typeset  quantities  in  aconsistent  way.
@@ -207,7 +206,6 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %\newcommand{\noteAG}[1]{\todo[color=green!40, author=\textbf{Antoine}, inline]{#1}}
 %\newcommand{\noteLP}[1]{\todo[color=red!20, author=\textbf{Laurent}, inline]{#1}}
 %\newcommand{\modif}[1]{\todo[color=orange!20, author=\textbf{Proposition}, inline]{#1}}
-
 
 \begin{document}
 %%%-----------------------------------------------------------------
@@ -226,14 +224,16 @@ A CC-BY public copyright license has been applied by the authors to the present 
 
 \author[1]{\fnm{Laurent} \sur{Perrinet}}\email{laurent.perrinet@univ-amu.fr}
 
-\affil[1]{\orgdiv{Department}, \orgname{\Affiliation}, \orgaddress{\street{\Street}, \city{Marseille}, \postcode{13005}, \country{France}}}
+\affil[1]{\orgdiv{Department}, \orgname{\Affiliation}, \orgaddress{\street{Street}, \city{Marseille}, \postcode{13005}, \country{France}}}
 \affil[2]{\orgdiv{SPARKS}, \orgname{Université Côte d'Azur, CNRS, I3S}, \orgaddress{\street{2000 Rte des Lucioles}, \city{Sophia-Antipolis}, \postcode{06900}, \country{France}}}
 
 %
 %\ninept
 %
 %
-\abstract{\Abstract}
+%\abstract{
+%Abstract
+%}
 %
 \keywords{\Keywords}
 %
@@ -404,6 +404,24 @@ Here, we have introduced a generic SNN using hetero-synaptic delays and shown ho
 
 Note that this supervised learning scheme can be extended to a variety of tasks. It would follow from the emergence of new kernels adapted to this new task after supervised learning.  This constitutes a major advantage over other algorithms which derive event-based algorithms from specific physical rules (see for instance~\citep{Benosman12} for computing the optic flow using the luminance conservation rule). We aim at extending the application of this model on more generic datasets acquired in natural conditions for progressively more complex tasks from motion extraction, optic flow or time-to-contact maps.
 %
+
+\backmatter
+
+\bmhead{Acknowledgments}
+
+% Acknowledgement hidden for review.
+This work was supported by the European Union’s ERA-NET CHIST-ERA 2018 research and innovation programme under grant agreement ANR-19-CHR3-0008.
+
+% Nef acknowledgements 
+The authors are grateful to the OPAL infrastructure from Université Côte d'Azur for providing resources and support.
+
+\section*{Declarations}
+
+\textcolor{purple}{TBD - What the template says about it:}
+
+\textcolor{purple}{Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations': Funding; Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use); Ethics approval; Consent to participate; Consent for publication; Availability of data and materials; Code availability; Authors' contributions. }
+
+\textcolor{purple}{If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section. }
 
 
 \bibliographystyle{apalike}
