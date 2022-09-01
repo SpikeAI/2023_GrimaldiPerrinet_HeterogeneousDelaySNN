@@ -5,23 +5,45 @@
 % -*- coding: UTF-8; -*-
 % vim: set fenc=utf-8
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Call for papers: Biological Cybernetics Special Issue: What can Computer Vision learn from Visual Neuroscience?
+%
+%Computer vision still struggles to solve many problems as quickly and accurately as our brain does, despite its tremendous progress using deep learning over the last decade. Current challenges include geometry understanding, dynamic scene understanding, few shot learning of novel objects, anomaly and counterfeit detection, stable reproduction of imaginary visuals, and more. The brain achieves all these on a low computational cost and power budget (i.e., tens of watts), whereas the state-of-the-art computer vision models require multiple graphics processors consuming kilowatts of power. Hence, new inspirations from the brain could make computer vision more efficient, robust, and capable of continuous learning and adaptation. Although visual neuroscience literature provides knowledge about neuronal selectivities and early processing of visual inputs, computational modelling of neuronal and network behaviours with some degree of biological constraints and characteristics is an important tool to address many of the challenges facing computer vision. With new neuroscientific insights about deep cortical vision processing using the latest stimulation and recording technologies, it is important that we strive to understand the underlying computations and learning mechanisms, so that artificial vision systems with similar efficiency can be developed. This special issue invites original research and review articles related to topics in biological vision that can potentially benefit computer vision systems. The following is a non-exhaustive list of topics in biological vision that can also benefit computer vision systems.
+%
+%● Active vision’s role in visual search, scene understanding, social interactions, etc.
+%
+%● Learning in the visual system. Learning in biology is continual, few-shot, and adversarially robust.
+%
+%● The roles of recurrent and top-down connections in the visual cortex.
+%
+%● Spike based spatiotemporal processing and its implications for neuromorphic vision.
+%
+%● Motion perception in dynamic environments.
+%
+%● Neural coding schemes in the visual system (e.g., sparse coding, predictive coding, and temporal coding.)
+%
+%● The roles of attention mechanisms in biological vision.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\Title}{
 Learning hetero-synaptic delays for motion detection in a single layer of spiking neurons
 %FAST MOTION DETECTION USING HETERO-SYNAPTIC DELAYS IN A LAYER OF SPIKING NEURONS
 }
-\newcommand{\AuthorAG}{Antoine Grimaldi}
-\newcommand{\AuthorCB}{Camille Besnainou}
-\newcommand{\AuthorHL}{Hugo Ladret}
-\newcommand{\AuthorLP}{Laurent U Perrinet}
+\newcommand{\FirstAG}{Antoine}
+\newcommand{\LastAG}{Grimaldi}
+\newcommand{\AuthorAG}{\FirstAG \LastAG}
+\newcommand{\FirstLP}{Laurent U}
+\newcommand{\LastLP}{Perrinet}
+\newcommand{\AuthorLP}{\FirstLP \LastLP}
 \newcommand{\EmailLP}{laurent.perrinet@univ-amu.fr}
 \newcommand{\EmailAG}{antoine.grimaldi@univ-amu.fr}
-\newcommand{\EmailHL}{hugo.ladret@univ-amu.fr}
 \newcommand{\orcidLP}{0000-0002-9536-010X}
-\newcommand{\orcidHL}{0000-0001-7999-3751}
 \newcommand{\orcidAG}{0000-0002-3107-4788}
-\newcommand{\Address}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS; Marseille, France}%
-\newcommand{\Affiliation}{Institut de Neurosciences de la Timone (UMR 7289); Aix Marseille Univ, CNRS;}%
-\newcommand{\CityLP}{Marseille, France}%
+\newcommand{\Department}{Institut de Neurosciences de la Timone (UMR 7289)}%
+\newcommand{\Affiliation}{Aix Marseille Univ, CNRS}%
+\newcommand{\Street}{27 boulevard Jean Moulin}%
+\newcommand{\City}{Marseille}%
+\newcommand{\Country}{France}%
 \newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
 \newcommand{\Abstract}{
 The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neuronal code is essential in understanding information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neuronal models do not take advantage of this minute temporal dimension and here, we develop a model for the efficient detection of temporal spiking motifs based on a layer of neurons with hetero-synaptic delays. Indeed, the variety of synaptic delays on the dendritic tree allows to synchronize synaptic inputs as they reach the basal dendritic tree. We show this can be formalized as a time-invariant logistic regression which can be trained using labelled data. We apply this model to solve the specific computer vision problem of motion detection, and demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how its accuracy can vary with the total computational load. This end-to-end event-driven computational brick could help improve the performance of future Spiking Neural Network (SNN) algorithms and their prospective use in neuromorphic chips.
@@ -169,8 +191,8 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %%\unnumbered% uncomment this for unnumbered level heads
 
 %%\unnumbered% uncomment this for unnumbered level heads
-%\newcommand{\citep}[1]{\cite{#1}}
-%\newcommand{\citet}[1]{\cite{#1}}
+\newcommand{\citep}[1]{\cite{#1}}
+\newcommand{\citet}[1]{\cite{#1}}
 \newcommand{\seeFig}[1]{see Fig.~\ref{fig:#1}}%{see Figure~\ref{fig:#1}}
 %% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 %\usepackage{cite}
@@ -216,24 +238,36 @@ A CC-BY public copyright license has been applied by the authors to the present 
 % Single address.
 % ---------------
 
-\author*[1]{\fnm{Antoine} \sur{Grimaldi}}\email{antoine.grimaldi@univ-amu.fr}
+\author*{\fnm{Antoine} \sur{Grimaldi}}\email{antoine.grimaldi@univ-amu.fr}
 
-\author[2]{\fnm{Amélie} \sur{Gruel}}\email{amelie.gruel@univ-cotedazur.fr}
+\author{\fnm{Laurent} \sur{Perrinet}}\email{laurent.perrinet@univ-amu.fr}
 
-\author[2]{\fnm{Jean} \sur{Martinet}}\email{jean.martinet@univ-cotedazur.fr}
+\affil{\orgdiv{\Department}, \orgname{\Affiliation}\\ \orgaddress{\street{\Street}, \city{\City}, \postcode{13005}, \country{\Country}}}
 
-\author[1]{\fnm{Laurent} \sur{Perrinet}}\email{laurent.perrinet@univ-amu.fr}
+%\author*[1]{\fnm{Antoine} \sur{Grimaldi}}\email{antoine.grimaldi@univ-amu.fr}
+%
+%\author[2]{\fnm{Amélie} \sur{Gruel}}\email{amelie.gruel@univ-cotedazur.fr}
+%
+%\author[2]{\fnm{Jean} \sur{Martinet}}\email{jean.martinet@univ-cotedazur.fr}
+%
+%\author[1]{\fnm{Laurent} \sur{Perrinet}}\email{laurent.perrinet@univ-amu.fr}
+%
+%\affil[1]{\orgdiv{Department}, \orgname{\Affiliation}, \orgaddress{\street{Street}, \city{Marseille}, \postcode{13005}, \country{France}}}
+%\affil[2]{\orgdiv{SPARKS}, \orgname{Université Côte d'Azur, CNRS, I3S}, \orgaddress{\street{2000 Rte des Lucioles}, \city{Sophia-Antipolis}, \postcode{06900}, \country{France}}}
 
-\affil[1]{\orgdiv{Department}, \orgname{\Affiliation}, \orgaddress{\street{Street}, \city{Marseille}, \postcode{13005}, \country{France}}}
-\affil[2]{\orgdiv{SPARKS}, \orgname{Université Côte d'Azur, CNRS, I3S}, \orgaddress{\street{2000 Rte des Lucioles}, \city{Sophia-Antipolis}, \postcode{06900}, \country{France}}}
+%%==================================%%
+%% sample for unstructured abstract %%
+%%==================================%%
+
+\abstract{
+\Abstract
+}
+
 
 %
 %\ninept
 %
-%
-%\abstract{
-%Abstract
-%}
+%\abstract{Abstract}
 %
 \keywords{\Keywords}
 %
