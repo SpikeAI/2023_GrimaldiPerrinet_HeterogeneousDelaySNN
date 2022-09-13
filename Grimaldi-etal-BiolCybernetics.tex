@@ -190,11 +190,7 @@ A CC-BY public copyright license has been applied by the authors to the present 
 \newtheorem{definition}{Definition}%
 
 \raggedbottom
-%%\unnumbered% uncomment this for unnumbered level heads
 
-%%\unnumbered% uncomment this for unnumbered level heads
-%\newcommand{\citep}[1]{\cite{#1}}
-%\newcommand{\citet}[1]{\cite{#1}}
 \newcommand{\seeFig}[1]{see Fig.~\ref{fig:#1}}%{see Figure~\ref{fig:#1}}
 %% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 %\usepackage{cite}
@@ -227,9 +223,13 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %
 %\usepackage%[disable]	% uncomment to hide all the notes
 %	{todonotes}
-%\newcommand{\noteAG}[1]{\todo[color=green!40, author=\textbf{Antoine}, inline]{#1}}
-%\newcommand{\noteLP}[1]{\todo[color=red!20, author=\textbf{Laurent}, inline]{#1}}
-%\newcommand{\modif}[1]{\todo[color=orange!20, author=\textbf{Proposition}, inline]{#1}}
+%\newcommand{\noteAG}[1]{\todo[author=\textbf{Antoine}, inline]{#1}}
+\usepackage{soul}
+\usepackage{color}
+
+\DeclareRobustCommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
+%\newcommand{\noteLP}[1]{\todo[author=\textbf{Laurent}, inline]{#1}}
+%\newcommand{\modif}[1]{\todo[author=\textbf{Proposition}, inline]{#1}}
 
 \begin{document}
 %%%-----------------------------------------------------------------
@@ -278,13 +278,9 @@ A CC-BY public copyright license has been applied by the authors to the present 
 \section{Introduction}
 \label{sec:intro}
 %
-<<<<<<< HEAD
-In 1982, Abeles asked if the role of cortical neurons is whether to integrate synaptic inputs or rather to detect coincidences in temporal spiking patterns~\cite{Abeles82}. While the first possibility favors the rate coding theory, the second highlights the function of temporal precision in the neural code. Since, numerous studies demonstrated the emergence of synchronicity in the activity within a neural population~\cite{riehle1997spike, davis2021spontaneous}, efficient encoding thanks to the use of spike latencies~\cite{perrinet2004coding, gollisch2008rapid} or precise timing in the auditory system~\cite{deweese2002binary, carr1990circuit}. All these findings, and more~\cite{bohte2004evidence}, highlight the importance of the temporal aspect of the neural code and suggest the existence of repeated spatio-temporal patterns in biological spike trains.
-=======
-In 1982, Abeles asked if the role of cortical neurons is whether to integrate synaptic inputs or rather to detect coincidences in temporal spiking patterns~\cite{abeles_role_1982}. While the first possibility favors the rate coding theory, the second highlights the function of temporal precision in the neural code. Since, numerous studies demonstrated the emergence of synchronicity in the activity within a neural population~\cite{riehle1997spike, davis2021spontaneous}, efficient encoding thanks to the use of spike latencies~\cite{perrinet2004coding, gollisch2008rapid} or precise timing in the auditory system~\cite{deweese2002binary, carr1990circuit}. All these findings, and more~\cite{bohte2004evidence}, highlight the importance of the temporal aspect of the neural code and suggest the existence of repeated spatio-temporal patterns in biological spike trains.
->>>>>>> 04b952ac1a94ef2ab25f62a746ae0f9667e54750
+In 1982, Abeles asked if the role of cortical neurons is whether to integrate synaptic inputs or rather to detect coincidences in temporal spiking patterns~\citep{abeles_role_1982}. While the first possibility favors the rate coding theory, the second highlights the function of temporal precision in the neural code. Since, numerous studies demonstrated the emergence of synchronicity in the activity within a neural population~\citep{riehle_spike_1997, davis_spontaneous_2021}, efficient encoding thanks to the use of spike latencies~\citep{perrinet_coding_2004, gollisch_rapid_2008} or precise timing in the auditory system~\citep{deweese_binary_2002, carr_circuit_1990}. All these findings, and more~\citep{bohte_evidence_2004}, highlight the importance of the temporal aspect of the neural code and suggest the existence of repeated spatio-temporal patterns in biological spike trains.
 
-In neuronal models, an efficient use or detection of these spatio-temporal patterns embedded in the spike train comes with the integration of heterogeneous delays~\cite{gutig2006tempotron, guise2014bayesian, zhang2020supervised}. Notably, Izhikevich~\citet{izhikevich2006polychronization} introduced the notion of the polychronous group as a repetitive motif of spikes defined by a subset of neurons with different, yet precise, relative spiking delays. This representation has a much greater information capacity in comparison to a firing-rate based neural coding approach through the variety of configurations and the possible coexistence of multiple superposed motifs.
+In neuronal models, an efficient use or detection of these spatio-temporal patterns embedded in the spike train comes with the integration of heterogeneous delays~\citep{gutig_tempotron_2006, guise_bayesian_2014, zhang_supervised_2020}. Notably,~\citet{izhikevich_polychronization_2006} introduced the notion of the polychronous group as a repetitive motif of spikes defined by a subset of neurons with different, yet precise, relative spiking delays. This representation has a much greater information capacity in comparison to a firing-rate based neural coding approach through the variety of configurations and the possible coexistence of multiple superposed motifs.
 However, most current neuroscience-inspired computer vision algorithms (for instance convolution neural networks) do not make use of this dynamic aspect. A novel emerging representation is that provided by event-based cameras, in which each pixel independently processes its input and emits an event for positive or negative increments of the log-luminance. The shift from the classical, dense representations to this sparse encoding of visual information offers a better analogy to neurobiology, but also offers more energy-efficient computations. Yet, flexible and robust event-driven algorithms for classical computer vision tasks, such as motion detection, are still not able to compete with the state-of-the-art of dense computer vision solutions.
 
 In this work, we study the emergence of such spatio-temporal spiking motifs when training a single layer of spiking neurons on a supervised classification task (\seeFig{motionclouds}). We develop a SNN-like method able to learn hetero-synaptic delays to perform motion detection on a synthetic event-based dataset. Because neuromorphic devices are, by design, good candidates to integrate computations with time, we highlight the fact that this event-driven algorithm is transferable to such hardware.
@@ -303,7 +299,7 @@ We expect our model to be able to efficiently detect temporal patterns and here 
 Taking analogy with biological conditions, a common use case for motion detection is to estimate the motion generated on a sensor by saccade-like movements. Saccades are rapid movements of the eyeball which allow to reposition the axis of view in a short period. In humans, these are particularly rapid 
 To test our model, we will quantify its ability to categorize different motions. In that order, we will generate a natural
 
-use a set of synthetic visual stimuli, \textit{Motion Clouds}~\cite{leon2012motion} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
+use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
 This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions:
 % of a motion cloud is determined by a constant $k_v$: with a constant speed $\speed$ (see \fig{motionclouds}-(a)): 
 %\begin{equation*}
@@ -327,13 +323,14 @@ For any given velocity, we also varied the parameters of the textures, such as t
 \begin{figure}[h!]%[ht!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motionclouds.pdf}
-    \caption{{\bf Motion detection task.} {\bf (a)} The motion direction represented as the plain red vector, other possible motion directions are represented in light red. {\bf (b)} A screenshot of one generated naturalistic textured stimulus at a specific time. % $\timev_\arank$. 
-    {\bf (c)} The corresponding ON (in red) and OFF (in blue) event stream generated from the stimuli on (b) and constituting the input to the spiking neural network.}
+    \note{TODO: redo figure according to caption}
+    \caption{
+    {\bf Motion detection task.} {\bf (a)} We use large-scale natural images ($512\times512$) in which an aperture ($128\times128$) extracts a sub-image image in the axis of view (here the cross at the center of the image). {\bf (b)} To mimic the effect of a saccadic-like movement, the axis of view moves following a step-like Brownian motion, and we show here on example path of the trajectory. {\bf (c)} Recording the dynamics of the sub-image as a function of time, it generates a naturalistic movie which may be transformed to an event-based representation. Mimicking the retina, this representation codes for proportional increments or decrements of the luminance in the image, respectively ON (in red) and OFF (in blue) events. This will constitute the input to the spiking neural network.}
     \label{fig:motionclouds}
 \end{figure}
 
 
-To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\cite{Rasetto2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motionclouds}-(c)). The goal here is to infer the correct motion solely by observing these events.
+To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motionclouds}-(c)). The goal here is to infer the correct motion solely by observing these events.
 
 
 \subsection{Hetero-synaptic delays model}
@@ -365,7 +362,7 @@ toto
 %\activeweights^\postsynaddr(t) = \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}
 $.
 %
-The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
+The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. It transforms this list of weights into a probability with the following formula:
 $
 toto
 %Pr(k=\postsynaddr \; | \; \timev) =
@@ -393,7 +390,7 @@ This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dens
 This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different patterns in the event stream.
 %
 In particular, we may extend the convolution to a 3D convolution 
-such that the representation would also benefit from spatial invariance. The use of spatio-temporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\cite{ghosh2022conv3D}.
+such that the representation would also benefit from spatial invariance. The use of spatio-temporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\citep{ghosh_spatiotemporal_2019}.
 For that, we design 3D kernels of shape  $(\Kx, \Ky, \Ktime) = (15, 15, 8)$, respectively representing the two spatial dimensions and the range of delays. An example of such kernels is given in Figure~\ref{fig:kernels}.
 Computations are performed on spatio-temporal windows, defined by the kernels, sliding around the events, that is, the center of the spatio-temporal window around the current event $\epsilon_\arank$.
 %
@@ -410,14 +407,14 @@ After training our model, we first observe the weights learned for the different
 %
 With the negative weights, one can observe an anti-selectivity for directions that do not correspond to the motion to which the kernel is selective to. This qualitative look at the 3D kernels allows the reader to infer for the $8$ different motion directions used to generate our synthetic event streams.
 
-If one focuses on the interpretation of these kernels in terms of spatio-temporal patterns embedded in the event stream, it can lead to interesting outcomes. In~\cite{Grimaldi22pami}, a link between event-based MLR training and Hebbian learning is drawn, allowing to say that the present model will learn its weights according to a presynaptic activity associated to the different motion directions. Each neuron becomes selective to a specific motion direction through the learning of an associated prototypical spatio-temporal spike pattern. Each voxel in the 3D kernels defines a specific timestamp and a specific address. Then, our model is able to detect precise spatio-temporal patterns embedded in the spike train and associated to the different motion directions. The cone shape for the positive weights distribution highlights a loss of precision for longer delays, i.e. events away in the past. For the directions not coherent to the class of a training sample, an anti-Hebbian learning is also observed through the negative weights in the kernels of Figure~\ref{fig:kernels}. 
+If one focuses on the interpretation of these kernels in terms of spatio-temporal patterns embedded in the event stream, it can lead to interesting outcomes. In~\citep{grimaldi_robust_2022}, a link between event-based MLR training and Hebbian learning is drawn, allowing to say that the present model will learn its weights according to a presynaptic activity associated to the different motion directions. Each neuron becomes selective to a specific motion direction through the learning of an associated prototypical spatio-temporal spike pattern. Each voxel in the 3D kernels defines a specific timestamp and a specific address. Then, our model is able to detect precise spatio-temporal patterns embedded in the spike train and associated to the different motion directions. The cone shape for the positive weights distribution highlights a loss of precision for longer delays, i.e. events away in the past. For the directions not coherent to the class of a training sample, an anti-Hebbian learning is also observed through the negative weights in the kernels of Figure~\ref{fig:kernels}. 
 %
 \subsection{Accuracy for the motion detection task}
 %
 Once our MLR is trained, we obtain 3D kernels corresponding to the weights associated to the hetero-synaptic delays of our layer of spiking neurons and which may be used for detection. We observed that the distribution of the kernels' weights is sparse, with most values near zero. As shown in the formalization of our event-based model, the computational cost of our model if implemented on a neuromorphic chip would be dominated by the number of spikes times the number of synapses. This scales with the number of nonzero synaptic weights. To  assess the robustness of the classification as a function of the computational load, we will prune the weights in $\{\synapse_\ranksyn\}_{\ranksyn \in [0,\Nsyn)}$ that are below a defined threshold. 
 
-In Figure~\ref{fig:accuracy}, we plot the classification accuracy as a function of the relative number of computations, or active weights, per decision for each neuron of the layer. As a comparison and to account for the gain in performance by using hetero-synaptic delays, we provide the accuracy obtained with a MLR model using 2D time surface (in red) as in~\cite{Grimaldi22pami}. This latter method is based on delays from the last recorded events and uses fewer computations (in our case $15\times15$) than the dense 3D kernels without any pruning ($15\times15\times8$). While less computations are needed, the classification performance obtained for the model using time surfaces is similar to our method using all the weights of the kernels.
-By pruning weights, we observe that the evolution of accuracy as a function of the log percentage of active weights follows a sigmoid curve. Half-saturation level is reached at about $3.5\times 10^{-3}\%$ of active weights, corresponding to a total amount of $6$ computations per decision. Compared to the full kernels, the accuracy of our method is maintained to its top performances when dividing the number of computations by a factor up to about $200$. In this case, the number of computations is greatly reduced compared to~\cite{Grimaldi22pami}, thus demonstrating the efficiency of the presented method. 
+In Figure~\ref{fig:accuracy}, we plot the classification accuracy as a function of the relative number of computations, or active weights, per decision for each neuron of the layer. As a comparison and to account for the gain in performance by using hetero-synaptic delays, we provide the accuracy obtained with a MLR model using 2D time surface (in red) as in~\citep{grimaldi_robust_2022}. This latter method is based on delays from the last recorded events and uses fewer computations (in our case $15\times15$) than the dense 3D kernels without any pruning ($15\times15\times8$). While less computations are needed, the classification performance obtained for the model using time surfaces is similar to our method using all the weights of the kernels.
+By pruning weights, we observe that the evolution of accuracy as a function of the log percentage of active weights follows a sigmoid curve. Half-saturation level is reached at about $3.5\times 10^{-3}\%$ of active weights, corresponding to a total amount of $6$ computations per decision. Compared to the full kernels, the accuracy of our method is maintained to its top performances when dividing the number of computations by a factor up to about $200$. In this case, the number of computations is greatly reduced compared to~\citep{grimaldi_robust_2022}, thus demonstrating the efficiency of the presented method. 
 %
 \begin{figure}[h!]
     \centering
@@ -429,7 +426,7 @@ By pruning weights, we observe that the evolution of accuracy as a function of t
 
 \subsection{Testing with natural-like textures}
 %
-To test our model, we will quantify its ability to categorize different motions. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\cite{leon2012motion} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
+To test our model, we will quantify its ability to categorize different motions. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
 This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions:
 % of a motion cloud is determined by a constant $k_v$: with a constant speed $\speed$ (see \fig{motionclouds}-(a)): 
 %\begin{equation*}
@@ -459,7 +456,7 @@ For any given velocity, we also varied the parameters of the textures, such as t
 \end{figure}
 
 
-To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\cite{Rasetto2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motionclouds}-(c)). The goal here is to infer the correct motion solely by observing these events.
+To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motionclouds}-(c)). The goal here is to infer the correct motion solely by observing these events.
 
 
 \section{Discussion}
@@ -469,7 +466,7 @@ Here, we have introduced a generic SNN using hetero-synaptic delays and shown ho
 %One advantage of our model is the generality of the possible kernels. However, this can be a limit as this increases the number of free parameters in the learning algorithm. As we observe that the timing of events in natural scene may be slightly variable (in the order of the synaptic time constant of $5~\ms$) an extension of the model would be to include a fixed filtering stage similar to that in the tempotron model~\citep{gutig2006tempotron}. This could be efficiently added as a temporal convolution on $\mathcal{C}^\postsynaddr(t)$.
 %\noteAG{C'est pas clair pour moi ce que veut dire ou ce qu'ajoute le paragraphe précédent. La généralité des kernels est données dans le suivant et celui là fait appel à des concepts de filtrage pas très explicités. Aussi la référence au timing des events des scènes naturelles peut être justifié par une référence. }
 
-Note that this supervised learning scheme can be extended to a variety of tasks. It would follow from the emergence of new kernels adapted to this new task after supervised learning.  This constitutes a major advantage over other algorithms which derive event-based algorithms from specific physical rules (see for instance~\citep{Benosman12} for computing the optic flow using the luminance conservation rule). We aim at extending the application of this model on more generic datasets acquired in natural conditions for progressively more complex tasks from motion extraction, optic flow or time-to-contact maps.
+Note that this supervised learning scheme can be extended to a variety of tasks. It would follow from the emergence of new kernels adapted to this new task after supervised learning.  This constitutes a major advantage over other algorithms which derive event-based algorithms from specific physical rules (see for instance~\citep{benosman_asynchronous_2012} for computing the optic flow using the luminance conservation rule). We aim at extending the application of this model on more generic datasets acquired in natural conditions for progressively more complex tasks from motion extraction, optic flow or time-to-contact maps.
 %
 
 \backmatter
