@@ -1,4 +1,393 @@
 
+@article{hanuschkin_general_2010,
+	title = {A {General} and {Efficient} {Method} for {Incorporating} {Precise} {Spike} {Times} in {Globally} {Time}-{Driven} {Simulations}},
+	volume = {4},
+	issn = {1662-5196},
+	url = {https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2965048/},
+	doi = {10.3389/fninf.2010.00113},
+	abstract = {Traditionally, event-driven simulations have been limited to the very restricted class of neuronal models for which the timing of future spikes can be expressed in closed form. Recently, the class of models that is amenable to event-driven simulation has been extended by the development of techniques to accurately calculate firing times for some integrate-and-fire neuron models that do not enable the prediction of future spikes in closed form. The motivation of this development is the general perception that time-driven simulations are imprecise. Here, we demonstrate that a globally time-driven scheme can calculate firing times that cannot be discriminated from those calculated by an event-driven implementation of the same model; moreover, the time-driven scheme incurs lower computational costs. The key insight is that time-driven methods are based on identifying a threshold crossing in the recent past, which can be implemented by a much simpler algorithm than the techniques for predicting future threshold crossings that are necessary for event-driven approaches. As run time is dominated by the cost of the operations performed at each incoming spike, which includes spike prediction in the case of event-driven simulation and retrospective detection in the case of time-driven simulation, the simple time-driven algorithm outperforms the event-driven approaches. Additionally, our method is generally applicable to all commonly used integrate-and-fire neuronal models; we show that a non-linear model employing a standard adaptive solver can reproduce a reference spike train with a high degree of precision.},
+	urldate = {2022-09-14},
+	journal = {Frontiers in Neuroinformatics},
+	author = {Hanuschkin, Alexander and Kunkel, Susanne and Helias, Moritz and Morrison, Abigail and Diesmann, Markus},
+	month = oct,
+	year = {2010},
+	pmid = {21031031},
+	pmcid = {PMC2965048},
+	keywords = {⛔ No INSPIRE recid found},
+	pages = {113},
+}
+
+@article{roelfsema_early_2016,
+	title = {Early visual cortex as a multiscale cognitive blackboard},
+	volume = {2},
+	doi = {10.1146/annurev-vision-111815-114443},
+	journal = {Annual review of vision science},
+	author = {Roelfsema, Pieter R and de Lange, Floris P},
+	year = {2016},
+	note = {Publisher: Annual Reviews},
+	keywords = {⛔ No INSPIRE recid found},
+	pages = {131--151},
+}
+
+@article{perrinet_active_2014,
+	title = {Active inference, eye movements and oculomotor delays},
+	volume = {108},
+	copyright = {All rights reserved},
+	issn = {1432-0770},
+	url = {https://doi.org/10.1007/s00422-014-0620-8},
+	doi = {10.1007/s00422-014-0620-8},
+	abstract = {This paper considers the problem of sensorimotor delays in the optimal control of (smooth) eye movements under uncertainty. Specifically, we consider delays in the visuo-oculomotor loop and their implications for active inference. Active inference uses a generalisation of Kalman filtering to provide Bayes optimal estimates of hidden states and action in generalised coordinates of motion. Representing hidden states in generalised coordinates provides a simple way of compensating for both sensory and oculomotor delays. The efficacy of this scheme is illustrated using neuronal simulations of pursuit initiation responses, with and without compensation. We then consider an extension of the generative model to simulate smooth pursuit eye movements in which the visuo-oculomotor system believes both the target and its centre of gaze are attracted to a (hidden) point moving in the visual field. Finally, the generative model is equipped with a hierarchical structure, so that it can recognise and remember unseen (occluded) trajectories and emit anticipatory responses. These simulations speak to a straightforward and neurobiologically plausible solution to the generic problem of integrating information from different sources with different temporal delays and the particular difficulties encountered when a system, like the oculomotor system, tries to control its environment with delayed signals.},
+	number = {6},
+	journal = {Biological Cybernetics},
+	author = {Perrinet, Laurent U and Adams, Rick A and Friston, Karl J},
+	month = dec,
+	year = {2014},
+	note = {Publication title: Biological cybernetics
+Publisher: Springer Berlin Heidelberg
+Url: http://link.springer.com/article/10.1007\%2Fs00422-014-0620-8
+tex.date-modified: 2020-03-31 11:07:29 +0200
+tex.eprint: 25128318
+tex.eprinttype: pmid
+tex.ids: Perrinet14a,Perrinet2014a
+tex.preprint: https://hal-amu.archives-ouvertes.fr/hal-01382350},
+	keywords = {\#nosource, Active inference, Bayesian model, Biologically Inspired Computer vision, Generalised coordinates, Oculomotor delays, Smooth pursuit eye movements, Tracking eye movements, Variational free energy, active inference, active-inference, bayesian, bicv-motion, bicv-sparse, delays, eye, eye movements, eye-movements, free energy, free-energy, generalized-coordinates, generalized-filtering, motion detection, oculomotor, perception, perrinetadamsfriston14, smooth-pursuit, tracking-eye-movements, variational-filtering, ⛔ No INSPIRE recid found},
+	pages = {777--801},
+}
+
+@article{gutig_tempotron_2006,
+	title = {The tempotron: a neuron that learns spike timing–based decisions},
+	volume = {9},
+	issn = {1546-1726},
+	shorttitle = {The tempotron},
+	url = {http://www.nature.com/articles/nn1643/},
+	doi = {10.1038/nn1643},
+	abstract = {The timing of action potentials in sensory neurons contains substantial information about the eliciting stimuli. Although the computational advantages of spike timing–based neuronal codes have long been recognized, it is unclear whether, and if so how, neurons can learn to read out such representations. We propose a new, biologically plausible supervised synaptic learning rule that enables neurons to efficiently learn a broad range of decision rules, even when information is embedded in the spatiotemporal structure of spike patterns rather than in mean firing rates. The number of categorizations of random spatiotemporal patterns that a neuron can implement is several times larger than the number of its synapses. The underlying nonlinear temporal computation allows neurons to access information beyond single-neuron statistics and to discriminate between inputs on the basis of multineuronal spike statistics. Our work demonstrates the high capacity of neural systems to learn to decode information embedded in distributed patterns of spike synchrony.},
+	language = {en},
+	number = {3},
+	urldate = {2022-01-31},
+	journal = {Nature Neuroscience},
+	author = {Gütig, Robert and Sompolinsky, Haim},
+	month = mar,
+	year = {2006},
+	note = {00716
+tex.ids= gutig2006tempotron
+number: 3
+publisher: Nature Publishing Group},
+	keywords = {⛔ No INSPIRE recid found},
+	pages = {420--428},
+}
+
+@article{hogendoorn_predictive_2019,
+	title = {Predictive {Coding} with {Neural} {Transmission} {Delays}: {A} {Real}-{Time} {Temporal} {Alignment} {Hypothesis}},
+	volume = {6},
+	issn = {2373-2822},
+	shorttitle = {Predictive {Coding} with {Neural} {Transmission} {Delays}},
+	url = {http://eneuro.org/lookup/doi/10.1523/ENEURO.0412-18.2019},
+	doi = {10.1523/eneuro.0412-18.2019},
+	language = {en},
+	number = {2},
+	urldate = {2019-11-12},
+	journal = {eneuro},
+	author = {Hogendoorn, Hinze and Burkitt, Anthony N.},
+	month = mar,
+	year = {2019},
+	note = {00002},
+	keywords = {⛔ No INSPIRE recid found},
+	pages = {ENEURO.0412--18.2019},
+}
+
+@article{dardelet_event-by-event_2021,
+	title = {An {Event}-by-{Event} {Feature} {Detection} and {Tracking} {Invariant} to {Motion} {Direction} and {Velocity}},
+	url = {https://www.techrxiv.org/articles/preprint/An_Event-by-Event_Feature_Detection_and_Tracking_Invariant_to_Motion_Direction_and_Velocity/17013824/1},
+	doi = {10.36227/techrxiv.17013824.v1},
+	abstract = {Contour velocity estimation and tracking from a fully event-based perspective.},
+	urldate = {2021-12-14},
+	author = {Dardelet, Laurent and Benosman, Ryad and Ieng, Sio-Hoi},
+	month = nov,
+	year = {2021},
+	note = {1 citations (Crossref) [2022-09-03]
+00000},
+	keywords = {⛔ No INSPIRE recid found},
+}
+
+@article{khoei_flash-lag_2017,
+	title = {The {Flash}-{Lag} {Effect} as a {Motion}-{Based} {Predictive} {Shift}},
+	volume = {13},
+	copyright = {Licence Creative Commons Attribution - Pas d’utilisation commerciale - Partage dans les mêmes conditions 4.0 International (CC-BY-NC-SA)},
+	issn = {1553-7358},
+	url = {https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005068},
+	doi = {10.1371/journal.pcbi.1005068},
+	abstract = {Due to its inherent neural delays, the visual system has an outdated access to sensory information about the current position of moving objects. In contrast, living organisms are remarkably able to track and intercept moving objects under a large range of challenging environmental conditions. Physiological, behavioral and psychophysical evidences strongly suggest that position coding is extrapolated using an explicit and reliable representation of object’s motion but it is still unclear how these two representations interact. For instance, the so-called flash-lag effect supports the idea of a differential processing of position between moving and static objects. Although elucidating such mechanisms is crucial in our understanding of the dynamics of visual processing, a theory is still missing to explain the different facets of this visual illusion. Here, we reconsider several of the key aspects of the flash-lag effect in order to explore the role of motion upon neural coding of objects’ position. First, we formalize the problem using a Bayesian modeling framework which includes a graded representation of the degree of belief about visual motion. We introduce a motion-based prediction model as a candidate explanation for the perception of coherent motion. By including the knowledge of a fixed delay, we can model the dynamics of sensory information integration by extrapolating the information acquired at previous instants in time. Next, we simulate the optimal estimation of object position with and without delay compensation and compared it with human perception under a broad range of different psychophysical conditions. Our computational study suggests that the explicit, probabilistic representation of velocity information is crucial in explaining position coding, and therefore the flash-lag effect. We discuss these theoretical results in light of the putative corrective mechanisms that can be used to cancel out the detrimental effects of neural delays and illuminate the more general question of the dynamical representation at the present time of spatial information in the visual pathways.},
+	language = {en},
+	number = {1},
+	urldate = {2022-08-31},
+	journal = {PLOS Computational Biology},
+	author = {Khoei, Mina A. and Masson, Guillaume S. and Perrinet, Laurent U.},
+	month = jan,
+	year = {2017},
+	note = {Publisher: Public Library of Science},
+	keywords = {Coding mechanisms, Extrapolation, Motion, Psychophysics, Sensory perception, Velocity, Vision, Visual system, ⛔ No INSPIRE recid found},
+	pages = {e1005068},
+}
+
+@article{boutin_pooling_2022,
+	title = {Pooling strategies in {V1} can account for the functional and structural diversity across species},
+	volume = {18},
+	issn = {1553-7358},
+	url = {https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1010270},
+	doi = {10.1371/journal.pcbi.1010270},
+	abstract = {Neurons in the primary visual cortex are selective to orientation with various degrees of selectivity to the spatial phase, from high selectivity in simple cells to low selectivity in complex cells. Various computational models have suggested a possible link between the presence of phase invariant cells and the existence of orientation maps in higher mammals’ V1. These models, however, do not explain the emergence of complex cells in animals that do not show orientation maps. In this study, we build a theoretical model based on a convolutional network called Sparse Deep Predictive Coding (SDPC) and show that a single computational mechanism, pooling, allows the SDPC model to account for the emergence in V1 of complex cells with or without that of orientation maps, as observed in distinct species of mammals. In particular, we observed that pooling in the feature space is directly related to the orientation map formation while pooling in the retinotopic space is responsible for the emergence of a complex cells population. Introducing different forms of pooling in a predictive model of early visual processing as implemented in SDPC can therefore be viewed as a theoretical framework that explains the diversity of structural and functional phenomena observed in V1.},
+	language = {en},
+	number = {7},
+	urldate = {2022-09-14},
+	journal = {PLOS Computational Biology},
+	author = {Boutin, Victor and Franciosini, Angelo and Chavane, Frédéric and Perrinet, Laurent U.},
+	year = {2022},
+	note = {Publisher: Public Library of Science},
+	keywords = {Coding mechanisms, Convolution, Neural networks, Neuronal tuning, Neurons, Neurophysiology, Visual cortex, Visual system, ⛔ No INSPIRE recid found},
+	pages = {e1010270},
+}
+
+@article{grimaldi_robust_2022,
+	title = {A robust event-driven approach to always-on object recognition},
+	url = {https://www.techrxiv.org/articles/preprint/A_robust_event-driven_approach_to_always-on_object_recognition/18003077/1},
+	doi = {10.36227/techrxiv.18003077.v1},
+	abstract = {We propose a neuromimetic architecture able to perform always-on pattern recognition. To achieve this, we extended an existing event-based algorithm [1], which introduced novel spatio-temporal features as a Hierarchy Of Time-Surfaces (HOTS). Built from asynchronous events acquired by a neuromorphic camera, these time surfaces allow to code the local dynamics of a visual scene and to create an efficient event-based pattern recognition architecture. Inspired by neuroscience, we extended this method to increase its performance. Our first contribution was to add a homeostatic gain control on the activity of neurons to improve the learning of spatio-temporal patterns [2]. A second contribution is to draw an analogy between the HOTS algorithm and Spiking Neural Networks (SNN). Following that analogy, our last contribution is to modify the classification layer and remodel the offline pattern categorization method previously used into an online and event-driven one. This classifier uses the spiking output of the network to define novel time surfaces and we then perform online classification with a neuromimetic implementation of a multinomial logistic regression. Not only do these improvements increase consistently the performances of the network, they also make this event-driven pattern recognition algorithm online and bio-realistic. Results were validated on different datasets: DVS barrel [3], Poker-DVS [4] and N-MNIST [5]. We foresee to develop the SNN version of the method and to extend this fully event-driven approach to more naturalistic tasks, notably for always-on, ultra-fast object categorization.},
+	language = {en},
+	urldate = {2022-01-13},
+	author = {Grimaldi, Antoine and Boutin, Victor and Ieng, Sio-Hoi and Benosman, Ryad and Perrinet, Laurent},
+	month = jan,
+	year = {2022},
+	note = {00000
+tex.ids= Grimaldi22pami
+tex.bdsk-url-2: https://doi.org/10.36227/techrxiv.18003077.v1
+tex.date-modified: 2022-01-20 09:10:37 +0100
+tex.grants: aprovis3D
+publisher: TechRxiv
+url: https://www.techrxiv.org/articles/preprint/A\_robust\_event-driven\_approach\_to\_always-on\_object\_recognition/18003077/1},
+	keywords = {efficient coding, event-based vision, homeostasis, neuromorphic hardware, online classification},
+}
+
+@article{boutin_effect_2020,
+	title = {Effect of top-down connections in {Hierarchical} {Sparse} {Coding}},
+	volume = {32},
+	copyright = {All rights reserved},
+	url = {https://laurentperrinet.github.io/publication/boutin-franciosini-ruffier-perrinet-20-feedback/},
+	doi = {10.1162/neco_a_01325},
+	abstract = {Hierarchical Sparse Coding (HSC) is a powerful model to efficiently represent multi-dimensional, structured data such as images. The simplest solution to solve this computationally hard problem is to decompose it into independent layer-wise subproblems. However, neuroscientific evidence would suggest inter-connecting these subproblems as in the Predictive Coding (PC) theory, which adds top-down connections between consecutive layers. In this study, a new model called 2-Layers Sparse Predictive Coding (2L-SPC) is introduced to assess the impact of this inter-layer feedback connection. In particular, the 2L-SPC is compared with a Hierarchical Lasso (Hi-La) network made out of a sequence of independent Lasso layers. The 2L-SPC and the 2-layers Hi-La networks are trained on 4 different databases and with different sparsity parameters on each layer. First, we show that the overall prediction error generated by 2L-SPC is lower thanks to the feedback mechanism as it transfers prediction error between layers. Second, we demonstrate that the inference stage of the 2L-SPC is faster to converge than for the Hi-La model. Third, we show that the 2L-SPC also accelerates the learning process. Finally, the qualitative analysis of both models dictionaries, supported by their activation probability, show that the 2L-SPC features are more generic and informative.},
+	number = {11},
+	journal = {Neural Computation},
+	author = {Boutin, Victor and Franciosini, Angelo and Ruffier, Franck and Perrinet, Laurent U},
+	month = feb,
+	year = {2020},
+	note = {tex.ids= BoutinFranciosiniRuffierPerrinet20
+tex.date-modified: 2020-11-03 09:59:57 +0100
+tex.grants: doc-2-amu,phd-icn,mesocentre
+tex.preprint: https://arxiv.org/abs/2002.00892
+publisher: MIT Press},
+	keywords = {deep-learning, sparse coding},
+	pages = {2279--2309},
+}
+
+@article{boutin_sparse_2020,
+	title = {Sparse {Deep} {Predictive} {Coding} captures contour integration capabilities of the early visual system},
+	copyright = {All rights reserved},
+	url = {https://doi.org/10.1371/journal.pcbi.1008629},
+	doi = {10.1371/journal.pcbi.1008629},
+	abstract = {Both neurophysiological and psychophysical experiments have pointed out the crucial role of recurrent and feedback connections to process context-dependent information in the early visual cortex. While numerous models have accounted for feedback effects at either neural or representational level, none of them were able to bind those two levels of analysis. Is it possible to describe feedback effects at both levels using the same model? We answer this question by combining Predictive Coding (PC) and Sparse Coding (SC) into a hierarchical and convolutional framework. In this Sparse Deep Predictive Coding (SDPC) model, the SC component models the internal recurrent processing within each layer, and the PC component describes the interactions between layers using feedforward and feedback connections. Here, we train a 2-layered SDPC on two different databases of images, and we interpret it as a model of the early visual system (V1 \& V2). We first demonstrate that once the training has converged, SDPC exhibits oriented and localized receptive fields in V1 and more complex features in V2. Second, we analyze the effects of feedback on the neural organization beyond the classical receptive field of V1 neurons using interaction maps. These maps are similar to association fields and reflect the Gestalt principle of good continuation. We demonstrate that feedback signals reorganize interaction maps and modulate neural activity to promote contour integration. Third, we demonstrate at the representational level that the SDPC feedback connections are able to overcome noise in input images. Therefore, the SDPC captures the association field principle at the neural level which results in better disambiguation of blurred images at the representational level.},
+	journal = {PLoS Computational Biology},
+	author = {Boutin, Victor and Franciosini, Angelo and Chavane, Frédéric Y and Ruffier, Franck and Perrinet, Laurent U},
+	month = may,
+	year = {2020},
+	note = {tex.date-added: 2019-06-18 13:53:53 +0200
+tex.date-modified: 2020-12-12 11:55:20 +0100
+tex.grants: doc-2-amu,phd-icn,mesocentre
+tex.preprint: https://arxiv.org/abs/1902.07651
+tex.url\_code: https://github.com/VictorBoutin/InteractionMap
+publisher: Public Library of Science San Francisco, CA USA},
+	keywords = {deep-learning, sparse coding},
+}
+
+@article{chavane_revisiting_2022,
+	title = {Revisiting horizontal connectivity rules in {V1}: from like-to-like towards like-to-all},
+	copyright = {All rights reserved},
+	issn = {1863-2661},
+	shorttitle = {Revisiting horizontal connectivity rules in {V1}},
+	url = {https://doi.org/10.1007/s00429-022-02455-4},
+	doi = {10.1007/s00429-022-02455-4},
+	abstract = {Horizontal connections in the primary visual cortex of carnivores, ungulates and primates organize on a near-regular lattice. Given the similar length scale for the regularity found in cortical orientation maps, the currently accepted theoretical standpoint is that these maps are underpinned by a like-to-like connectivity rule: horizontal axons connect preferentially to neurons with similar preferred orientation. However, there is reason to doubt the rule’s explanatory power, since a growing number of quantitative studies show that the like-to-like connectivity preference and bias mostly observed at short-range scale, are highly variable on a neuron-to-neuron level and depend on the origin of the presynaptic neuron. Despite the wide availability of published data, the accepted model of visual processing has never been revised. Here, we review three lines of independent evidence supporting a much-needed revision of the like-to-like connectivity rule, ranging from anatomy to population functional measures, computational models and to theoretical approaches. We advocate an alternative, distance-dependent connectivity rule that is consistent with new structural and functional evidence: from like-to-like bias at short horizontal distance to like-to-all at long horizontal distance. This generic rule accounts for the observed high heterogeneity in interactions between the orientation and retinotopic domains, that we argue is necessary to process non-trivial stimuli in a task-dependent manner.},
+	language = {en},
+	urldate = {2022-02-06},
+	journal = {Brain Structure and Function},
+	author = {Chavane, Frédéric and Perrinet, Laurent Udo and Rankin, James},
+	month = feb,
+	year = {2022},
+}
+
+@article{perrinet_edge_2015,
+	title = {Edge co-occurrences can account for rapid categorization of natural versus animal images},
+	volume = {5},
+	doi = {10.1038/srep11400},
+	journal = {Scientific reports},
+	author = {Perrinet, Laurent U and Bednar, James A},
+	year = {2015},
+	note = {tex.ids= Perrinet2015, Perrinet2015d, PerrinetBednar15
+tex.bdsk-url-2: https://doi.org/10.1038/srep11400
+tex.date-added: 2020-03-27 10:11:37 +0100
+tex.date-modified: 2020-03-27 10:11:44 +0100
+tex.grants: anr-bala-v1
+tex.preprint: https://hal-amu.archives-ouvertes.fr/hal-01202447
+tex.url\_code: https://github.com/laurentperrinet/PerrinetBednar15
+publisher: Nature Publishing Group
+url: http://dx.doi.org/10.1038/srep11400},
+	keywords = {\#nosource, Biologically Inspired Computer vision, anr-trax, association field, assofield, bicv-sparse, perrinetbednar15, sanz12jnp, sparse coding, vacher14},
+	pages = {11400},
+}
+
+@article{tatler_eye_2011,
+	title = {Eye guidance in natural vision: {Reinterpreting} salience},
+	volume = {11},
+	issn = {1534-7362},
+	shorttitle = {Eye guidance in natural vision},
+	url = {https://doi.org/10.1167/11.5.5},
+	doi = {10.1167/11.5.5},
+	abstract = {Models of gaze allocation in complex scenes are derived mainly from studies of static picture viewing. The dominant framework to emerge has been image salience, where properties of the stimulus play a crucial role in guiding the eyes. However, salience-based schemes are poor at accounting for many aspects of picture viewing and can fail dramatically in the context of natural task performance. These failures have led to the development of new models of gaze allocation in scene viewing that address a number of these issues. However, models based on the picture-viewing paradigm are unlikely to generalize to a broader range of experimental contexts, because the stimulus context is limited, and the dynamic, task-driven nature of vision is not represented. We argue that there is a need to move away from this class of model and find the principles that govern gaze allocation in a broader range of settings. We outline the major limitations of salience-based selection schemes and highlight what we have learned from studies of gaze allocation in natural vision. Clear principles of selection are found across many instances of natural vision and these are not the principles that might be expected from picture-viewing studies. We discuss the emerging theoretical framework for gaze allocation on the basis of reward maximization and uncertainty reduction.},
+	number = {5},
+	urldate = {2022-09-14},
+	journal = {Journal of Vision},
+	author = {Tatler, Benjamin W. and Hayhoe, Mary M. and Land, Michael F. and Ballard, Dana H.},
+	month = may,
+	year = {2011},
+	pages = {5},
+}
+
+@article{rasetto_challenges_2022,
+	title = {The {Challenges} {Ahead} for {Bio}-inspired {Neuromorphic} {Event} {Processors}: {How} {Memristors} {Dynamic} {Properties} {Could} {Revolutionize} {Machine} {Learning}},
+	shorttitle = {The {Challenges} {Ahead} for {Bio}-inspired {Neuromorphic} {Event} {Processors}},
+	url = {http://arxiv.org/abs/2201.12673},
+	abstract = {Neuromorphic engineering has led to the necessary process of rethinking of how we process and integrate information, analyze data, and use the resulting insights to improve computation and avoid the current high power and latency of Artificial Intelligence (AI) hardware. Current neuromorphic processors are, however, limited by digital technologies, which cannot reproduce the abilities of biological neural computation in terms of power, latency and area cost. In this paper, we show that the combined use of the dynamic properties of memristors to implement a model of synaptic integration and the determination of the correct level of abstraction of biological neural networks has the potential to open a new range of capabilities for neuromorphic processors. We test this approach using a novel three-terminal LixWO3 electrochemical memristor, by deriving its conductance model and using it to emulate synaptic temporal kernel computation in the context of a pattern recognition task. We show that these devices allow for robust results with no loss in precision while opening the path for an energy efficient approach to build novel bio-inspired processing units in silicon.},
+	language = {english},
+	urldate = {2022-02-02},
+	journal = {arXiv:2201.12673 [cs]},
+	author = {Rasetto, Marco and Wan, Qingzhou and Akolkar, Himanshu and Shi, Bertram and Xiong, Feng and Benosman, Ryad},
+	month = jan,
+	year = {2022},
+	note = {arXiv: 2201.12673 [cs]},
+	keywords = {Computer Science - Emerging Technologies, ⛔ No DOI found},
+}
+
+@article{ghosh_spatiotemporal_2019,
+	title = {Spatiotemporal filtering for event-based action recognition},
+	volume = {abs/1903.07067},
+	url = {http://arxiv.org/abs/1903.07067},
+	journal = {CoRR},
+	author = {Ghosh, Rohan and Gupta, Anupam and Silva, Andrei Nakagawa and Soares, Alcimar and Thakor, Nitish V.},
+	year = {2019},
+	note = {arXiv: 1903.07067
+tex.bibsource: dblp computer science bibliography, https://dblp.org
+tex.biburl: https://dblp.org/rec/journals/corr/abs-1903-07067.bib
+tex.timestamp: Mon, 01 Apr 2019 14:07:37 +0200},
+	keywords = {⛔ No DOI found},
+}
+
+@article{deweese_binary_2002,
+	title = {Binary coding in auditory cortex},
+	volume = {15},
+	journal = {Advances in neural information processing systems},
+	author = {DeWeese, Michael and Zador, Anthony},
+	year = {2002},
+	keywords = {⛔ No DOI found},
+}
+
+@incollection{perrinet_sparse_2015,
+	address = {Weinheim, Germany},
+	title = {Sparse {Models} for {Computer} {Vision}},
+	copyright = {All rights reserved},
+	url = {http://onlinelibrary.wiley.com/doi/10.1002/9783527680863.ch14/summary},
+	booktitle = {Biologically {Inspired} {Computer} {Vision}},
+	publisher = {Wiley-VCH Verlag GmbH \& Co. KGaA},
+	author = {Perrinet, Laurent U},
+	editor = {Keil, Matthias and Cristóbal, Gabriel and Perrinet, Laurent U},
+	month = aug,
+	year = {2015},
+	doi = {10.1002/9783527680863.ch14},
+	note = {Section: 13
+tex.date-modified: 2020-01-07 12:54:57 +0100
+tex.ids: Perrinet15bicv,Perrinet2015c
+tex.preprint: https://hal-amu.archives-ouvertes.fr/hal-01444362
+tex.url\_code: https://github.com/bicv/Perrinet2015BICVₛparse},
+	keywords = {\#nosource, Biologically Inspired Computer vision, anr-trax, bicv-sparse, sanz12jnp, sparse coding, vacher14},
+	pages = {319--346},
+}
+
+@article{poletti_head-eye_2015,
+	title = {Head-{Eye} {Coordination} at a {Microscopic} {Scale}},
+	volume = {25},
+	issn = {0960-9822},
+	url = {https://www.cell.com/current-biology/abstract/S0960-9822(15)01365-2},
+	doi = {10.1016/j.cub.2015.11.004},
+	abstract = {{\textless}h2{\textgreater}Summary{\textless}/h2{\textgreater}{\textless}p{\textgreater}Humans explore static visual scenes by alternating rapid eye movements (saccades) with periods of slow and incessant eye drifts [1–3]. These drifts are commonly believed to be the consequence of physiological limits in maintaining steady gaze, resulting in Brownian-like trajectories [4–7], which are almost independent in the two eyes [8–10]. However, because of the technical difficulty of recording minute eye movements, most knowledge on ocular drift comes from artificial laboratory conditions, in which the head of the observer is strictly immobilized. Little is known about eye drift during natural head-free fixation, when microscopic head movements are also continually present [11–13]. We have recently observed that the power spectrum of the visual input to the retina during ocular drift is largely unaffected by fixational head movements [14]. Here we elucidate the mechanism responsible for this invariance. We show that, contrary to common assumption, ocular drift does not move the eyes randomly, but compensates for microscopic head movements, thereby yielding highly correlated movements in the two eyes. This compensatory behavior is extremely fast, persists with one eye patched, and results in image motion trajectories that are only partially correlated on the two retinas. These findings challenge established views of how humans acquire visual information. They show that ocular drift is precisely controlled, as long speculated [15], and imply the existence of neural mechanisms that integrate minute multimodal signals.{\textless}/p{\textgreater}},
+	language = {English},
+	number = {24},
+	urldate = {2022-09-13},
+	journal = {Current Biology},
+	author = {Poletti, Martina and Aytekin, Murat and Rucci, Michele},
+	month = dec,
+	year = {2015},
+	pmid = {26687623},
+	note = {tex.ids= Poletti2015a
+publisher: Elsevier},
+	pages = {3253--3259},
+}
+
+@article{van_der_stigchel_eye_2006,
+	title = {Eye movement trajectories and what they tell us},
+	volume = {30},
+	issn = {0149-7634},
+	url = {https://www.sciencedirect.com/science/article/pii/S0149763405001740},
+	doi = {10.1016/j.neubiorev.2005.12.001},
+	abstract = {In the last two decades, research has shown that eye movement trajectories can be modified by situational determinants. These modifications can inform us about the mechanisms that control eye movements and they can yield information about the oculomotor, memory and attention system that is not easily obtained via other sources. Eye movement trajectories can deviate either towards or away from elements in the visual field. We review the conditions in which these deviations are found and the mechanisms underlying trajectory deviations. It is argued that deviations towards an element are caused by the unresolved competition in the oculomotor system between elements in a visual scene. Deviations away from an element are mainly observed in situations in which top-down preparation can influence the target selection process, but the exact cause of such deviations remains unclear.},
+	language = {en},
+	number = {5},
+	urldate = {2022-09-13},
+	journal = {Neuroscience \& Biobehavioral Reviews},
+	author = {Van der Stigchel, Stefan and Meeter, Martijn and Theeuwes, Jan},
+	month = jan,
+	year = {2006},
+	note = {tex.ids= VanderStigchel2006a},
+	pages = {666--679},
+}
+
+@article{dan_efficient_1996,
+	title = {Efficient coding of natural scenes in the lateral geniculate nucleus: experimental test of a computational theory},
+	volume = {16},
+	doi = {10.1523/jneurosci.16-10-03351.1996},
+	number = {10},
+	journal = {The Journal of neuroscience : the official journal of the Society for Neuroscience},
+	author = {Dan, Yang and Atick, Joseph J and Reid, R C},
+	month = may,
+	year = {1996},
+	keywords = {\#nosource},
+	pages = {3351--3362},
+}
+
+@article{olshausen_emergence_1996,
+	title = {Emergence of simple-cell receptive field properties by learning a sparse code for natural images.},
+	volume = {381},
+	issn = {0028-0836},
+	url = {http://dx.doi.org/10.1038/381607a0 http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?db=m&form=6&dopt=r&uid=8637596 http://www.ncbi.nlm.nih.gov/pubmed/8637596 http://www.nature.com/doifinder/10.1038/381607a0},
+	doi = {10.1038/381607a0},
+	abstract = {The receptive fields of simple cells in mammalian primary visual cortex can be characterized as being spatially localized, oriented and bandpass (selective to structure at different spatial scales), comparable to the basis functions of wavelet transforms. One approach to understanding such response properties of visual neurons has been to consider their relationship to the statistical structure of natural images in terms of efficient coding. Along these lines, a number of studies have attempted to train unsupervised learning algorithms on natural images in the hope of developing receptive fields with similar properties, but none has succeeded in producing a full set that spans the image space and contains all three of the above properties. Here we investigate the proposal that a coding strategy that maximizes sparseness is sufficient to account for these properties. We show that a learning algorithm that attempts to find sparse linear codes for natural scenes will develop a complete family of localized, oriented, bandpass receptive fields, similar to those found in the primary visual cortex. The resulting sparse image code provides a more efficient representation for later stages of processing because it possesses a higher degree of statistical independence among its outputs.},
+	number = {6583},
+	journal = {Nature},
+	author = {Olshausen, Bruno A. and Field, David J.},
+	year = {1996},
+	pmid = {8637596},
+	note = {00000 },
+	keywords = {\#nosource, Algorithms, Learning, Models, Neurological, Neurons, Neurons: physiology, Ocular, Ocular: physiology, Vision, Visual Cortex, Visual Cortex: cytology, Visual Cortex: physiology, anr-trax, bicv-sparse, perrinetadamsfriston14, sparse\_coding, sparse\_hebbian\_learning, sparse\_spike\_coding},
+	pages = {607--609},
+}
+
 @article{izhikevich_polychronization_2006,
 	title = {Polychronization: computation with spikes},
 	volume = {18},
@@ -36,21 +425,6 @@ publisher: MIT Press One Rogers Street, Cambridge, MA 02142-1209, USA journals-i
 	year = {1997},
 	note = {Publisher: American Association for the Advancement of Science},
 	pages = {1950--1953},
-}
-
-@article{rasetto_challenges_2022,
-	title = {The {Challenges} {Ahead} for {Bio}-inspired {Neuromorphic} {Event} {Processors}: {How} {Memristors} {Dynamic} {Properties} {Could} {Revolutionize} {Machine} {Learning}},
-	shorttitle = {The {Challenges} {Ahead} for {Bio}-inspired {Neuromorphic} {Event} {Processors}},
-	url = {http://arxiv.org/abs/2201.12673},
-	abstract = {Neuromorphic engineering has led to the necessary process of rethinking of how we process and integrate information, analyze data, and use the resulting insights to improve computation and avoid the current high power and latency of Artificial Intelligence (AI) hardware. Current neuromorphic processors are, however, limited by digital technologies, which cannot reproduce the abilities of biological neural computation in terms of power, latency and area cost. In this paper, we show that the combined use of the dynamic properties of memristors to implement a model of synaptic integration and the determination of the correct level of abstraction of biological neural networks has the potential to open a new range of capabilities for neuromorphic processors. We test this approach using a novel three-terminal LixWO3 electrochemical memristor, by deriving its conductance model and using it to emulate synaptic temporal kernel computation in the context of a pattern recognition task. We show that these devices allow for robust results with no loss in precision while opening the path for an energy efficient approach to build novel bio-inspired processing units in silicon.},
-	language = {english},
-	urldate = {2022-02-02},
-	journal = {arXiv:2201.12673 [cs]},
-	author = {Rasetto, Marco and Wan, Qingzhou and Akolkar, Himanshu and Shi, Bertram and Xiong, Feng and Benosman, Ryad},
-	month = jan,
-	year = {2022},
-	note = {arXiv: 2201.12673 [cs]},
-	keywords = {Computer Science - Emerging Technologies, ⛔ No DOI found},
 }
 
 @article{zhang_supervised_2020,
@@ -132,7 +506,7 @@ tex.date-modified: 2020-11-09 16:16:25 +0100},
 	pages = {2052--2073},
 }
 
-@article{gutig_tempotron_2006,
+@article{gutig_tempotron_2006-1,
 	title = {The tempotron: {A} neuron that learns spike {Timing}–{Based} decisions},
 	volume = {9},
 	issn = {1546-1726},
@@ -153,29 +527,6 @@ tex.ids: gutig2006tempotron},
 	pages = {420--428},
 }
 
-@article{ghosh_spatiotemporal_2019,
-	title = {Spatiotemporal filtering for event-based action recognition},
-	volume = {abs/1903.07067},
-	url = {http://arxiv.org/abs/1903.07067},
-	journal = {CoRR},
-	author = {Ghosh, Rohan and Gupta, Anupam and Silva, Andrei Nakagawa and Soares, Alcimar and Thakor, Nitish V.},
-	year = {2019},
-	note = {arXiv: 1903.07067
-tex.bibsource: dblp computer science bibliography, https://dblp.org
-tex.biburl: https://dblp.org/rec/journals/corr/abs-1903-07067.bib
-tex.timestamp: Mon, 01 Apr 2019 14:07:37 +0200},
-	keywords = {⛔ No DOI found},
-}
-
-@article{deweese_binary_2002,
-	title = {Binary coding in auditory cortex},
-	volume = {15},
-	journal = {Advances in neural information processing systems},
-	author = {DeWeese, Michael and Zador, Anthony},
-	year = {2002},
-	keywords = {⛔ No DOI found},
-}
-
 @article{benosman_asynchronous_2012,
 	title = {Asynchronous frameless event-based optical flow},
 	volume = {27},
@@ -190,7 +541,7 @@ tex.timestamp: Mon, 01 Apr 2019 14:07:37 +0200},
 	pages = {6},
 }
 
-@article{grimaldi_robust_2022,
+@article{grimaldi_robust_2022-1,
 	title = {A robust event-driven approach to always-on object recognition},
 	url = {https://www.techrxiv.org/articles/preprint/A<sub>r</sub>obustₑvent-drivenₐpproachₜoₐlways-onₒbject<sub>r</sub>ecognition/18003077/1},
 	doi = {10.36227/techrxiv.18003077.v1},
