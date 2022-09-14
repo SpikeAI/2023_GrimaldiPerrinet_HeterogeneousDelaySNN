@@ -304,70 +304,13 @@ Our SNN model will be tested on a behaviorally relevant task consisting in detec
 
 \subsection{Task definition: fast motion detection}
 %
-Taking analogy with biological conditions, a common use case for motion detection is to estimate the motion generated on a sensor by saccade-like movements. Saccades are rapid movements of the eyeball which allow to reposition the axis of view in a short period. In humans, these are particularly rapid 
-To test our model, we will quantify its ability to categorize different motions. In that order, we will generate a natural
+%Taking analogy with biological conditions, a common use case for motion detection is to estimate the motion generated on a sensor by saccade-like movements. Saccades are rapid movements of the eyeball which allow to reposition the axis of view in a short period. In humans, these are particularly rapid 
+%To test our model, we will quantify its ability to categorize different motions. In that order, we will generate a natural
+
+Let's first define a biologically inspired trajectory inspired by eye movements. Indeed, these allow to dynamically actuate the axis of vision in the visual field of view. For instance, Saccades are rapid movements of the eyeball which reposition the center of vision. In humans, these are Very frequent (on average every 3 seconds [ ]). They are produced very rapidly C- 80ms) and the peak speed is proportional to the amplitude of the displacement (up to 600 deg/sec for a large saccade of 30deg of amplitude). At a more microscopic scale, the gaze moves with are incessant drift similar to a Brownian-like trajectory (Poletti 2015). To keep with the generality of the task, we defined eye movements using a form of Random walk (Engbert 211). This consists first to define a finite set of
+possible 2D motions in polar coordinates. Based on the distribution of biological motions, we simplified it by selecting a set motion set of eye motions as the cartesian product of N-V-phi=8 linearly spaced motion directions and N-Y-speed=7 different speeds (see inset of fig : motion - task, a). Note that speeds are sampled on a geometric scale between $1/4$ and $v-speed_base = 4$. Second, we define the trajectory as segments whose duration are drawn from a Poisson distribution with an average length of block-length = 20 ms - similar to a Levy flight. Finally, the trajectory is integrated by assuming 1/that speeds are uniformly and independently sampled from the set of different motions motion-set and 2/ that motion is uniform during a time segment. resulting instances are giving qualitatively similar trajectories as those observed for eye movements as observed for instance in humans (see figure fig : motion-task - a) .
 
 
-Let's first define a biologically inspired trajectory
-inspired by Gye movements. Indeed,
-these allow to dynamically actuate
-the axis of vision in the visual field of view.
-Ton instance, Saccades au rapid movements of the eyeball
-which reposition the center of vision. In humans,
-these are Very frequent (on average every 3 seconds
-[ ]) They reproduced very rapidly.
-C- 80ms) and the peak speed is proportional to the
-amplitude of the displacement (up to 6000/1 for
-a large saccade of 30" of amplitude). At a more
-microscopic scale, the gaze moves with au
-incessant drift similar to a Brownian-like
-trajectory (Poletti pois).
-To keep with the generality of the task,
-we defined eye movements using a form of
-Random walk (Engbent 20"]. This
-consists first dro define a finite set of
-possible motion. Bayed on the distribution of
-biological motions, we simplified it
-by selectingasetmotionsetofaye motions as the
-cartesian product of N-V- phi-8 linearly spaced motion directions
-and NY-speed - 7 different speeds.
-(see inset of fg : motion_task, a)
-Note that speeds are sampled on a geometric
-scale between Yq and v-speed_base : 4.
-second, we define the trajectory as segments
-Whose duration are drawn from a Poisson
-distribution with an average length of
-block-length : 20 msflevyfl.int). Finally, the trajectory
-is integrated by assuming ① that speeds are
-uniformly and independently sampled from the
-et of different motions motionset and ② motion
-is uniform during a time segment. resulting
-instances are giving qualitatively similar
-trajectories as those observed for eye movements
-as observed for instance in humans (see
-figure fig : motion_task - a) .
-
-use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
-This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions:
-% of a motion cloud is determined by a constant $k_v$: with a constant speed $\speed$ (see \fig{motionclouds}-(a)): 
-%\begin{equation*}
-%%\begin{gathered}
-%\va{v}_k = %\binom{\cos(\frac{2\pi\cdot k_v}{N_v})}{\sin(\frac{2\pi\cdot k_v}{N_v})}
-%  \begin{pmatrix}
-%    \cos(2\pi\cdot \frac{k}{\Nclass})\\
-%    \sin(2\pi\cdot \frac{k}{\Nclass})
-%  \end{pmatrix}
-%%\end{gathered}
-%\end{equation*}
-$
-\speed_\kernelind = 
-  ( 
-    \speed \cdot \cos(2\pi\cdot \frac{\kernelind}{\Nspeed}),
-    \speed \cdot \sin(2\pi\cdot \frac{\kernelind}{\Nspeed})
-  )
-$ (\seeFig{motionclouds}-(a) for an illustration).
-For any given velocity, we also varied the parameters of the textures, such as the mean and variance of the orientation or spatial frequency content. This method provides a rich dataset of textured movies for which we know the ground truth for motion.
-%
 \begin{figure}[h!]%[ht!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motionclouds.pdf}
@@ -376,6 +319,14 @@ For any given velocity, we also varied the parameters of the textures, such as t
     {\bf Motion detection task.} {\bf (a)} To mimic the effect of a saccadic-like movement, the axis of view moves following a step-like Brownian motion, and we show here on example path of the trajectory. {\bf (b)} We use large-scale natural images ($512\times512$) in which an aperture ($128\times128$) extracts a sub-image image in the axis of view (here the cross at the center of the image) such as to reproduce the effect of displacing the eye. {\bf (c)} Recording the dynamics of the sub-image as a function of time, it generates a naturalistic movie which may be transformed to an event-based representation. Mimicking the retina, this representation codes for proportional increments or decrements of the luminance in the image, respectively ON (in red) and OFF (in blue) events. This will constitute the input to the spiking neural network.}
     \label{fig:motionclouds}
 \end{figure}
+
+Once these eye-movement trajectories are simulated, we can use them on a visual scene. For this, we selected a database of 10 grayscale natural images which are typically used for studying tu statistics of natural images [olshausen 96]. Note that these are reprocessed in order to equalize the energy in each frequency band (that is, whitened). This process is known to occur as early as the retina-thalamic pathway [dan 1996]. These images are of size 512 × 512 and we will extract sub-images of
+1281 128 which will be positionned around
+the center of gaze at every time step (see
+figure fig : motion -task - b).
+
+We will discretize time in 1ms true bins and produce movies of duration N-T = 250 ms (that is, approximately corresponding to the mean duration between two saccades). To avoid border effects, we will position one draw of the full trajectory at random in image space such that the sub-image is translated using the position given by the trajectory at each time step. The translation is computed using a roll of coordinates in the horizontal and vertical dimensions, followed by a sub-pixel translation defined in Fourier space [Perrinet, 2015]. Note that the amplitude of the displacement is relative to the time bin and we defined speed such that a speed of V-1 corresponds to a motion of one pixel per frame (that is, per
+time bin).
 
 
 To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motionclouds}-(c)). The goal here is to infer the correct motion solely by observing these events.
