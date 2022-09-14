@@ -299,19 +299,36 @@ In this work, we study the emergence of such spatio-temporal spiking motifs when
 %
 Let us now formally define the hetero-synaptic model, as well as the task and how we will solve it. First, we will define the model for supervised learning of weights and delays in a feed-forward layer of a spiking neural network (SNN). Our SNN model will be tested on a computationally relevant task of motion detection in an event-based sensory input. By analogy with biological conditions, we will design a paradigm simulating eye movements where an input image is translated by a parameterized saccadic trajectory. The task is then to guess the motion as accurately as possible (see \seeFig{motion-task}). This is, for example, useful in real-life situations to compensate for eye, head or body movements and to provide robust image categorization by stabilizing the image on the retina. To this end, we will extend the SNN model to be efficient for the resolution of the task by including convolutional kernels. We will finally describe its implementation on conventional computers. 
 
-\subsection{Hetero-synaptic delays model as a temporal Logistic Regression}
+\subsection{Hetero-synaptic delays model as a Logistic Regression with a temporal convolution}
 
-Let's first define a layer of hetero-synaptic spiking neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then not only described by synaptic weights connecting to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. For each neuron $\postsynaddr$, we define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. Note that a neuron may contact an afferent neuron with multiple different delays.
+Let's first define a layer of hetero-synaptic spiking neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. For each neuron $\postsynaddr$, we thus define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. This defines the full connectivity of the hetero-synaptic model.
 
-The corresponding input presynaptic spikes $\event$ will be integrated by this synaptic set and notably by the respective delays, which will multiplex in time all possible patterns. For each time $\timev$ the integration of $\event$ is defined by a list of weights $\activeweights^\postsynaddr$ linked to the synapses that match a precise spatio-temporal motif as input:
+We can now define an event-based input to the model as a set on incoming spikes reaching the presynaptic neurons at specified times, like the sensory signal representing the output of an event-based camera. It thus forms a discrete stream of events, which can be formalized as an ordered set of addresses and timestamps: $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event $\event_\arank$. Each event has a time of occurrence $\timev_\arank$. The corresponding set of input presynaptic spikes $\event$ will be integrated by this synaptic set and notably by the respective delays, which will multiplex in time all possible patterns. For each time $\timev$ the integration of $\event$ is defined by a list of weights $\activeweights^\postsynaddr$ linked to the synapses that match a precise spatio-temporal motif as input:
 $
-\activeweights^\postsynaddr (t) = % \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}
+\activeweights^\postsynaddr (t) = 
+\{ \synapticweight_\ranksyn^\postsynaddr  \vert 
+\presynaddr_\arank = 
+ \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + 
+\synapticdelay_\ranksyn^\postsynaddr \}_{ \arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]} 
+\}
 $.
+\note{finish by saying that it is effortless in biology but difficult on conventional computers}
+
+\note{ TODO: show why this formula implements a polychrony detector }
+From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the nonzero weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
+Using this dense representation, the counting defined above becomes:
+$$
+\mathcal{C}^\postsynaddr(a,t)
+= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
+$$
 %
-The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. It transforms this list of weights into a probability with the following formula:
+This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$. This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different patterns in the event stream.
+%
+
+The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
+It transforms this list of weights into a probability with the following formula:
 $
-toto
-%Pr(k=\postsynaddr \; | \; \timev) =
+Pr(k=\postsynaddr \; \vert \; \timev) =
 \frac 1 Z
 {\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
 $ 
@@ -320,21 +337,8 @@ where $\mathcal{C}^\postsynaddr(\timev) = \sum
 $ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
 %
+In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
 
-%
-In our MLR model with $\Nclass=\Nspeed$ classes, 
-a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. 
-The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
-From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the nonzero weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
-Using this dense representation, the counting defined above becomes:
-$$
-\mathcal{C}^\postsynaddr(a,t)
-= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
-$$
-%
-This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
-This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different patterns in the event stream.
-%
 \subsection{Task definition: fast motion detection}
 %
 Let us now define a trajectory inspired by the biological movements of the eyes. Indeed, these movements allow us to dynamically actuate the center of vision, or gaze, in the field of vision. In animals with a fovea, this is particularly useful as it allows to move the area with the highest density of photoreceptors in the environment, for example at a point of interest. For example, saccades are rapid movements of the eyeball that reposition the center of vision. In humans, these are very frequent (on average one every 3 seconds~\citep{}). They are produced very rapidly (about 80ms) and the maximum speed is proportional to the amplitude of the displacement (up to 600 deg/sec for a large saccade of 30deg amplitude). At a more microscopic scale, the human gaze moves with an incessant drift similar to a Brownian-like trajectory~\citep{Poletti 2015}. To maintain the full generality of the task, we will define eye movements using a form of random walk~\citep{Engbert 2011}. This approach first defines a finite set of possible 2D motions in polar coordinates. Based on the distribution of biological motions, we simplified it by selecting a set of eye movements as the Cartesian product of N-V-phi=8 linearly spaced motion directions and N-Y-velocity=7 different velocities (see inset of \seeFig{motion-task}-(a)). Note that the velocities are sampled on a geometric scale between $1/4$ and $v-speed_base = 4$. Next, we define one trajectory of gaze as segments whose duration is drawn from a Poisson distribution with an average block length = 20 ms - similar to a Lévy flight~\citep{}. Finally, the trajectory is integrated by assuming 1/ that velocities are uniformly and independently sampled from the set of different motion-sets and 2/ that motion is uniform during a time segment. The resulting instances yield trajectories qualitatively similar to those observed for human eye movements (\seeFig{motion-task}-(a)).
@@ -352,7 +356,8 @@ Once these eye movement trajectories are generated, we can apply them to a visua
 
 \note{ TODO: formula / say it is driven by image gradients / give scaling rules }
 To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motion-task}-(c)). The goal here is to infer the correct motion solely by observing these events. 
-The sensory signal representing the output of an event-based camera forms a discrete stream of events, which can be formalized as an ordered set of addresses and timestamps: $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event $\event_\arank$.  This event has a time of occurrence $\timev_\arank$  and an associated address, which is typically in the form $\presynaddr_\arank=(x_\arank, y_\arank, \polev_\arank)$. This defines a presynaptic address space $\presynaddrspace = [1, \Nx]\times[1, \Ny] \times [1, \Npol] \subset \mathbb{N}^3$ where $(\Nx, \Ny)$ is the size of the sensor in pixels and $\Npol$ is the number of polarities  ($\Npol=2$ for ON and OFF polarities). 
+This sensory signal representing the output of this event-based camera forms a discrete stream of events, $\event$ as defined above.   
+Each event has an associated address, which is typically in the form $\presynaddr_\arank=(x_\arank, y_\arank, \polev_\arank)$. This defines a presynaptic address space $\presynaddrspace = [1, \Nx]\times[1, \Ny] \times [1, \Npol] \subset \mathbb{N}^3$ where $(\Nx, \Ny)$ is the size of the sensor in pixels and $\Npol$ is the number of polarities  ($\Npol=2$ for ON and OFF polarities). 
 \note{ the task is full-field rigid translations, the model resolves it locally (analogy to the input from V1 to MT) }
 
 \subsection{Extension as 3D convolutions for motion detection}
@@ -431,7 +436,7 @@ For any given velocity, we also varied the parameters of the textures, such as t
 %
 \begin{figure}[h!]%[ht!]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/motionclouds.pdf}
+    \includegraphics[width=0.95\linewidth]{figures/motion-clouds.pdf}
     \caption{{\bf Motion detection task.} {\bf (a)} The motion direction represented as the plain red vector, other possible motion directions are represented in light red. {\bf (b)} A screenshot of one generated naturalistic textured stimulus at a specific time. % $\timev_\arank$. 
     {\bf (c)} The corresponding ON (in red) and OFF (in blue) event stream generated from the stimuli on (b) and constituting the input to the spiking neural network.}
     \label{fig:motionclouds}
