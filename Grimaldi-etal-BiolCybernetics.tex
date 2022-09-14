@@ -318,21 +318,6 @@ Once these eye movement trajectories are generated, we can apply them to a visua
 To transform each movie into events, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. If, on a specific pixel at that specific timestamp, the absolute value of this gradient exceeds a threshold, an event is generated. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is then similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motion-task}-(c)). The goal here is to infer the correct motion solely by observing these events.
 
 \subsection{Hetero-synaptic delays model as a temporal Logistic Regression}
-%
-\begin{figure*}[ht!]
-    {\centering
-    \vspace{-3cm}
-    \includegraphics[width=\linewidth]{figures/3D_kernels_oneline.png}
-    }
-    %\vspace{-.5cm}
-    \caption{
-    	Representation of the weights for the $8$ learned kernels of the model corresponding to the OFF polarities and selective to the different motion directions
-	(because of the symmetry observed between the ON and OFF event streams, kernels are similar for the ON polarities). These weights are associated to a specific delay on the \textit{delays} axis and to a presynaptic address defined on the two other axes.
-	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. One sees positive (excitatory) coefficients for the specific direction of motion and negative (inhibitory) coefficients for all other directions.
-	}
-    \label{fig:kernels}
-\end{figure*} 
-%
 The sensory signal representing the output of an event-based camera forms a discrete stream of events, which can be formalized as an ordered set of addresses and timestamps: $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event $\event_\arank$. 
 This event has a time of occurrence $\timev_\arank$  and an associated address, which is typically in the form $\presynaddr_\arank=(x_\arank, y_\arank, \polev_\arank)$.
 This defines a presynaptic address space $\presynaddrspace = [1, \Nx]\times[1, \Ny] \times [1, \Npol] \subset \mathbb{N}^3$ where $(\Nx, \Ny)$ is the size of the sensor in pixels and $\Npol$ is the number of polarities  ($\Npol=2$ for ON and OFF polarities).
@@ -358,7 +343,7 @@ where $\mathcal{C}^\postsynaddr(\timev) = \sum
 $ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
 %
-\subsection{A Spiking Neural Network detecting motion as a CNN}
+
 %
 In our MLR model with $\Nclass=\Nspeed$ classes, 
 a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. 
@@ -372,6 +357,7 @@ $$
 %
 This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
 This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different patterns in the event stream.
+\subsection{Extension as 3D convolutions for motion detection}
 %
 In particular, we may extend the convolution to a 3D convolution 
 such that the representation would also benefit from spatial invariance. The use of spatio-temporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\citep{ghosh_spatiotemporal_2019}.
@@ -386,6 +372,21 @@ The loss function of the MLR model is the binary cross entropy on the output of 
 \label{sec:results}
 %
 \subsection{Kernels learned for motion detection}
+%
+\begin{figure*}[ht!]
+    {\centering
+    \vspace{-3cm}
+    \includegraphics[width=\linewidth]{figures/3D_kernels_oneline.png}
+    }
+    %\vspace{-.5cm}
+    \caption{
+    	Representation of the weights for the $8$ learned kernels of the model corresponding to the OFF polarities and selective to the different motion directions
+	(because of the symmetry observed between the ON and OFF event streams, kernels are similar for the ON polarities). These weights are associated to a specific delay on the \textit{delays} axis and to a presynaptic address defined on the two other axes.
+	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. One sees positive (excitatory) coefficients for the specific direction of motion and negative (inhibitory) coefficients for all other directions.
+	}
+    \label{fig:kernels}
+\end{figure*} 
+%
 %
 After training our model, we first observe the weights learned for the different neurons (\seeFig{kernels}). Focusing on the positive weights, a strong selectivity is observed along specific axes for the different kernels. These directions can be easily associated to the direction of motion controlled in the motion clouds. For instance, the third and the seventh kernels show a horizontal selectivity to motion directions.
 %
