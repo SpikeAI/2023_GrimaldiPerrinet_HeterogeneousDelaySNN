@@ -307,6 +307,46 @@ Our SNN model will be tested on a behaviorally relevant task consisting in detec
 Taking analogy with biological conditions, a common use case for motion detection is to estimate the motion generated on a sensor by saccade-like movements. Saccades are rapid movements of the eyeball which allow to reposition the axis of view in a short period. In humans, these are particularly rapid 
 To test our model, we will quantify its ability to categorize different motions. In that order, we will generate a natural
 
+
+Let's first define a biologically inspired trajectory
+inspired by Gye movements. Indeed,
+these allow to dynamically actuate
+the axis of vision in the visual field of view.
+Ton instance, Saccades au rapid movements of the eyeball
+which reposition the center of vision. In humans,
+these are Very frequent (on average every 3 seconds
+[ ]) They reproduced very rapidly.
+C- 80ms) and the peak speed is proportional to the
+amplitude of the displacement (up to 6000/1 for
+a large saccade of 30" of amplitude). At a more
+microscopic scale, the gaze moves with au
+incessant drift similar to a Brownian-like
+trajectory (Poletti pois).
+To keep with the generality of the task,
+we defined eye movements using a form of
+Random walk (Engbent 20"]. This
+consists first dro define a finite set of
+possible motion. Bayed on the distribution of
+biological motions, we simplified it
+by selectingasetmotionsetofaye motions as the
+cartesian product of N-V- phi-8 linearly spaced motion directions
+and NY-speed - 7 different speeds.
+(see inset of fg : motion_task, a)
+Note that speeds are sampled on a geometric
+scale between Yq and v-speed_base : 4.
+second, we define the trajectory as segments
+Whose duration are drawn from a Poisson
+distribution with an average length of
+block-length : 20 msflevyfl.int). Finally, the trajectory
+is integrated by assuming ① that speeds are
+uniformly and independently sampled from the
+et of different motions motionset and ② motion
+is uniform during a time segment. resulting
+instances are giving qualitatively similar
+trajectories as those observed for eye movements
+as observed for instance in humans (see
+figure fig : motion_task - a) .
+
 use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds}). In particular, we will set the spatial size to $(\Nx, \Ny)$ and consider a discretization of time with a time step of $1$ such that $\timev \in \mathbb{N}$. Movies' duration are here set to $\Ntime=400$.
 This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions:
 % of a motion cloud is determined by a constant $k_v$: with a constant speed $\speed$ (see \fig{motionclouds}-(a)): 
