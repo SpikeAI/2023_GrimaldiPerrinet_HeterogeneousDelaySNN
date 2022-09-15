@@ -1,8 +1,8 @@
 ################################################
-SRC = Jeremie-etal-Vision
+SRC = Grimaldi-etal-BiolCybernetics
 # SRC_rev = Pasturel_etal2019
 DIR_rev = revision_0
-SRC_rev = $(DIR_rev)/Jeremie-etal-Vision
+SRC_rev = $(DIR_rev)/$(SRC)
 #LATEXMK = latexmk -pdf -pdflatex=lualatex
 LATEXMK = latexmk -pdf
 BIBTEX = bibtex
@@ -14,7 +14,6 @@ diff: $(SRC)_trackedchanges.pdf
 LATEXMK = latexmk -bibtex -pdf
 #  -pdflatex=pdflatex
 ################################################
-
 
 # post-production
 $(SRC)_trackedchanges.tex: $(SRC).tex $(SRC).bib $(SRC_rev).tex
