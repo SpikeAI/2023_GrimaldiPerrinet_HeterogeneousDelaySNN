@@ -52,7 +52,11 @@ The response of a biological neuron depends on the precise timing of afferent sp
 }
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
 }
-\newcommand{\Acknowledgments}{This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). %HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}{AgileNeuroBot}''). HL received funding from a University of Montreal Artificial Intelligence scholarship. For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
+\newcommand{\Acknowledgments}{This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). %HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}
+LP received funding from the ANR project  N° ANR-22-XXX-XXX (''\href{https://laurentperrinet.github.io/grant/polychronies/}{polychronies}''). 
+%HL received funding from a University of Montreal Artificial Intelligence scholarship. 
+%
+%For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
 A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -470,18 +474,20 @@ Such recurrent activity would be essential for implementing predictive or antici
 
 %Note that this supervised learning scheme can be extended to a variety of tasks. It would follow from the emergence of new kernels adapted to this new task after supervised learning.  This constitutes a major advantage over other algorithms which derive event-based algorithms from specific physical rules (see for instance~\citep{benosman_asynchronous_2012} for computing the optic flow using the luminance conservation rule). We aim at extending the application of this model on more generic datasets acquired in natural conditions for progressively more complex tasks from motion extraction, optic flow or time-to-contact maps.
 % >>>>>>>>>>> LuP is here <<<<<<<<<<<
+Lors de la définition de notre tâche, nous avons montré comment la génération d'événements dépendait du gradient dans les images. Ce gradient est défini dans les dimensions horizontale et verticale et les maxima de ce gradient sont généralement orientés. Considérés ensemble, ces bords orientés forment les contours des objets visuels présents dans la scène (Koenderink). Il existe donc une dépendance au sein du flux d'événements entre les informations relatives au mouvement et à l'orientation. Il serait crucial d'étudier plus en profondeur cette interdépendance, ce qui pourrait être amorcé en entraînant le modèle sur un ensemble de données comportant des labels d'orientation. L'étude de cette dépendance permettra de dissocier ces deux formes d'information visuelle et de pouvoir les intégrer, et notamment de considérer que la définition du mouvement est plus précise perpendiculairement à un contour orienté (aka, le problème de l'ouverture), mais aussi d'implémenter des règles prédictives récurrentes, telles que celles qui sont identifiées pour dissocier ce problème (Perrinet 2012).
+
+Le modèle est entraîné sur une tâche de bas niveau de détection de mouvement local, et on peut se demander s'il pourrait être entraîné sur des tâches de plus haut niveau. Un exemple de tâche serait par exemple celui de l'estimation de la profondeur dans la scène visuelle. Il existe de multiples sources d'information pour déduire la profondeur, comme la disparité binoculaire ou les changements de texture ou d'ombrage, mais dans notre cas, la parallaxe du mouvement serait l'indice le plus significatif (Rogers). En effet, les objets proches d'un observateur se déplacent relativement plus rapidement sur la rétine qu'un objet situé à une grande distance. En utilisant cette information, on peut segmenter les objets et estimer leur profondeur (Yoonessi). Cependant, cela nécessiterait d'abord de calculer le flux optique. Une implémentation possible est donc d'ajouter une nouvelle couche à notre modèle, en analogie avec l'organisation hiérarchique mise en évidence dans le cortex visuel. Cela est en théorie possible en utilisant la sortie de notre modèle (qui estime la vitesse dans l'espace rétinotopique) comme entrée d'une nouvelle couche de neurones qui estimerait la vitesse dans le champ visuel, en incluant la dimension de profondeur comme étiquette de sortie. Cela pourrait avoir des applications directes et importantes, par exemple dans la conduite autonome, afin de détecter les obstacles de manière rapide et robuste. Une autre extension serait de produire activement des mouvements du capteur (physiquement ou virtuellement) pour produire cette estimation (Nawrot).
+
+Pour conclure, le modèle que nous avons présenté offre un moyen de traiter efficacement les signaux basés sur des événements. Nous avons montré que nous pouvons entraîner le modèle de manière semi-supervisée, en connaissant les étiquettes de sortie mais sans savoir quand elles se produisent. Une autre perspective consisterait à étendre le modèle à un paradigme d'apprentissage entièrement auto-supervisé, c'est-à-dire sans aucune donnée étiquetée (Barlow). On pense que ce type d'apprentissage est prédominant dans le système nerveux central et, en supposant que le signal est parcimonieux (Olshausen), on pourrait étendre les schémas d'apprentissage hebbien parcimonieux aux spikes (Perrinet Masquelier). Un tel schéma serait particulièrement bien adapté à l'exploration de données neurobiologiques. En effet, il existe une littérature importante indiquant que la dynamique cérébrale s'organise souvent en séquences stéréotypées comme des chaînes synfire (Ikegaya), des paquets (Luczak) ou des séquences hippocampiques (Pastalkora 2008 Villette 2015). Ces motifs sont stéréotypés et robustes, car ils peuvent être activés selon le même motif d'un jour à l'autre (Haimerl 2019). Contrairement aux méthodes classiques qui sont utilisées pour traiter les données neurobiologiques, un tel modèle serait capable de répondre à des questions clés concernant la représentation de l'information dans les données neuronales. En outre, il ouvrirait des possibilités dans le domaine de l'apprentissage automatique, en particulier dans celui de la vision par ordinateur, pour résoudre les principales incertitudes actuelles telles que la robustesse aux attaques, la scalabilité, l'interprétabilité ou la consommation d'énergie.
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%
 \backmatter
 
 \bmhead{Acknowledgments}
 
 % Acknowledgement hidden for review.
-This work was supported by the European Union’s ERA-NET CHIST-ERA 2018 research and innovation programme under grant agreement ANR-19-CHR3-0008.
-
-% Nef acknowledgements 
-The authors are grateful to the OPAL infrastructure from Université Côte d'Azur for providing resources and support.
+\Acknowledgments
 
 \section*{Declarations}
 
