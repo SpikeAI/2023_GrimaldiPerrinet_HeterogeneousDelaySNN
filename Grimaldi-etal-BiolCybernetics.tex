@@ -1,5 +1,5 @@
+% !TEX encoding = UTF-8 Unicode
 %!TeX TS-program = pdfLaTeX
-%!TeX encoding = UTF-8 Unicode
 %!TeX spellcheck = en-US
 %!BIB TS-program = bibtex
 % -*- coding: UTF-8; -*-
@@ -160,10 +160,14 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %%\documentclass[default,iicol]{sn-jnl}% Default with double column layout
 %\documentclass[iicol]{sn-jnl}
 
+\usepackage[T1]{fontenc}
+%\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+
 %%%% Standard Packages
 %%<additional latex packages if required can be included here>
-\usepackage[lofdepth,lotdepth,position=top]{subfig}
-\usepackage{tabularx}
+%\usepackage[lofdepth,lotdepth,position=top]{subfig}
+%\usepackage{tabularx}
 %%%%
 
 %%%%%=============================================================================%%%%
@@ -231,10 +235,11 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %\usepackage%[disable]	% uncomment to hide all the notes
 %	{todonotes}
 %\newcommand{\noteAG}[1]{\todo[author=\textbf{Antoine}, inline]{#1}}
-\usepackage{soul}
+\usepackage{soulutf8}
 \usepackage{color}
 
-\DeclareRobustCommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
+%\DeclareRobustCommand
+\newcommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
 %\newcommand{\noteLP}[1]{\todo[author=\textbf{Laurent}, inline]{#1}}
 %\newcommand{\modif}[1]{\todo[author=\textbf{Proposition}, inline]{#1}}
 
@@ -337,7 +342,7 @@ In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicte
 %
 \subsection{Task definition: fast motion detection}
 %%%-----------------------------------------------------------------
-\note{c'est la meme expe faite par baudot et modelisee par kremkow}
+\note{c'est la meme expe faite par baudot et modelisée par kremkow}
 Let us now define a trajectory inspired by the biological movements of the eyes. Indeed, these movements allow us to dynamically actuate the center of vision, or gaze, in the field of vision. In animals with a fovea, this is particularly useful as it allows to move the area with the highest density of photoreceptors in the environment, for example at a point of interest. For example, saccades are rapid movements of the eyeball that reposition the center of vision. In humans, these are very frequent (on average one every 3 per second~\citep{dandekar_neural_2012}). They are produced very rapidly (about $80~\ms$) and display a whole range of speeds. At a more microscopic scale, the human gaze moves with an incessant drift similar to a Brownian-like trajectory~\citep{poletti_head-eye_2015}. To maintain the full generality of the task, we will define eye movements using a form of random walk~\citep{engbert_integrated_2011}. This approach first defines a finite set of possible 2D motions in polar coordinates. Based on the distribution of biological motions, we simplified it by selecting a set of eye movements as the Cartesian product of N-V-phi=8 linearly spaced motion directions and N-Y-velocity=7 different velocities (see inset of \seeFig{motion_task}-(a)). Note that the velocities are sampled on a geometric scale between $1/4$ and $v-speed_base = 4$. Next, we define one trajectory of gaze as segments whose duration is drawn from a Poisson distribution with an average block length = $20~\ms$ - similar to a Lévy flight~\citep{}. Finally, the trajectory is integrated by assuming 1/ that velocities are uniformly and independently sampled from the set of different motion-sets and 2/ that motion is uniform during a time segment. The resulting instances yield trajectories qualitatively similar to those observed for human eye movements (\seeFig{motion_task}-(a)).
 
 %%%-----------------------------------------------------------------
