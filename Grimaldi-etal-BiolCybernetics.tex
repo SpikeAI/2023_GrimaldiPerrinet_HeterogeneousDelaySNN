@@ -303,6 +303,13 @@ Let us now formally define the hetero-synaptic model, as well as the task and ho
 \subsection{Hetero-synaptic delays model as a Logistic Regression with a temporal convolution}
 %%%-----------------------------------------------------------------
 Let's first define a layer of hetero-synaptic spiking neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. For each neuron $\postsynaddr$, we thus define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. This defines the full connectivity of the hetero-synaptic model.
+%In general, a spiking neuron is defined on the one hand by the equations governing the evolution of its membrane potential dynamics on its soma and on the other hand by the characterization of the synaptic contacts on its dendritic tree. A classical characterization consists in detailing the synaptic weights of each synaptic contact on the dendritic tree. A more detailed examination of these synaptic contacts reveals the added importance of hetero-synaptic delays, i.e., the precise timing from synaptic activation to its integration into the soma, and how this changes the network's dynamics~\citep{Izhikevich06}. Thus, we can parameterize each neuron by the set of tuples defining the weight and delay of each synaptic contact. By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights. When a neuron is activated by a discharge pattern that corresponds to this specific set of delays and addresses, the discharge probability will increase. Following the observations of~\citet{Izhikevich06}, let us assume that such precise discharge pattern defines a polychronous group (PG). Assuming that we know there exists $M$ such groups, we will define as $b \in [1, M]$ the address of a PG and as $W_b$ the corresponding weight matrices. This allows then to derive a generative model for raster plots (see Figure~\ref{fig:1}).
+
+%Indeed, the probability of firing of a neuron $a$ at a given time $t$ can be understood as a Bernoulli trial whose (only) parameter is a bias $p(t, a) \in [0, 1]$. Assuming that the presence of PGs is conditionally independent, this bias can be written as the combination of these factors, whose values are given by the corresponding weights. PGs may be activated independently at random times and  we write that $B(b, t)=1$ if $b$ is activated at $t$ (and else $B(b, t)=0$). We can thus write the probability bias as %the joint probability given these factors as 
+%$%$
+%p(t, a) = \sigma\big(W_0 + \sum_{b, t} B(b, t) \cdot W_b(a, t-d) \big)  
+%$, %$
+%where $\sigma$ is the sigmoid function. We will further assume that the weights are balanced (their mean is zero) and that $W_0$ is a bias such that $p_0=\sigma(W_0)$ is the average background firing rate. Conveniently, one can write this summation as a one-dimensional temporal convolution operator such that we may simply write $p = \sigma(W_0 + B \ast W )$ where  $p\in [ 0, 1]^{N\times T}$ and $B\in \{0, 1\}^{M\times T}$ is the raster plot corresponding to the temporal activation of the PGs. Finally, we obtain the raster plot $A\in \{0, 1\}^{N\times T}$ by drawing spikes using independent Bernoulli trials $A \sim \mathcal{B}(p)$. Note that, depending on the shape of the kernels, the generative model can model a Poisson process, generate rhythmic activity or more generally propagating waves. This formulation thus defines a simple generative model for raster plots as a combination of independent PGs. 
 
 We can now define an event-based input to the model as a set on incoming spikes reaching the presynaptic neurons at specified times, like the sensory signal representing the output of an event-based camera. It thus forms a discrete stream of events, which can be formalized as an ordered set of addresses and timestamps: $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event $\event_\arank$. Each event has a time of occurrence $\timev_\arank$. The corresponding set of input presynaptic spikes $\event$ will be integrated by this synaptic set and notably by the respective delays, which will multiplex in time all possible motifs. For each time $\timev$ the integration of $\event$ is defined by a list of weights $\activeweights^\postsynaddr$ linked to the synapses that match a precise spatio-temporal motif as input:
 $
@@ -399,7 +406,46 @@ Finally, the output of the MLR model results in an event with the highest probab
 The loss function of the MLR model is the binary cross entropy on the output of the classification layer. Simulations are performed thanks to the PyTorch library using gradient descent with Adam ($2^{12}$ epochs and a learning rate of $10^{-5}$). 
 %
 
-
+% %---------------------------
+% \begin{wrapfigure}{r}{.275\textwidth}
+%     \vspace{-15pt}
+%     % ❯ git add figure_N_PG_time.pdf figure_N_PGs.pdf figure_N_pre.pdf
+%     %\subfloat[]{
+%     \includegraphics[width=\linewidth]{figure_N_PGs.pdf}
+%     %}%
+%     %\subfloat[]{\includegraphics[width=.49\linewidth]{Figures/fig_methods_nat.pdf}}%
+%     \vspace{-25pt}
+%     {
+%     \caption{Accuracy of PG detection as a function of the number $M$ of kernels.
+%     }
+%     \label{fig:2}
+%     }
+%     \vspace{-10pt}
+%     \end{wrapfigure}
+%     %---------------------------
+%     This generative model allows to define an inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the PGs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider PG kernels with similar decreasing exponential time profile, we can prove that this is similar to %finding the tuning function of L-NL neurons, as used in 
+%     the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. To quantify the efficiency of this operation, we generated $M=55$ synthetic PGs as random independent kernels over $128$ presynaptic inputs and $D=127$ possible delays. We drew random independent instances of $B$ with a length of $T=1000$ time steps and with on average $2.0$ occurrences each. This allowed us to generate raster plots which we use to infer $\hat{B}$. We compute the accuracy as the rate of true positive detections and observe on average $\approx 98\%$ correct PGs both for the address and %(exact) 
+%     timing.
+    
+%     %---------------------------
+%     \begin{wrapfigure}{r}{.275\textwidth}
+%     \vspace{-10pt}
+%     % ❯ git add figure_N_PG_time.pdf figure_N_PGs.pdf figure_N_pre.pdf
+%     %\subfloat[]{
+%     \includegraphics[width=\linewidth]{figure_N_PG_time.pdf}
+%     %}%
+%     %\subfloat[]{\includegraphics[width=.49\linewidth]{Figures/fig_methods_nat.pdf}}%
+%     \vspace{-25pt}
+%     {
+%     \caption{Accuracy of PG detection as a function of the temporal depth $D$ of kernels.
+%     }
+%     \label{fig:3}
+%     }
+%     \vspace{-15pt}
+%     \end{wrapfigure}
+%     %---------------------------
+%     We further extended this result by showing how the accuracy would evolve as a function of the number of simultaneous PGs, while keeping the same frequency of occurrence. We show in Figure~\ref{fig:2} that the accuracy of finding the right PG is still above $80\%$ accuracy with more than $1364$ PGs. Moreover, we show in Figure~\ref{fig:3} that (with $M=55$ PGs fixed) the accuracy increases notably as the temporal depth $D$ of the PG kernel increased, demonstrating quantitatively the potential of hetero-synaptic delays. These results were obtained while assuming that we know $W$. However, this is in general not the case, for instance when observing the raster plot of a population of neurons. Inspired by the k-means algorithm, it is possible to devise a self-supervised learning algorithm. Our preliminary results show that it is possible to retrieve PGs embedded in the data, yet that further analysis is necessary to improve the convergence of the algorithm. In particular, it seems promising to use a sparseness constraint in the inference mechanism such as to remove spurious correlations in the inference.
+    
 \subsection{Task definition: fast motion detection}
 %%%-----------------------------------------------------------------
 \note{c'est la meme expe faite par baudot et modelisée par kremkow}
