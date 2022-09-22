@@ -26,7 +26,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\Title}{
-Learning hetero-synaptic delays for fast motion detection in a single layer of spiking neurons
+Learning hetero-synaptic delays in a layer of spiking neurons for fast motion detection
 }
 \newcommand{\ShortTitle}{
 Learning synaptic delays of spiking neurons for motion detection
@@ -314,6 +314,41 @@ $
 \}
 $.
 \note{finish by saying that it is effortless in biology but difficult on conventional computers}
+%
+\begin{figure}[t!]
+    \centering
+    \includegraphics[width=0.90\linewidth]{figures/figure_1a.pdf}
+    \includegraphics[width=0.90\linewidth]{figures/figure_1b.pdf}
+    \includegraphics[width=0.90\linewidth]{figures/figure_1c.pdf}
+	    \caption{The hetero-synaptic delays model applied on synthetic data. {\bf (a)}~The afferent information consists of the repeated occurrence of groups of precise motifs of spikes that we call ``polychronous groups'' (PGs). We highlight them by different colors, an information hidden to a detection model. {\bf (b)}~The model is defined as an assembly of neurons (here for $4$ PGs) each defined by a set of different synapses defined by weights (increasing with the radius of the black dots) at each different delay. Note that each afferent may be connected with multiple weights at different delays. The propagation of the afferent information through these delay may generate at each time step a synchronous pattern on a subset of synapses. %These PG patterns were efficiently learned by a logistic regression.
+	    {\bf (c)}~The output of the model provides with the predicted probability of occurrence of each PG pattern at any time, which may be used to generate a spike as a Bernoulli trial, providing in this particular case with an exact identification of PGs occurrences. }
+    \label{fig:model}
+\end{figure}
+
+% 
+The sensory signal representing the output of an event-based camera forms a discrete stream of events, which can be formalized as an ordered set of addresses and timestamps: $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event $\event_\arank$. 
+This event has a time of occurrence $\timev_\arank$  and an associated address, which is typically in the form $\presynaddr_\arank=(x_\arank, y_\arank, \polev_\arank)$.
+This defines a presynaptic address space $\presynaddrspace = [1, \Nx]\times[1, \Ny] \times [1, \Npol] \subset \mathbb{N}^3$ where $(\Nx, \Ny)$ is the size of the sensor in pixels and $\Npol$ is the number of polarities  ($\Npol=2$ for ON and OFF polarities).
+
+We may now define a layer of neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then not only described by synaptic weights connecting to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. For each neuron $\postsynaddr$, we define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. Note that a neuron may contact an afferent neuron with multiple, different delays.
+
+The corresponding input presynaptic spikes $\event$ will be integrated by this synaptic set and notably by the respective delays, which will multiplex in time all possible patterns.
+For each time $\timev$ the integration of $\event$ is defined by a list of weights $\activeweights^\postsynaddr$ linked to the synapses that match a precise spatio-temporal motif as input:
+$
+\activeweights^\postsynaddr(t) = \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}
+$.
+%
+The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
+$
+Pr(k=\postsynaddr \; | \; \timev) =
+\frac 1 Z
+{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
+$ 
+where $\mathcal{C}^\postsynaddr(\timev) = \sum
+\activeweights^\postsynaddr(t)
+$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
+In particular, some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
+%
 
 \note{ TODO: show why this formula implements a polychrony detector }
 From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the Boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the nonzero weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
@@ -338,8 +373,33 @@ where $\mathcal{C}^\postsynaddr(\timev) = \sum
 $ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
 %
-In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
+%In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
 %
+%
+In our MLR model with $\Nclass=\Nspeed$ classes, 
+a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. 
+The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
+From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representations. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
+Using this dense representation, the counting defined above becomes:
+\begin{equation*}
+\mathcal{C}^\postsynaddr(a,t)
+= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
+\end{equation*}
+%
+This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
+This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different patterns in the event stream.
+%
+In particular, we may extend the convolution to a 3D convolution 
+such that the representation would also benefit from spatial invariance. The use of spatiotemporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\cite{ghosh2022conv3D}.
+For that, we design 3D kernels of shape  $(\Kx, \Ky, \Ktime) = (15, 15, 8)$, respectively representing the two spatial dimensions and the range of delays.
+Computations are performed on spatio-temporal windows, defined by the kernels, sliding around the events, that is, the center of the spatio-temporal window around the current event $\epsilon_\arank$.
+%
+Finally, the output of the MLR model results in an event with the highest probability class, keeping the same timing as the event as input.
+%
+The loss function of the MLR model is the binary cross entropy on the output of the classification layer. Simulations are performed thanks to the PyTorch library using gradient descent with Adam ($2^{12}$ epochs and a learning rate of $10^{-5}$). 
+%
+
+
 \subsection{Task definition: fast motion detection}
 %%%-----------------------------------------------------------------
 \note{c'est la meme expe faite par baudot et modelisée par kremkow}
