@@ -345,6 +345,19 @@ When a neuron is activated by a discharge motif that corresponds to this specifi
 
 \subsubsection{Detecting spiking motifs}
 %: Detection model
+\note{ TODO: show why this formula implements a polychrony detector }
+
+
+From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
+Using this dense representation, the counting defined above becomes:
+\begin{equation*}
+\mathcal{C}^\postsynaddr(a,t)
+= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
+\end{equation*}
+%
+This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
+This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
+%
 
 
 By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights.
@@ -361,35 +374,21 @@ where  $p\in [ 0, 1]^{N\times T}$ and $B\in \{0, 1\}^{M\times T}$ is the raster 
 
 \subsubsection{Implementation using spiking neurons with hetero-synaptic delays}
 %
-%The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
-%$
-%Pr(k=\postsynaddr \; | \; \timev) =
-%\frac 1 Z
-%{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
-%$ 
-%where $\mathcal{C}^\postsynaddr(\timev) = \sum
-%\activeweights^\postsynaddr(t)
-%$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
-%In particular, some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
-%
-We may now define a layer of neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then not only described by synaptic weights connecting to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. For each neuron $\postsynaddr$, we define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. Note that a neuron may contact an afferent neuron with multiple, different delays.
+The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
+$
+Pr(k=\postsynaddr \; | \; \timev) =
+\frac 1 Z
+{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
+$ 
+where $\mathcal{C}^\postsynaddr(\timev) = \sum
+\activeweights^\postsynaddr(t)
+$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
+In particular, some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
+
 
 
 \note{say that it is effortless in biology but difficult on conventional computers}
 
-
-
-\note{ TODO: show why this formula implements a polychrony detector }
-From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that hetero-synaptic delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
-Using this dense representation, the counting defined above becomes:
-\begin{equation*}
-\mathcal{C}^\postsynaddr(a,t)
-= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
-\end{equation*}
-%
-This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
-This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
-%
 
 The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
 It transforms this list of weights into a probability with the following formula:
