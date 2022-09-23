@@ -374,22 +374,6 @@ where  $p\in [ 0, 1]^{N\times T}$ and $B\in \{0, 1\}^{M\times T}$ is the raster 
 
 \subsubsection{Implementation using spiking neurons with hetero-synaptic delays}
 %
-The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\cite{Grimaldi22pami}, in analogy to a spiking Winner-Take-All network~\cite{nessler2013bayesian}. It transforms this list of weights into a probability with the following formula:
-$
-Pr(k=\postsynaddr \; | \; \timev) =
-\frac 1 Z
-{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
-$ 
-where $\mathcal{C}^\postsynaddr(\timev) = \sum
-\activeweights^\postsynaddr(t)
-$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
-In particular, some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
-
-
-
-\note{say that it is effortless in biology but difficult on conventional computers}
-
-
 The activation function of our spiking neuron is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
 It transforms this list of weights into a probability with the following formula:
 $
@@ -402,6 +386,10 @@ where $\mathcal{C}^\postsynaddr(\timev) = \sum
 $ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
 %
+
+\note{say that it is effortless in biology but difficult on conventional computers}
+
+
 %In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the hetero-synaptic delays model. 
 %
 %
