@@ -437,25 +437,23 @@ Each event has an associated address, which is typically in the form $\presynadd
 \subsection{Extension as 3D convolutions for motion detection}
 %%%-----------------------------------------------------------------
 %
-Having defined our task, we may extend the convolution-based detection model to a 3D convolution 
-such that the representation would also benefit from spatial invariance. The use of spatiotemporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\cite{ghosh2022conv3D} and we will here use a similar strategy, yet with a focus on using an event-based representation.
+Having defined our task in the visual space for motion detection, we may extend the convolution-based detection model to a 3D convolution 
+such that the representation would also benefit from spatial invariance. The use of spatiotemporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\cite{ghosh_spatiotemporal_2019} and we will here use a similar strategy, yet with a focus on using an event-based representation.
 For that, we design 3D kernels of shape  $(\Kx, \Ky, \Ktime) = (9, 9, 11)$, respectively representing the two spatial dimensions and the range of delays.
-Computations are performed on spatio-temporal windows, defined by the kernels, sliding around the events, that is, the center of the spatio-temporal window around the current event $\epsilon_\arank$.
+Computations are performed on the spatio-temporal windows which are defined by the kernels and sliding around the events, that is, the center of the spatio-temporal window around the current event $\epsilon_\arank$. Note that to keep with a causal computation, the kernel are shifted in time, such that only past information is giving a response at the present time.
 %
 Finally, the output of the MLR model results in an event with the highest probability class, keeping the same timing as the event as input. Importantly, we include the prior knowledge that the event-based input is spatio-temporally clustered, and that these clusters are sparse. As a consequence, we only keep a given proportion of the most-active cells which we set here to $.01\%$ of all output voxels.
 Given a spiking input, the model thus gives a spiking output  in the post-synaptic address space.
 
 %
-As the model is fully differentiable, we may now implement a supervised learning rule. The loss function of the MLR model is the binary cross entropy on the output of the classification layer . Simulations are performed thanks to the PyTorch library using gradient descent with Adam ($2^{12}$ epochs and a learning rate of $10^{-5}$). 
-%
+As the model is fully differentiable, we may now implement a supervised learning rule. The loss function of the MLR model is the binary cross entropy on the output of the classification layer and can be extended to the spatio-temporal convolutions. The supervision was implemented using the input binary events as defined above and the labels as the desired output. The labels were defined at each point in time as a one-hot encoding of the present motion in the channel corresponding to the current motion, and for all positions. Importantly, we weighted the loss functions only on the support corresponding to the active cells, such that the error was only back-propagated at the spatial locations of these active cells. Simulations are performed thanks to the PyTorch library using gradient descent with Adam (for $2^{12}$ movies and a learning rate of $10^{-5}$). We tested the effect of different parameters on a validation set to check the role of each parameter.
 
-In particular, we may extend the convolution to a 3D convolution such that the representation would also benefit from spatial invariance which is inherent to the task's construction. The use of spatio-temporal filters on a stream of events was shown to improve CNN performances for an action recognition task in~\citep{ghosh_spatiotemporal_2019}.
-For that, we design 3D kernels of shape  $(\Kx, \Ky, \Ktime) = (15, 15, 8)$, respectively representing the two spatial dimensions and the range of delays. An example of such kernels is given in Figure~\ref{fig:kernels}.
-Computations are performed on spatio-temporal windows, defined by the kernels, sliding around the events, that is, the center of the spatio-temporal window around the current event $\epsilon_\arank$.
 %
-Finally, the output of the MLR model results in an event with the highest probability class, keeping the same timing as the event as input.
-%
-The loss function of the MLR model is the binary cross entropy on the output of the classification layer. Simulations are performed thanks to the PyTorch library using gradient descent with Adam (with $2^{12}$ epochs and a learning rate of $10^{-5}$). 
+Finally, the output of the MLR model results in an event-based representation predicting at each position and time the probability for each motion. Such an output gives a form of optic flow which can be exploited for non-rigid motions, but here we defined for the sake of simplicity a readout method which applies to the full field. We have shown above that when different independent observations (here, motion estimated at different spatial locations) are known to have a common cause (here, the rigid motion of the image), then an optimal estimate of the logit of that probability is the sum of the logit of the independent probabilities. Taking the logit of the ouput probability given by the model, one can thus compute the probability for the output. This allows to compute the accuracy (as the percentage of times when the motion is exactly predicted) or the squared error $|| \speed - ||^2$ of the velocity estimate given by:
+$
+(u, v) = \sum_{} (u_k \cdot Pr(k \vert image) , v_k \cdot Pr(k \vert image) )
+$ 
+These metrics will be useful to compare our methods with other methods on our defined task.  The full code to reproduce the results of this paper are openly available at \url{https://github.com/SpikeAI/pyTERtorch}.  
 %
 \note{kernel size has to be adapted to the characteristics of motion see Samonds %~\citep{samonds}
 }
