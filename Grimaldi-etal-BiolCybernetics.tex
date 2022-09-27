@@ -279,121 +279,15 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %
 \subsection{Recent challenges in machine learning and computer vision}
 %%%-----------------------------------------------------------------
-% 1.1.1
-Machine learning, and computer vision in particular, have seen a sharp transition in modern times from moving from science fiction movies to a mainstream status, present in the smartphones that sit in each and everybody's pocket. More hidden but even more important to our economy and security, these automated tools are now prominent on the servers that empowers essentially all sectors of our daily life, especially medicine for which it empowers practionners with now diagnostic tools to heal people sooner and better. This particular example illustrates also some important challenges increasingly paced by these tools. One of these is their sensibility to adversarial attacks, that is the sensibility of fire models output to minute changes of the input. This Could rain important issues on the reliability of the results y an automated diagnostic model. More generally, these models back also to offer why it forms a given output for a class of inputs. This back. of generality hinders the general advances and acceptance of these methods for secure-sensitive tasks.
+Machine learning, and computer vision in particular, have seen a sharp transition in modern times from moving from science fiction movies to a mainstream status, present in the smartphones that sit in each and everybody's pocket. Less visible but even more important to our economy and security, numerous automated tools are now prominent in the services that empowers essentially all sectors of our daily life. This is most acute in medicine for which it empowers practionners with novel diagnostic tools to heal people sooner and better. This particular example illustrates also some important challenges increasingly faced by these tools. One of these is their sensibility to adversarial attacks, that is the sensibility of the models' output to minute changes in the input. This Could raise important issues on the reliability about the results any automated diagnostic model. More generally, these models lack also to offer why it forms a given output for a class of inputs. This lack of explainability hinders the general advances and acceptance of these methods for most secure-sensitive tasks.
 
-% 1.1.2 a
-Taking some perspective, one remembers that these tools are inherited by theoretical models made to understand the brain. while these first neural network were mainly applied on toy-like problems, they were also offering a growing number of applications in computer vision but also more generally for automating tasks. In particular, convolutional neural networks are inspired by the feed-forward processing observed in the visual pathways of primates and reaches now super-human performances for categorizing images. One challenge with these models is to be able to scale them up for prospective applications, for instance in autonomous driving. Indeed, in such applications, the input does not consist of a single image (let's say of about a M byte) but of a continuous stream of images from multiple cameras.
+Taking some perspective, one remembers that these tools are inherited by theoretical models made to understand the brain. While the first artificial neural network were mainly applied on toy-like problems, they were also offering a growing number of applications in computer vision but also more generally for automating tasks. In particular, convolutional neural networks are inspired by the feed-forward processing observed in the visual pathways of primates and reaches now super-human performances for categorizing images. One challenge with these models is to be able to scale them up for prospective applications, for instance in autonomous driving. Indeed, in such applications, the input does not consist of a single image (let's say of about a few million pixels) but of a continuous stream of images from multiple cameras.
 
-% 1.1.2 b
-Challenges are numerous in
-that case and we should
-put forward two major ones:
-rapidity and energy budget.
-First, most existing solutions are
-being built incrementally from
-low-definition images such as
-Le Net for MN is T (Le Cun, 98),
-to high definition images, such as
-V94 on Imagen et (V9 416).
-This comes at a cost and notably
-that the computation time increases
-with image size. This has been tampered
-by the increase of computational power
-available, notably with the parallel
-processing implemented in GPU cards.
-However, transitioning from images
-to videos, and then to multiple cameras
-involves a change of scale in the
-amount of data processed. It
-raises also a question which is often
-of little importance in image
-categorization. Indeed, in the setting
-of autonomous driving, an important
-task is to respond as fast as possible
-be a eventual collision, for instance as
-a pedestrian crosses the street. As such,
-future systems should always be able
-to give a response at any time, instead
-of having to wait until the pipeline
-delivers the correct response. This
-online processing is also a hallmark
-of processing in biological systems.
-This could be a first important
-contribution if we could translate
-these principles into future automated
-processes. 
+Challenges are numerous in that case and we should put forward two major hurdls: rapidity and energy budget. First, most existing solutions are being built incrementally from low-definition images such as Le Net for MNIST (Le Cun, 98), to high definition images, such as VGG on Imagenet (VGG16). This comes at a cost and notably that the computation time increases with image size. This has been tampered by the increase of computational power available, notably with the parallel processing implemented in GPU cards. However, transitioning from images to videos, and then to multiple cameras involves a change of scale in the amount of data processed. It raises also a question which is often of little importance when dealing with image categorization. Indeed, in the setting of autonomous driving, an important task is to respond as fast as possible to an eventual collision, for instance as a pedestrian crosses the street. As such, future systems should always be able to give a response at any time, instead of having to wait until the pipeline delivers the correct response. This online processing is also a hallmark of processing in biological systems. This could be a first important contribution if we could translate these principles into future automated processes. 
 
-second, a major constraint on
-futur systems is energy budget.
-As we saw, a fait computation
-time was kept for high-dimension
-images, but this come at the cost
-of a higher energy consumption.
-Also, the need he solve increasingly
-more complex tasks necessitated the
-construction of increasingly more
-complex and deepen architectures.
-As en exaupte the top performing
-net on the Imagent challenge is
-using billions of parameters which
-tipycally cost 1Wh to train and
-approximately 1Wh per inference
-of a single image. Less greedy
-solutions have emerged such
-as Mobile Net, yet these solutions
-are yet not pit to be used
-in practice in autonomous
-Lars, as the added consumption
-would be approximately Bow
-that is, 200 to of the energy
-of an electric can in standaro
-conditions.
+Second, a major constraint on future systems is energy budget. As we saw, a fast computation time was maintained for high-dimension images, but this come at the cost of a higher energy consumption. Also, the need to solve increasingly more complex tasks necessitated the construction of increasingly more complex and deeper architectures. As en example, the top performing model on the Imagenet challenge is using billions of parameters which typically cost 1Wh to train and approximately 1Wh per inference of a single image. Less greedy solutions have emerged such as Mobile Net, yet these solutions are yet not ready to be used in practice in autonomous cars, as the added consumption would be approximately 300W that is, 20\% of the energy of an electric can in standard conditions.
 
-Neuroscience could bring
-breakthrough answers to these
-two intertwined problems-Indeed
-the human brain has the remarkable
-property of being mostly autonomous
-in it a learning, to be able to act
-and respond at any time, and get to
-consume en reasonable amount of energy,
-estimated to 5W at rest. This system
-is the result of million of years of natural
-selection, get a striking property of
-biological neural networks compared
-to an artificial one is their respective
-representation. CNN s for instance
-represent the information passing from
-one lage to the other as tensons representing
-visual information in a dense manner on
-the visual topography, while representing
-different properties in different channels.
-On the other side, information in avait
-majority of biological neural networks
-is represented as spikes, that is, as
-prototypical all-or-none events whose
-only parameters are their timing and
-the address of the neuron that emitted
-that spite. Why spikes ? It is not
-yet known the reason why most systems
-evolved to use that representation, but
-one major advantage sans to be a
-form of efficiency. In the human brain,
-each of the about to trillion nerve cells
-emit on average 1 spike per second,
-but with a high variability and up to
-300 spikes per second. There has been
-numerous attempts to build artificial
-spiking neural networks, and
-notabley to have the same performance
-en that observed in classical cans, yet
-with a lower energy budget. Yet, un
-such SNN has yet surpassed state-of
-the art performances. Here, we will attempt
-to focus on a neurobiologically inspired
-property of spiking neurons to advance
-in that endeavour.
+Neuroscience could bring breakthrough answers to these two intertwined problems. Indeed, the human brain has the remarkable property of being able to act and respond at any time, while consuming a reasonable amount of energy, estimated to 5W at rest. This system is the result of million of years of natural selection, and a striking difference of biological neural networks compared to an artificial one is the representation that they use. CNNs for instance represent the information passing from one layer to the other as tensors representing visual information in a dense manner on the visual topography, while representing different properties in different channels. On the other side, information in a vast majority of biological neural networks is represented as spikes, that is, as prototypical all-or-none events whose only parameters are their timing and the address of the neuron that emitted that spite. Why spikes ? It is not yet known the reason why most systems evolved to use that representation, but one major advantage seems to be a form of efficiency. In the human brain, each of the about ten trillion nerve cells emit on average 1 spike per second, but each neurons fires with a high variability, and up to 300 spikes per second. There has been numerous attempts to build artificial spiking neural networks, and notably to have the same performance as that observed in classical CNNs, yet with a lower energy budget. Yet, no such SNN has yet surpassed state-of the art performances. Here, we will attempt to focus on a neurobiologically inspired property of spiking neurons to advance in that endeavor.
 
 \subsection{What can neuroscience bring to computer vision?}% and the Hetero-synaptic delays in spiking neurons}
 %%%-----------------------------------------------------------------
