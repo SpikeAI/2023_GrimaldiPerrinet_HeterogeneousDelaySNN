@@ -451,7 +451,7 @@ As the model is fully differentiable, we may now implement a supervised learning
 %
 Finally, the output of the MLR model results in an event-based representation predicting at each position and time the probability for each motion. Such an output gives a form of optic flow which can be exploited for non-rigid motions, but here we defined for the sake of simplicity a readout method which applies to the full field. We have shown above that when different independent observations (here, motion estimated at different spatial locations) are known to have a common cause (here, the rigid motion of the image), then an optimal estimate of the logit of that probability is the sum of the logit of the independent probabilities. Taking the logit of the ouput probability given by the model, one can thus compute the probability for the output. This allows to compute the accuracy (as the percentage of times when the motion is exactly predicted) or the squared error $|| \speed - ||^2$ of the velocity estimate given by:
 $
-(u, v) = \sum_{} (u_k \cdot Pr(k \vert image) , v_k \cdot Pr(k \vert image) )
+\speed = \sum_{\class} \speed_\class \cdot Pr(\class \vert image)
 $ 
 These computations are performed on a set of input which is different from that used at the training or validation stages. These metrics will be useful to compare our methods with other methods on our defined task.  The full code to reproduce the results of this paper are openly available at \url{https://github.com/SpikeAI/pyTERtorch}.  
 %
