@@ -53,12 +53,18 @@ The response of a biological neuron depends on the precise timing of afferent sp
 }
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
 }
-\newcommand{\Acknowledgments}{
-Thanks to CB, TS, ...
-This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). %HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}
-LP received funding from the ANR project  N° ANR-22-XXX-XXX (''\href{https://laurentperrinet.github.io/grant/polychronies/}{polychronies}''). 
+\newcommand{\Funding}{
+This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{APROVIS3D}{http://aprovis3d.eu/}''). %HL and 
+LP received funding from the ANR project  N° ANR-20-CE23-0021 ``\href{AgileNeuroBot}{https://laurentperrinet.github.io/grant/anr-anr/}''
+% LP received funding 
+and from the ANR project % N° ANR-22-XXX-XXX 
+``\href{PolyChronies}{https://laurentperrinet.github.io/grant/polychronies/}''. 
 %HL received funding from a University of Montreal Artificial Intelligence scholarship. 
 %
+}
+\newcommand{\Acknowledgments}{
+Thanks to Thomas Schatz, Rosa Cossart, Hugo Ladret, Camille Besnainou and Jean-Nicolas Jérémie for useful discussions during the elaboration of this work. %
+\Funding %
 %For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
 A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
 }
@@ -249,6 +255,7 @@ A CC-BY public copyright license has been applied by the authors to the present 
 % Title.
 % ------
 \title[\ShortTitle]{\Title}
+\artnote{This article is published as part of the Special Issue on "What can Computer Vision learn from Visual Neuroscience?"}
 %
 % Single address.
 % ---------------
@@ -280,7 +287,7 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %
 \subsection{Recent challenges in machine learning and computer vision}
 %%%-----------------------------------------------------------------
-Machine learning, and computer vision in particular, have undergone a major transformation in modern times, transitioning from an active character in science fiction movies to become mainstream tools found in the smartphones in everyone's pocket. Less visible, yet crucial to our economy and security, these automated tools now dominate the range of services that equip virtually most sectors of our daily lives. This trend is profoundly pronounced in the field of medicine, as it provides practitioners with new diagnostic tools to treat people faster and more effectively. This particular example also illustrates some important challenges that these tools are increasingly facing. One of these is their sensitivity to adversarial attacks, that is, the sensitivity of the models' output to minute changes in the input. This could raise important questions about the reliability of the results of any automated diagnostic model. More generally, these models do give an output for any possible input but they lack an explanation as to why they produced it. This lack of explainability is a hindrance to the advancement of these methodologies as well as to their acceptance for most safety-relevant tasks. Having said that, we may remember that these tools are inherited from theoretical models originally designed to understand the brain. While the first artificial neural networks were mainly applied to toy-like problems, they also offered a growing number of applications in machine learning and computer vision, but also more generally for task automation. In particular, convolutional neural networks are inspired by the feed-forward processing observed in the visual pathways of primates, and today they reach higher performances than humans for key image categorization challenges. One of the challenges of these models is to be able to scale them up for future applications, for example in autonomous driving. Indeed, in such applications, the input does not consist of a single image (say a few million pixels) but of a continuous stream of images from several cameras.
+Machine learning, and computer vision in particular, have undergone a major transformation in modern times, transitioning from an active character in science fiction movies to become mainstream tools found in the smartphones in everyone's pocket. Less visible, yet crucial to our economy and security, these automated tools now dominate the range of services that equip virtually most sectors of our daily lives. This trend is profoundly pronounced in the field of medicine, as it provides practitioners with new diagnostic tools to treat people faster and more effectively. This particular example also illustrates some important challenges that these tools are increasingly facing. One of these is the sensitivity of deep-learning based algorithms to adversarial attacks, that is, the sensitivity of the models' output to minute changes in the input. This could raise important questions about the reliability of the results of any automated diagnostic model. More generally, these models do give an output for any possible input but they lack an explanation as to why they produced it. This lack of explainability is a hindrance to the advancement of these methodologies as well as to their acceptance for most safety-relevant tasks. Having said that, we may remember that these tools are inherited from theoretical models originally designed to understand the brain. While the first artificial neural networks were mainly applied to toy-like problems, they also offered a growing number of applications in machine learning and computer vision, but also more generally for task automation. In particular, convolutional neural networks are inspired by the feed-forward processing observed in the visual pathways of primates, and today they reach higher performances than humans for key image categorization challenges. One of the challenges of these models is to be able to scale them up for future applications, for example in autonomous driving. Indeed, in such applications, the input does not consist of a single image (say a few million pixels) but of a continuous stream of images from several cameras.
 
 The challenges are numerous in such situations and two major obstacles must be highlighted: the computational delay and the energy budget. First, most existing solutions are built incrementally from models built to process low definition images, such as Le Net for MNIST~\citep{lecun_gradient-based_1998}, then high definition images, such as VGG on Imagenet~\citep{simonyan_very_2015}. This has a cost and notably the fact that the computation time increases with the size of the image. This phenomenon has been mitigated by the increase in available computing power, notably thanks to the parallel processing implemented in GPU cards. However, the transition from images to videos, then to multiple cameras implies a further level in the change of scale in the amount of data processed. It also raises an issue that is often not addressed when it comes to image categorization. Indeed, in autonomous driving, an important task is to react as quickly as possible to a possible collision, for example when a pedestrian unexpectedly crosses the street. As such, future systems should always be able to give a response at any time, instead of having to wait for the pipeline to provide the correct answer. This online processing is also a feature of processing in biological systems and could be an important first contribution if we could translate these principles into future automated processes. %
 Second, a major constraint for future systems is energy cost. As we have seen, fast computation time has been maintained for high-dimensional images, but at the cost of higher energy consumption. In addition, the need to solve increasingly complex tasks has required the construction of increasingly complex and deep architectures. As an example, the best performing model in the Imagenet challenge uses 2100 million parameters. Training the model typically consumes kilowatts of power and about 1 joule to infer a decision per single image. Less power-hungry solutions have emerged, such as Mobile Net~\citep{howard_searching_2019}, but they are not yet ready for practical use in autonomous cars, as the additional power consumption would be a significant percentage of the energy consumed by an electric car under standard conditions.
@@ -301,7 +308,7 @@ This paper explores the possibility that prototypical spiking motifs may be a us
 %
 \subsection{Outline}
 %%%-----------------------------------------------------------------
-In this work, we study the emergence of spatio-temporal spiking motifs when training a single layer of spiking neurons on a semi-supervised classification task (\seeFig{motion_task}). The paper is organized as follows. We develop a theoretically defined SNN capable of learning from heterogeneous delays that we first evaluate on a synthetic event-based dataset. We first detail the methodology by defining the basic mechanism of spiking neurons that utilize heterogeneous delays. This will allow us to formalize the spike neuron used to learn the model's parameters and test its effectiveness. We aim to apply this model to a realistic motion detection task which we will first define. Then, we will show how the model can be adapted to solve the motion detection task. In the results section, we will detail the emergent structure of the model solving the task and show in particular the similarities with neurobiological observations. We will also test the network with classical stimuli used in neuroscience, and in particular with frequency or contrast responses.  We will also study the efficiency of the motion detection mechanism and in particular its resilience to synaptic weight pruning. This will allow us to show how such a model can provide an efficient solution to the energy/accuracy trade-off.  Finally, we will conclude by highlighting the main contributions of this paper, while defining some limitations. This will open perspectives for future SNNs.  In particular, as neuromorphic devices are by design good candidates for integrating computations over time, we highlight the fact that this event-driven algorithm is perfectly fit to be transfered to this type of hardware.
+In this work, we study the emergence of spatio-temporal spiking motifs when training a single layer of spiking neurons on a semi-supervised classification task (\seeFig{motion_task}). The paper is organized as follows. We develop a theoretically defined SNN capable of learning heterogeneous delays from spiking motifs that we first evaluate on a synthetic event-based dataset. We first detail the methodology by defining the basic mechanism of spiking neurons that utilize heterogeneous delays. This will allow us to formalize the spike neuron used to learn the model's parameters and test its effectiveness. We aim to apply this model to a realistic motion detection task which we will first define. Then, we will show how the model can be adapted to solve the motion detection task. In the results section, we will detail the emergent structure of the model solving the task and show in particular the similarities with neurobiological observations. We will also test the network with classical stimuli used in neuroscience, and in particular with frequency or contrast responses.  We will also study the efficiency of the motion detection mechanism and in particular its resilience to synaptic weight pruning. This will allow us to show how such a model can provide an efficient solution to the energy/accuracy trade-off.  Finally, we will conclude by highlighting the main contributions of this paper, while defining some limitations. This will open perspectives for future SNNs.  In particular, as neuromorphic devices are by design good candidates for integrating computations over time, we highlight the fact that this event-driven algorithm is perfectly fit to be transfered to this type of hardware.
 %
 \section{Methods}
 \label{sec:methods}
@@ -585,14 +592,36 @@ In conclusion, the model we have presented provides a way to efficiently process
 \Acknowledgments
 %
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section*{Declarations}
 
-\textcolor{purple}{TBD - What the template says about it:}
+\section*{Statements and Declarations}
 
-\textcolor{purple}{Some journals require declarations to be submitted in a standardised format. Please check the Instructions for Authors of the journal to which you are submitting to see if you need to complete this section. If yes, your manuscript must contain the following sections under the heading `Declarations': Funding; Conflict of interest/Competing interests (check journal-specific guidelines for which heading to use); Ethics approval; Consent to participate; Consent for publication; Availability of data and materials; Code availability; Authors' contributions. }
+\paragraph{Funding}
 
-\textcolor{purple}{If any of the sections are not relevant to your manuscript, please include the heading and write `Not applicable' for that section. }
+\Funding %
 
+\paragraph{Conflict of interest}
+Not applicable.
+% The authors do not have any financial or non-financial interests directly or indirectly related to this work.
+
+\paragraph{Ethics approval}
+Not applicable.
+
+\paragraph{Consent to participate}
+Not applicable.
+
+\paragraph{Consent for publication}
+Not applicable.
+
+\paragraph{Availability of data and materials}
+Not applicable.
+
+\paragraph{Code availability}
+
+The code is publicly available online at: \url{https://github.com/SpikeAI/pyTERtorch}.
+
+\paragraph{Authors' contributions}
+
+Both authors contributed to the conceptualization and methodology design of the study, to the project's coordination and administration. Laurent Perrinet carried out the funding acquisition and supervision. Formal analysis and investigation were performed by both authors. Results visualization and presentation were realized by both authors. The the manuscript was written by Laurent Perrinet. Both authors have read and approved the final manuscript.
 %%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{apalike}
 \bibliography{FastMotionDetection}
