@@ -49,7 +49,7 @@ Learning heterogeneous delays of spiking neurons for motion detection
 \newcommand{\Country}{France}%
 \newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
 \newcommand{\Abstract}{
-The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neuronal code is essential in understanding information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neuronal models do not take advantage of this minute temporal dimension. Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of neurons with heterogeneous delays. Indeed, the variety of synaptic delays on the dendritic tree allows to synchronize synaptic inputs as they reach the basal dendritic tree. We show this can be formalized as a time-invariant logistic regression which can be trained using labeled data. We apply this model to solve the specific computer vision problem of motion detection, and demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how its accuracy can vary with the total computational load. This end-to-end event-driven computational brick could help improve the performance of future Spiking Neural Network (SNN) algorithms and their prospective use in neuromorphic chips.
+The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neuronal code is essential in understanding information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neuronal models do not take advantage of this minute temporal dimension. Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of neurons with heterogeneous delays. Indeed, the variety of synaptic delays on the dendritic tree allows to synchronize synaptic inputs as they reach the basal dendritic tree. We show this can be formalized as a time-invariant logistic regression which can be trained using labeled data. We apply this model to solve the specific computer vision problem of motion detection, and demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how the accuracy of the model can vary with the total computational load. This end-to-end event-driven computational brick could help improve the performance of future Spiking Neural Network (SNN) algorithms and their prospective use in neuromorphic chips.
 }
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
 }
@@ -239,7 +239,8 @@ A CC-BY public copyright license has been applied by the authors to the present 
 \usepackage{color}
 
 %\DeclareRobustCommand
-\newcommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
+%\newcommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
+\newcommand{\note}[1]{}
 %\newcommand{\noteLP}[1]{\todo[author=\textbf{Laurent}, inline]{#1}}
 %\newcommand{\modif}[1]{\todo[author=\textbf{Proposition}, inline]{#1}}
 
@@ -306,7 +307,7 @@ In this work, we study the emergence of spatio-temporal spiking motifs when trai
 \label{sec:methods}
 %%%-----------------------------------------------------------------
 %%%-----------------------------------------------------------------
-Let us now formally define the heterogeneous model, as well as the task and how we will learn to solve it. First, we will define the model for the efficient detection of event-based motifs using a feed-forward layer of spiking neurons with heterogeneous delays. Our SNN model will be tested on a computationally relevant task of motion detection in an event-based sensory input. By analogy with biological conditions, we will design a paradigm simulating eye movements where an input image is translated by a parameterized saccadic trajectory. Solving this task is, for example, useful in real-life situations to compensate for eye, head or body movements and to provide robust image categorization by stabilizing the image on the retina. The task is thus to guess the motion as accurately as possible (\seeFig{motion_task}) and we will describe a semi-supervised learning mechanism for weights and delays. To this end, we will extend the SNN model to be efficient for the resolution of the task by including convolutional kernels. We will finally describe its implementation on conventional computers. 
+Let us now formally define the heterogeneous model, as well as the task and how we will learn to solve it. First, we will define the model for the efficient detection of event-based motifs using a feed-forward layer of spiking neurons with heterogeneous delays. Our SNN model will be tested on a computationally relevant task of motion detection in an event-based sensory input. By analogy with biological conditions, we will design a paradigm simulating eye movements where an input image is translated by a parameterized saccadic trajectory. Solving this task is, for example, useful in real-life situations to compensate for eye, head or body movements and to provide robust image categorization by stabilizing the image on the retina. The task is thus to guess the motion as accurately as possible (\seeFig{motion_task}) and we will describe a semi-supervised learning mechanism for weights and delays. To this end, we will extend the SNN model to be efficient for the resolution of the task by including spatio-temporal convolutional kernels. We will finally describe its implementation on conventional computers. 
 %
 \subsection{Detecting event-based motifs using spiking neurons with heterogeneous delays}% model as a Logistic Regression with a temporal convolution}
 %%%-----------------------------------------------------------------
@@ -337,42 +338,18 @@ This raster plot is generated by spiking neurons which are defined on the one ha
 Formally, let's define a layer of heterogeneous spiking neurons $\postsynaddr \in \postsynaddrspace$ by first describing how each neuron connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses, and each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. For each neuron $\postsynaddr$, we thus define a set of $\Nsyn^\postsynaddr$ synapses, as  $\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$. This defines the full connectivity of the heterogeneous model. As a consequence, an event stream $\event_\presynaddrspace$ on the presynaptic address space is transformed into a new event stream $\event_\postsynaddrspace$ which is defined by 
 $\{ (\presynaddr_\arank = 
  \presynaddr_\ranksyn^\postsynaddr, \timev=\timev_\arank + 
-\synapticdelay_\ranksyn^\postsynaddr \}_{ \arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]} )
+\synapticdelay_\ranksyn^\postsynaddr )_{ \arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]} )
 \}$. \note{formaliser le multiplexage}
 When post-synaptic neurons are activated on their soma by this discharge motif the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner. 
 
-Taking the argument the other way around, one may form a generative model for generic raster plots. Indeed, any spike in the presynaptic address space is generated by sensory neurons (for instance photoreceptors in the retina, sensors in a CMOS chip) or by afferent spiking neurons. In the latter case, these are connected to the spiking cell by a set of weights and delays, whose structure is relatively stable relative to the coding time-scale. When these connections are high and sparsely distributed, this firing will cause a specific temporal motif. Another example is given for the barn owl auditory system: When it hears the sound of a mouse, this will generate a specific spiking response in both ears, and specifically, the precise timing between these signal generated by the the left relative to the right ear can be for instance used to determine the position of the prey~\citep{goodman_spike-timing-based_2010}. Overall, these examples show that raster plots may be considered as a mixture of the effects of different elementary causes, and that each event triggers a specific spatio-temporal motif. 
+Taking the argument the other way around, one may form a generative model for generic raster plots. Indeed, any spike in the presynaptic address space is generated by sensory neurons (for instance photoreceptors in the retina, sensors in a CMOS chip) or by afferent spiking neurons. In the latter case, these are connected to the spiking cell by a set of weights and delays, whose structure is relatively stable relative to the coding time-scale. When these connections are high and sparsely distributed, this firing will cause a specific temporal motif. Another example is given for the barn owl auditory system: As it hears the sound of a mouse, this sound will generate a specific spiking response in both ears, and specifically, the precise timing between the signal generated by the the left relative to the right ear can be for instance used to determine the position of the prey~\citep{goodman_spike-timing-based_2010}. Overall, these examples show that raster plots may be considered as a mixture of the effects of different elementary causes, and that each event triggers a specific spatio-temporal motif. 
 %
 \subsubsection{Detecting spiking motifs}
 %: Detection model
 
 \note{ TODO: show why this formula implements a polychrony detector }
 From the perspective of simulating such event-based computations on standard chips, it is useful to transform this sparse representation into a dense representation. As such, we may first write any event-based input as the boolean matrix $A \in \{0, 1 \}^\presynaddrspace$. In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
-Using this dense representation, the counting defined above becomes:
-\begin{equation*}
-\mathcal{C}^\postsynaddr(a,t)
-= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
-\end{equation*}
-%
-This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
-This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
-%
-
-\note{formalize the following:}
-More generally, every cause may be considered as occurring independently and one might write the generative model for the generation of the presynaptic events as:
-
-
-Using this formalization, one might now deduce an optimal algorithm for the detection of such temporal motifs.
-
-
-By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights.
-
-
-Following the observations of~\citet{izhikevich_polychronization_2006}, let us assume that such precise discharge motif defines a polychronous group (PG). Assuming that we know there exists $M$ such groups, we will define as $b \in [1, M]$ the address of a PG and as $W_b$ the corresponding weight matrices. This allows then to derive a generative model for raster plots (see Figure~\ref{fig:model}-(b)).
-
-
-
-Indeed, the probability of firing of a neuron $a$ at a given time $t$ can be understood as a Bernoulli trial whose (only) parameter is a bias $p(t, a) \in [0, 1]$. Assuming that the presence of PGs is conditionally independent, this bias can be written as the combination of these factors, whose values are given by the corresponding weights. PGs may be activated independently at random times and  we write that $B(b, t)=1$ if $b$ is activated at $t$ (and else $B(b, t)=0$). We can thus write the probability bias as the accumulated evidence given these factors as 
+The probability of firing of a neuron $a$ at a given time $t$ can be understood as a Bernoulli trial whose (only) parameter is a bias $p(t, a) \in [0, 1]$. Assuming that the presence of PGs conditions the probability on all efferents, the logit (inverse of the sigmoid) of this probability bias can be written as the sum of the logit of each of these factors, whose values are given by the corresponding weights. PGs may be activated independently at random times and  we write that $B(b, t)=1$ if $b$ is activated at $t$ (and else $B(b, t)=0$). We can thus write the probability bias as the accumulated evidence given these factors as 
 \begin{equation*}
 p(t, a) = \sigma\big(W_0 + \sum_{b, t} B(b, t) \cdot W_b(a, t-d) \big)  
 \end{equation*}
@@ -381,22 +358,47 @@ where $\sigma$ is the sigmoid function. We will further assume that the weights 
 p = \sigma(W_0 + B \ast W )
 \end{equation*}
 where  $p\in [ 0, 1]^{N\times T}$ and $B\in \{0, 1\}^{M\times T}$ is the raster plot corresponding to the temporal activation of the PGs. Finally, we obtain the raster plot $A\in \{0, 1\}^{N\times T}$ by drawing spikes using independent Bernoulli trials $A \sim \mathcal{B}(p)$. Note that, depending on the shape of the kernels, the generative model can model a Poisson process, generate rhythmic activity or more generally propagating waves. This formulation thus defines a simple generative model for raster plots as a combination of independent PGs. 
+%
+%Using this dense representation, the counting defined above becomes:
+%\begin{equation*}
+%\mathcal{C}^\postsynaddr(a,t)
+%= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
+%\end{equation*}
+%%
+%This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
+%This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
+%%
+%
+%\note{formalize the following:}
+%More generally, every cause may be considered as occurring independently and one might write the generative model for the generation of the presynaptic events as:
+%
+%
+%Using this formalization, one might now deduce an optimal algorithm for the detection of such temporal motifs.
+%
+%
+%By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights.
+%
+%
+%Following the observations of~\citet{izhikevich_polychronization_2006}, let us assume that such precise discharge motif defines a polychronous group (PG). Assuming that we know there exists $M$ such groups, we will define as $b \in [1, M]$ the address of a PG and as $W_b$ the corresponding weight matrices. This allows then to derive a generative model for raster plots (see Figure~\ref{fig:model}-(b)).
 
-\subsubsection{Implementation using spiking neurons with heterogeneous delays}
+
+
+
+%\subsubsection{Implementation using spiking neurons with heterogeneous delays}
 %
 The activation function of our spiking neural is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
-It transforms this list of weights into a probability with the following formula:
-$
-Pr(k=\postsynaddr \; \vert \; \timev) =
-\frac 1 Z
-{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
-$ 
-where $\mathcal{C}^\postsynaddr(\timev) = \sum
-\activeweights^\postsynaddr(t)
-$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
-In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
+%It transforms this list of weights into a probability with the following formula:
+%$
+%Pr(k=\postsynaddr \; \vert \; \timev) =
+%\frac 1 Z
+%{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
+%$ 
+%where $\mathcal{C}^\postsynaddr(\timev) = \sum
+%\activeweights^\postsynaddr(t)
+%$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
+%In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
+%%
 %
-
 \note{say that it is effortless in biology but difficult on conventional computers}
 In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the heterogeneous delays model. 
 %
@@ -516,12 +518,12 @@ For any given velocity, we also varied the parameters of the textures, such as t
 \begin{figure}[h!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motion_clouds.pdf}
-    \caption{{\bf Role of image parameters in the motion detection accuracy.} Accuracy as a function of {\bf (a)} the mean spatial frequency, {\bf (b)} the bandwidth in orientation: from a grating-like (left) to isotropic textures (right)). {\bf (c)} the bandwidth in speed, from a rigid motion (left) to independent frames (right). Note that these accuracy is computed both in the case is necessarily perpendiular to the motion (aperture) or aribtrary (no aperture), showing that accuracy decreases in the latter case.}
+    \caption{{\bf Role of stimulus parameters in the motion detection accuracy.} Accuracy as a function of {\bf (a)} the mean spatial frequency, {\bf (b)} the bandwidth in orientation: from a grating-like (left) to isotropic textures (right)), {\bf (c)} the bandwidth in speed, from a rigid motion (left) to independent frames (right). Note that these accuracy is computed both in the case is necessarily perpendicular to the motion (no aperture) or arbitrary (aperture), showing that accuracy decreases in the latter case.}
     \label{fig:motion_clouds}
 \end{figure}
 %%%-----------------------------------------------------------------
 
-We plot here main axis of interests. First, as we change the mean spatial frequency of the texture, we observe a monotonous decrease in accuracy. This comes as a similar trend as that observed in the primary visual areas~\citep{priebe_tuning_2006}. \note{we should really do something more serious here...} Notably, the accuracy is better for a large spatial frequency bandwidth (which qualitatively resemble a more textured stimulus) than for a grating-like stimulation, reminiscent to the behavioral response of humans' eye movements to such stimuli~\citep{simoncini_more_2012}. Interestingly, we also see a modulation of accuracy as a function of orientation bandwidth. When the stimulus is grating-like and that the orientation is arbitrary with respect to the direction of motion, the system is faced with the aperture problem and see a decrease of accuracy. This is not the case for isotropic stimuli or when the orientation is perpendicular to the direction of motion. Finally, we manipulated the amount of change between two successive frames, similar to a temperature parameter. This shows a progressive decrease in accuracy, similar to that observed in the amplitude of humans' eye movements~\citep{mansour_pour_speed_2018}.
+We plot here main axis of interests. First, as we change the mean spatial frequency of the texture, we observe a monotonous decrease in accuracy. This comes as a similar trend as that observed in the primary visual areas~\citep{priebe_tuning_2006}. \note{we should really do something more serious here...} Notably, the accuracy is better for a large spatial frequency bandwidth (which qualitatively resemble a more textured stimulus) than for a grating-like stimulation, reminiscent to the behavioral response of humans' eye movements to such stimuli~\citep{simoncini_more_2012}. Interestingly, we also see a modulation of accuracy as a function of orientation bandwidth. When the stimulus is grating-like and that the orientation is arbitrary with respect to the direction of motion, the system is faced with the aperture problem and see a decrease of accuracy. This is not the case for isotropic stimuli or when the orientation is perpendicular to the direction of motion. Finally, we manipulated the amount of change between two successive frames, similar to a temperature parameter. This shows a progressive decrease in accuracy, similar to that observed in the amplitude of humans' eye movements~\citep{mansour_pour_speed_2018} but also that accuracy is low for a rigid motion which lacks variability.
 %
 \subsection{Accuracy for the motion detection task}
 %%%-----------------------------------------------------------------
