@@ -429,9 +429,8 @@ $7$ different velocities (see inset of \seeFig{motion_task}-(a)). Note that the 
 \begin{figure}[h!]%[ht!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motion_task.pdf}
-    \note{TODO: redo figure according to caption}
     \caption{
-    {\bf Motion detection task.} {\bf (a)}  {\bf (b)} We use large-scale natural images ($512\times512$) in which an aperture ($128\times128$) extracts a sub-image image in the axis of view (here the cross at the center of the image) such as to reproduce the effect of displacing the eye. To mimic the effect of a saccadic-like movement, the axis of view moves following a step-like random walk, and we show here on example path of the trajectory. {\bf (b)} Recording the dynamics of the sub-image as a function of time, it generates a naturalistic movie which may be transformed to an event-based representation. Mimicking the retina, this representation codes for proportional increments or decrements of the luminance in the image, respectively ON (in red) and OFF (in blue) events. This will constitute the input to the spiking neural network.}
+    {\bf Motion detection task.} {\bf (a)}  {\bf (b)} We use large-scale natural images ($512\times512$) in which an aperture ($128\times128$) extracts a sub-image image in the axis of view (the image on the left) such as to reproduce the effect of displacing the eye. To mimic the effect of a saccadic-like movement, the axis of view moves following a step-like random walk, and we show here on example path of the trajectory as a green line ($200$ steps). {\bf (b)} Recording the dynamics of the sub-image as a function of time, it generates a naturalistic movie which may be transformed to an event-based representation. Mimicking the retina, this representation codes for proportional increments or decrements of the luminance in the image, respectively ON (in red) and OFF (in blue) events. This will constitute the input to the spiking neural network.}
     \label{fig:motion_task}
 \end{figure}
 %%%-----------------------------------------------------------------
@@ -475,8 +474,9 @@ These calculations are performed on a different input dataset than the one used 
     }
     %\vspace{-.5cm}
     \caption{
-    	Representation of the weights for $3$ of the $32$ different learned kernels of the model. Each corresponding to the OFF polarities and selective to the different motion directions (because of the symmetry observed between the ON and OFF event streams, we observed that kernels are very similar for the ON polarities). These weights are associated to a specific delay on the \textit{delays} axis and to a presynaptic address defined on the two other axes. %	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. 
-        One sees positive (excitatory) coefficients for the specific direction of motion but also negative (inhibitory) coefficients for other directions.
+    	Representation of the weights for $3$ of the $32$ different learned kernels of the model. Each pair of line correspond to the ON and OFF polarities respectively, with excitatory weights in warm colors. Delays are represented in the horizontal axis from right (zero delay) to the left (delay of $11$ steps). Because of the symmetry observed between the ON and OFF event streams, we observed that kernels are very similar for the ON polarities. These weights are associated to a specific delay on the \textit{delays} axis and to a presynaptic address defined on the two other axes. %	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. 
+	Different kernels are selective to the different motion directions and we observe some level of orientation selectivity, where ON and OFF subfields organized in a push-pull organization. 
+%        One sees positive (excitatory) coefficients for the specific direction of motion but also negative (inhibitory) coefficients for other directions.
 	}
     \label{fig:kernels}
 \end{figure*} 
