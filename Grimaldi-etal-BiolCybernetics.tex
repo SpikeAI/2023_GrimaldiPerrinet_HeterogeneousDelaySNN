@@ -54,7 +54,7 @@ The response of a biological neuron depends on the precise timing of afferent sp
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
 }
 \newcommand{\Funding}{
-This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{APROVIS3D}{http://aprovis3d.eu/}''). %HL and 
+This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{APROVIS3D}{http://aprovis3d.eu/}''). % Agence Nationale de la Recherche %HL and 
 LP received funding from the ANR project  N° ANR-20-CE23-0021 ``\href{AgileNeuroBot}{https://laurentperrinet.github.io/grant/anr-anr/}''
 % LP received funding 
 and from the ANR project % N° ANR-22-XXX-XXX 
@@ -159,10 +159,10 @@ A CC-BY public copyright license has been applied by the authors to the present 
 %%\documentclass[sn-mathphys]{sn-jnl}% Math and Physical Sciences Reference Style
 %%\documentclass[sn-aps]{sn-jnl}% American Physical Society (APS) Reference Style
 %%\documentclass[sn-vancouver]{sn-jnl}% Vancouver Reference Style
-\documentclass[sn-apa]{sn-jnl}% APA Reference Style
+%%\documentclass[sn-apa]{sn-jnl}% APA Reference Style
 %%\documentclass[sn-chicago]{sn-jnl}% Chicago-based Humanities Reference Style
 %%\documentclass[sn-standardnature]{sn-jnl}% Standard Nature Portfolio Reference Style
-%%\documentclass[default]{sn-jnl}% Default
+\documentclass[default]{sn-jnl}% Default
 %%\documentclass[default,iicol]{sn-jnl}% Default with double column layout
 %%\documentclass[iicol]{sn-jnl}
 
@@ -232,7 +232,7 @@ A CC-BY public copyright license has been applied by the authors to the present 
 % \usepackage[position=top]{subfig} %The package provides support for the manipulation and reference of small or ‘sub’ figures and tables within a single figure or table environment. Linked to subfloat.
 % for units
 \usepackage{siunitx}%The siunitx package provides a  set  of  tools  for  authors  to  typeset  quantities  in  aconsistent  way.
-
+\AtBeginDocument{\RenewCommandCopy\qty\SI}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
@@ -319,7 +319,7 @@ Let us now formally define the heterogeneous model, as well as the task and how 
 \subsection{Detecting event-based motifs using spiking neurons with heterogeneous delays}% model as a Logistic Regression with a temporal convolution}
 %%%-----------------------------------------------------------------
 %
-\begin{figure}[t!]
+\begin{figure}%[t!]
     \centering
     \includegraphics[width=0.490\linewidth]{figures/figure_1a_k.pdf}
     \includegraphics[width=0.490\linewidth]{figures/figure_1c.pdf}
@@ -411,7 +411,7 @@ In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicte
 %
 \subsubsection{Performance on synthetic data}
 %
-\begin{figure}[t!]
+\begin{figure}%[t!]
     \centering
     \includegraphics[width=0.490\linewidth]{figures/figure_N_PGs.pdf}
     \includegraphics[width=0.490\linewidth]{figures/figure_N_PG_time.pdf}
@@ -435,7 +435,7 @@ $7$ different velocities (see inset of \seeFig{motion_task}-(a)). Note that the 
 %%%-----------------------------------------------------------------
 %: fig:motion_task
 %%%-----------------------------------------------------------------
-\begin{figure}[h!]%[ht!]
+\begin{figure}%[h!]%[ht!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motion_task.pdf}
     \caption{
@@ -509,7 +509,7 @@ say that we have tested }
 %
 \subsection{Testing with natural-like textures}
 %%%-----------------------------------------------------------------
-To test our model, we will quantify its ability to categorize different motions. Before applying the model on natural images, we will first test the model on simpler, parameterized stimuli. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motionclouds})~\citep{vacher_bayesian_2018}. In particular, we will set the spatial size and duration similarly to the motion task defined above.
+To test our model, we will quantify its ability to categorize different motions. Before applying the model on natural images, we will first test the model on simpler, parameterized stimuli. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motion_clouds})~\citep{vacher_bayesian_2018}. In particular, we will set the spatial size and duration similarly to the motion task defined above.
 This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions $
 \speed_\kernelind = 
   ( 
@@ -522,7 +522,7 @@ For any given velocity, we also varied the parameters of the textures, such as t
 %%%-----------------------------------------------------------------
 %: fig:motion_clouds
 %%%-----------------------------------------------------------------
-\begin{figure}[h!]
+\begin{figure}%[h!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motion_clouds.pdf}
     \caption{{\bf Role of stimulus parameters in the motion detection accuracy.} Accuracy as a function of {\bf (a)} the mean spatial frequency, {\bf (b)} the bandwidth in orientation: from a grating-like (left) to isotropic textures (right)), {\bf (c)} the bandwidth in speed, from a rigid motion (left) to independent frames (right). Note that these accuracy is computed both in the case is necessarily perpendicular to the motion (no aperture) or arbitrary (aperture), showing that accuracy decreases in the latter case.}
@@ -545,7 +545,7 @@ By pruning weights, we observe that the evolution of accuracy as a function of t
 %%%-----------------------------------------------------------------
 %: fig:accuracy
 %%%-----------------------------------------------------------------
-\begin{figure}[h!]
+\begin{figure}%[h!]
     \centering
     \includegraphics[width=0.95\linewidth]{figures/accuracy.pdf}
     \caption{Accuracy as a function of the number of computation load for the heterogeneous delays model (blue line) and for a method using 2D time surfaces (red dot)~\citep{grimaldi_robust_2022}. The relative computational load (on a log axis) is controlled by changing the percentage of active weights relative to the dense convolution kernel. We observe a similar accuracy than HOTS, yet that our model could achieve a similar accuracy with significantly fewer coefficients.}
