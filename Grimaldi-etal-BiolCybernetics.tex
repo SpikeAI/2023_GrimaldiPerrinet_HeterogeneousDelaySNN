@@ -269,19 +269,12 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 \DeclareMathOperator*{\argmin}{arg\,min}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%\usepackage%[disable]	% uncomment to hide all the notes
-%	{todonotes}
-%\newcommand{\noteAG}[1]{\todo[author=\textbf{Antoine}, inline]{#1}}
+% a simpler annotation system:
 \usepackage{soulutf8}
 \usepackage{color}
-
-%\DeclareRobustCommand
-%\newcommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
-\newcommand{\note}[1]{}
-%\newcommand{\noteLP}[1]{\todo[author=\textbf{Laurent}, inline]{#1}}
-%\newcommand{\modif}[1]{\todo[author=\textbf{Proposition}, inline]{#1}}
-
+\newcommand{\note}[1]{{\sethlcolor{yellow}\hl{#1}}}
+%\newcommand{\note}[1]{}
+%
 \begin{document}
 %%%-----------------------------------------------------------------
 % Title.
@@ -325,7 +318,7 @@ The challenges are numerous in such situations and two major obstacles must be h
 Second, a major constraint for future systems is energy cost. As we have seen, fast computation time has been maintained for high-dimensional images, but at the cost of higher energy consumption. In addition, the need to solve increasingly complex tasks has required the construction of increasingly complex and deep architectures. As an example, the best performing model in the Imagenet challenge uses 2100 million parameters. Training the model typically consumes kilowatts of power and about 1 joule to infer a decision per single image. Less power-hungry solutions have emerged, such as Mobile Net~\citep{howard_searching_2019}, but they are not yet ready for practical use in autonomous cars, as the additional power consumption would be a significant percentage of the energy consumed by an electric car under standard conditions.
 
 % The brain achieves all these on a low computational cost and power budget (i.e., tens of watts), whereas the state-of-the-art computer vision models require multiple graphics processors consuming kilowatts of power
-Neuroscience could provide revolutionary answers to these two closely related problems. Indeed, the human brain has the remarkable property of being able to react at any time, while consuming a reasonable amount of energy, about tens of watts. This system is the result of millions of years of natural selection, and a striking difference between biological neural networks and artificial ones is the representation they use. CNNs, for example, represent information passing from one layer to another as tensors representing visual information densely over the visual topography, while representing different properties in different channels. These networks have been known to mimick many propoerties of biological systems~\citep{schrimpf_brain-score_2020}, yet, this score does not count rapidity or energy. On the other hand, information in a large majority of biological neural networks is represented as spikes, i.e. prototypical all-or-nothing events whose only parameters are their timing and the address of the neuron that emitted this spike~\citep{paugam-moisy_computing_2012}. Why spikes? It is not yet known why most biological systems have evolved to use this representation, but one major advantage seems to be some form of efficiency. In the human brain, each of the approximately 90 trillion nerve cells emits on average one spike per second which fan out to an average of 10000 synapses. Importantly, each neuron fires with great variability, and up to 300 spikes per second. Many attempts have been made to build artificial spiking neural networks, and in particular to achieve the same performance as observed in classical CNNs with a lower energy budget. However, none of these networks has yet surpassed the state of the art performances. Here, we will try to focus on one core property of spiking neurons inspired by neurobiology to progress in this direction.
+Neuroscience could provide revolutionary answers to these two closely related problems. Indeed, the human brain has the remarkable property of being able to react at any time, while consuming a reasonable amount of energy, about tens of watts. This system is the result of millions of years of natural selection, and a striking difference between biological neural networks and artificial ones is the representation they use. CNNs, for example, represent information passing from one layer to another as tensors representing visual information densely over the visual topography, while representing different properties in different channels. These networks have been known to mimic many properties of biological systems~\citep{schrimpf_brain-score_2020}, yet, this score does not count rapidity or energy. On the other hand, information in a large majority of biological neural networks is represented as spikes, i.e. prototypical all-or-nothing events whose only parameters are their timing and the address of the neuron that emitted this spike~\citep{paugam-moisy_computing_2012}. Why spikes? It is not yet known why most biological systems have evolved to use this representation, but one major advantage seems to be some form of efficiency. In the human brain, each of the approximately 90 trillion nerve cells emits on average one spike per second which fan out to an average of 10000 synapses. Importantly, each neuron fires with great variability, and up to 300 spikes per second. Many attempts have been made to build artificial spiking neural networks, and in particular to achieve the same performance as observed in classical CNNs with a lower energy budget. However, none of these networks has yet surpassed the state of the art performances. Here, we will try to focus on one core property of spiking neurons inspired by neurobiology to progress in this direction.
 %
 \subsection{What can neuroscience bring to computer vision?}% and the heterogeneous delays in spiking neurons} ~\citep{}
 %%%-----------------------------------------------------------------
