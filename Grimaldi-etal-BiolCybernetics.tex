@@ -353,14 +353,11 @@ Let us now formally define the spiking neural network (SNN) model with heterogen
     \includegraphics[width=0.490\linewidth]{figures/THC_1b.pdf}
     \includegraphics[width=0.490\linewidth]{figures/THC_1a.pdf}
 	    \caption{Detecting event-based motifs using spiking neurons with heterogeneous delays. 
-	    {\bf (a)}~Given a generic raster plot defined by a set of spikes occurring on specific addresses and at specific times, one may consider that this information consists of the repeated occurrence of groups of precise motifs of spikes that we call ``spiking motifs''. 
-	    {\bf (b)}~We show some randomly drawn motifs, each identified at the top by a different color. To each neurons and $71$ different possible delays is assigned an evidence of activation (red) or deactivation (blue). 
-	    {\bf (c)}~The activation in time of the different motifs is then used to define a generative model for drawing a raster plot on the multi-unit address space.
-        % We will define a layer of neurons that will detect these PGs such that the addresses are the synapses of these neurons (which we therefore call here synapses).
-	    Note that each afferent may be connected with multiple weights at different delays. The propagation of the afferent information through these delay may generate at each time step a synchronous motif on a subset of synapses. %These PG motifs were efficiently learned by a logistic regression.
-	    % {\bf (c)}~The output of the model provides with the predicted probability of occurrence of each PG motif at any time, which may be used to generate a spike as a Bernoulli trial, providing in this particular case with an exact identification of PGs occurrences.
-	    {\bf (d)}~Knowing the results of this detection, one may for illustration purposes highlight them by different colors in the raster plots, showing that in this synthetic examples, all spikes are now associated with a PG.  The original raster plot can be annotated with each identified spiking motif. 
-	     }
+	    {\bf (a)}~Given a generic raster plot defined by a set of spikes occurring on specific addresses and at specific times, one may consider that this information consists of the repeated occurrence of precise spiking motifs. 
+	    {\bf (b)}~We show the motifs used in this example, each identified at the top by a different color. To each of the $10$ synapses and $71$ different possible delays is assigned an evidence of activation (red) or deactivation (blue). 
+	    {\bf (c)}~The activation in time of the different motifs is then used to define a generative model for drawing a raster plot on the multi-unit address space. Note that each afferent may be connected with multiple weights at different delays. The propagation of the afferent information through these delay may generate at each time step a synchronous motif on a subset of synapses. 
+	    {\bf (d)}~The output of the model provides with the predicted probability of occurrence of each motif at any time, which may be used to generate a spike as a Bernoulli trial, providing in this particular case with an exact identification of the occurrence of motifs. Knowing the results of this detection, one may for illustration purposes highlight them by different colors in the raster plots, showing that in this synthetic examples, all spikes can be annotated with each identified spiking motif. 
+	    }
     \label{fig:model}
 \end{figure}
 % 
