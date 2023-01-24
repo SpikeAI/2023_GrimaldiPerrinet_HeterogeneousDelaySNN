@@ -1,4 +1,49 @@
 
+@inproceedings{sekikawa_constant_2018,
+	address = {Verona},
+	title = {Constant {Velocity} {3D} {Convolution}},
+	isbn = {978-1-5386-8425-2},
+	url = {https://ieeexplore.ieee.org/document/8490985/},
+	doi = {10.1109/3DV.2018.00047},
+	abstract = {We propose a novel three-dimensional (3D)-convolution method, cv3dconv, for detecting spatiotemporal features from videos. It reduces the number of sum-of-products of 3D convolution by thousands of times by assuming the constant moving velocity of the camera. We observed that a speciﬁc class of video sequences, such as those captured by an in-vehicle camera, can be well approximated with piece-wise linear movements of 2D features in the temporal dimension. Our principal ﬁnding is that the 3D kernel, represented by the constant-velocity, can be decomposed into a convolution of a 2D kernel representing the shapes and a 3D kernel representing the velocity. We derived the efﬁcient recursive algorithm for this class of 3D convolution which is exceptionally suited for sparse data, and this parameterized decomposed representation imposes a structured regularization along the temporal direction. We experimentally veriﬁed the validity of our approximation using a controlled dataset, and we also showed the effectiveness of cv3dconv for the visual odometry estimation task using real event camera data captured in urban road scene.},
+	language = {en},
+	urldate = {2023-01-23},
+	booktitle = {2018 {International} {Conference} on {3D} {Vision} ({3DV})},
+	publisher = {IEEE},
+	author = {Sekikawa, Yusuke and Ishikawa, Kohta and Hara, Kosuke and Yoshida, Yuuichi and Suzuki, Koichiro and Sato, Ikuro and Saito, Hideo},
+	month = sep,
+	year = {2018},
+	keywords = {⛔ No INSPIRE recid found},
+	pages = {343--351},
+}
+
+@article{wang_event-based_2016,
+	title = {An {Event}-{Based} {Neurobiological} {Recognition} {System} with {Orientation} {Detector} for {Objects} in {Multiple} {Orientations}},
+	volume = {10},
+	issn = {1662-453X},
+	url = {https://www.frontiersin.org/articles/10.3389/fnins.2016.00498},
+	abstract = {A new multiple orientation event-based neurobiological recognition system is proposed by integrating recognition and tracking function in this paper, which is used for asynchronous address-event representation (AER) image sensors. The characteristic of this system has been enriched to recognize the objects in multiple orientations with only training samples moving in a single orientation. The system extracts multi-scale and multi-orientation line features inspired by models of the primate visual cortex. An orientation detector based on modified Gaussian blob tracking algorithm is introduced for object tracking and orientation detection. The orientation detector and feature extraction block work in simultaneous mode, without any increase in categorization time. An addresses lookup table (addresses LUT) is also presented to adjust the feature maps by addresses mapping and reordering, and they are categorized in the trained spiking neural network. This recognition system is evaluated with the MNIST dataset which have played important roles in the development of computer vision, and the accuracy is increased owing to the use of both ON and OFF events. AER data acquired by a dynamic vision senses (DVS) are also tested on the system, such as moving digits, pokers, and vehicles. The experimental results show that the proposed system can realize event-based multi-orientation recognition. The work presented in this paper makes a number of contributions to the event-based vision processing system for multi-orientation object recognition. It develops a new tracking-recognition architecture to feedforward categorization system and an address reorder approach to classify multi-orientation objects using event-based data. It provides a new way to recognize multiple orientation objects with only samples in single orientation.},
+	urldate = {2023-01-20},
+	journal = {Frontiers in Neuroscience},
+	author = {Wang, Hanyu and Xu, Jiangtao and Gao, Zhiyuan and Lu, Chengye and Yao, Suying and Ma, Jianguo},
+	year = {2016},
+	keywords = {⛔ No INSPIRE recid found},
+}
+
+@misc{ghosh_spatiotemporal_2019,
+	title = {Spatiotemporal {Filtering} for {Event}-{Based} {Action} {Recognition}},
+	url = {http://arxiv.org/abs/1903.07067},
+	abstract = {In this paper, we address the challenging problem of action recognition, using event-based cameras. To recognise most gestural actions, often higher temporal precision is required for sampling visual information. Actions are deﬁned by motion, and therefore, when using event-based cameras it is often unnecessary to re-sample the entire scene. Neuromorphic, event-based cameras have presented an alternative to visual information acquisition by asynchronously time-encoding pixel intensity changes, through temporally precise spikes (≈ 10 µs resolution), making them well equipped for action recognition. However, other challenges exist, which are intrinsic to event-based imagers, such as higher signal-to-noise ratio, and a spatiotemporally sparse information. One option is to convert event-data into frames, but this could result in signiﬁcant temporal precision loss. In this work we introduce spatiotemporal ﬁltering in the spike-event domain, as an alternative way of channeling spatiotemporal information through to a convolutional neural network. The ﬁlters are local spatiotemporal weight matrices, learned from the spike-event data, in an unsupervised manner. We ﬁnd that appropriate spatiotemporal ﬁltering signiﬁcantly improves CNN performance beyond state-of-the-art on the event-based DVS Gesture dataset. On our newly recorded action recognition dataset, our method shows signiﬁcant improvement when compared with other, standard ways of generating the spatiotemporal ﬁlters.},
+	language = {en},
+	urldate = {2023-01-20},
+	publisher = {arXiv},
+	author = {Ghosh, Rohan and Gupta, Anupam and Nakagawa, Andrei and Soares, Alcimar and Thakor, Nitish},
+	month = mar,
+	year = {2019},
+	note = {arXiv:1903.07067 [cs]},
+	keywords = {Computer Science - Computer Vision and Pattern Recognition, ⛔ No INSPIRE recid found},
+}
+
 @article{simoncini_more_2012,
 	title = {More is not always better: {Adaptive} gain control explains dissociation between perception and action.},
 	volume = {15},
@@ -1074,16 +1119,6 @@ Conference Name: IEEE Transactions on Pattern Analysis and Machine Intelligence}
 	year = {2014},
 	keywords = {\#nosource, ⛔ No INSPIRE recid found},
 	pages = {2052--2073},
-}
-
-@article{ghosh_spatiotemporal_2019,
-	title = {Spatiotemporal filtering for event-based action recognition},
-	volume = {abs/1903.07067},
-	url = {http://arxiv.org/abs/1903.07067},
-	journal = {CoRR},
-	author = {Ghosh, Rohan and Gupta, Anupam and Silva, Andrei Nakagawa and Soares, Alcimar and Thakor, Nitish V.},
-	year = {2019},
-	keywords = {\#nosource, ⛔ No DOI found, ⛔ No INSPIRE recid found},
 }
 
 @article{deweese_binary_2002,
