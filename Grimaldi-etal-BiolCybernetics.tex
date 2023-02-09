@@ -22,53 +22,6 @@
 % https://github.com/SpikeAI/pyTERtorch/
 % https://www.zotero.org/groups/4776796/fastmotiondetection
 
-% private
-% https://framateam.org/spikeai/channels/2022-10_icip-bordeaux
-% https://www.overleaf.com/project/630f9044c38e7a3cea81a7b2
-
-% preprint server =  https://www.researchsquare.com/login?redirect=/article/rs-2120999/private/timeline
-% 
-% 2023-01-13 decision: Revise
-% 
-% REVIEWER REPORTS
-
-% Reviewer Comments:
-
-% Reviewer 1
-% 1.There is a lack of an intuitive figure to show the HD-SNN model used in this paper.
-
-% 2.The MLR model used in the experimental part was presented in authors’ another work. Therefore, the changes on the MLR model are suggested to be highlighted and contrasted graphically.
-
-% 3.The title of section 2.2.1 is ’’a generative model for rater plots’’, but actually this section introduces basic terms and symbols. Section 2.2.2 is named ‘’detecting spiking motifs’’, but most of the content seems to introduce the generation process of raster plots, while only the last paragraph introduces the detection of motif. It is recommended that the content of these two sections be reorganized and that references to Figure 1(b)(c)(d) be added where appropriate during the description.
-
-% 4.The adjustment of weights and delays needs more detailed elaboration, preferably given in mathematical formulas.
-
-% 5.In Figure 4, it is claimed that the kernels are very similar for the ON polarities, and different kernels are selective to the different motion directions. However, in terms of these two observations, I think they are not very significant, so I suggest a more intuitive way to reflect them, such as quantifying the similarity between the ON kernels, and the angle between the kernels and the vector of the standard motion directions. 
-
-% 6.There are few experiments and lack of comparative experiments. Since the model has an improvement based on MLR model, it is suggested to increase the comparison with MLR model and HOTS model on other datasets, such as N-MNIST and other neuromorphic datasets, so as to show the advantages of the proposed model in computational consumption.
-
-% 7.Some sections are verbose, such as the discussion.
-
-% 8.There are some minor errors in the text, and it is recommended to check the full text: 
-% 1)In the first paragraph on page 8, "a presynaptic address b_s" should be "a postsynaptic address b_s"; 
-% 2)Whether W_b in the first formula should be K_b? And d in it lacks description. 
-% 3)"PGs" should be given in its full name when it first appears. 
-% 4)There is no subgraph label of (a), (b) and (c) in Fig. 3, but the expression of Fig. 3-(a)/(b)/(c) appears many times. 
-% 5)The content of paragraph 1 on page 13 is repeated. 
-
-% Reviewer 2
-% Key results: Please summarize what you consider to be the outstanding features of the work.
-% Using a single layer of spiking neurons with heterogeneous delays to learn spatio-temporal  spiking motifs
-
-% Validity: Does the manuscript have flaws which should prohibit its publication? If so, please provide details.
-
-% The work presented here is very similar to the author's other work,  "Learning hetero-synaptic delays for motion detection in a single layer of spiking neurons" 10.1109/ICIP46576.2022.9897394. This must be addressed and cited with an explanation of how this work presented is an extension of this previous publication. Abstract, Fig 6 and the main result is presented in the previous work. Arguably some of the figures from the previous publication would be nice to see in this publication as it helps with the visualisation of the problem. One suggestion for the extension to make the work unique would be to extend with some event-camera data, as it is mentioned multiple times within the publication. 
-% There are also a number of citations that could have been added that did appear in the other publication, while also including other motion detection/ segmentation or previous work on event-based optical flow, which is a very similar problem.
-
-% Originality and significance: If the conclusions are not original, please provide relevant references.
-
-% See above...
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2022-09-30
 % Learning heterogeneous delays in a layer of spiking neurons for fast motion detection
@@ -157,7 +110,6 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 
 %In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. If the study did not report any data, you might add ``Not applicable'' here. Chen
 }
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NOTATIONS
 % Pixel world
@@ -259,6 +211,9 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 \usepackage[T1]{fontenc}
 %\usepackage{textcomp}
 \usepackage[utf8]{inputenc}
+%
+\usepackage{lineno}
+\linenumbers
 
 %%%% Standard Packages
 %%<additional latex packages if required can be included here>
@@ -520,39 +475,43 @@ $\event_\postsynaddr = \{(\presynaddr_\arank, \timev_\arank+\synapticdelay_\rank
 \subsubsection{Applied on this detection task}
 
 From the perspective of simulating such event-based computations on standard CPU- or GPU-based computers and then using parallel computing, it is useful to transform this event-based representation into a dense representation. Indeed, by discretization of time, we may transform any event-based input as the boolean matrix $A \in \{0, 1 \}^{N\times T}$, where $N$ is the number of neurons in $\presynaddrspace$ and $T$ is the number of time bins. In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ of size $(N_{tb}, N_x, N_y)$, where $N_{tb}$ is the number of time bins, $N_x$ and $N_y$ are the number of pixels in both spatial dimensions. For each neuron $\postsynaddr$, $\kernel^\postsynaddr$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. Using this dense representation, the integration of the spike train as input by the synapses of neuron $\postsynaddr$ is:
-%
+
 \begin{equation}\label{eq:kernel_b}
 \forall \presynaddr \in \presynaddrspace^{\synapse^\postsynaddr}, \forall \timev \in T, \; \;
 \mathcal{C}^\postsynaddr(\presynaddr,\timev)
 = \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
 \end{equation}
-%
+
 where $\presynaddrspace^{\synapse^\postsynaddr}$ is the address space of the receptive field of neuron $\postsynaddr$ and $N_{\synapse^\postsynaddr}$ is the number of synapses belonging to neuron $\postsynaddr$. To benefit from invariance to location observed in CNN and to simplify the implementation of the model, one assumes that kernels should be similar across different positions and define a convolution operator. The characteristics of the kernels are shared among one class of neurons such that $\forall i,j \in [1, N_\class]^2, \; \kernel^i_\class = \kernel^j_\class$. The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$:
-%
+
 \begin{equation}\label{eq:conv}
 \forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
 \mathcal{C}_\class(\presynaddr,\timev)
 = \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
 \end{equation}
-%
+
 This shows that $\mathcal{C}_\class$ is a spatiotemporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$ (see Figure~\ref{fig:model} for an illustration). Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time.
 This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
 %
 The same type of spatiotemporal filtering is used as a preprocessing stage of a pattern recognition algorithm~\cite{ghosh_spatiotemporal_2019}. And in \cite{sekikawa_constant_2018}, an efficient 3D convolutional algorithm succeeds a motion estimation task. By assuming a locally constant velocity the 3D kernel can be decomposed into a 2D kernel representing the shapes and a 3D kernel representing the velocity. Here, we keep the analogy with spiking neurons and we try to use as few heuristics as possible to observe the emergence of spiking motifs in the spatiotemporal kernels. If so, this precise spatiotemporal patterns prove to be of interest for neural computations and one can assume that biological neurons make use of this information as well. 
 
+\note{plus de biblio sur la motion detection/segmentation ou optique flow avec les events? (reviewer 2)}
+
 The 3D convolution represents the linear integration of the spike train as input. The activation function of our model is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
 It transforms this list of weights into a probability with the following formula:
+
 \begin{equation}\label{eq:mlr}
 \forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \forall \class \in [1, N_\class], \; \;
 Pr(k=\class \; \vert \; \presynaddr, \timev) =
 \frac 1 Z
 {\exp  (\mathcal{C}_\class(\presynaddr, \timev) +\bias_\class) }
 \end{equation} 
+
 where $\bias_\class$ is the bias linked to class $\class$ and $Z$ is the partition function. 
 In our MLR model, a probability value, for each class (i.e. each motion direction), is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the HD-SNN model. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike. The spiking output of the model corresponds to an event with the highest probability class, keeping the same timing as the input event. 
 
-Once explained the general framework used to solve the ecological task described in section~\ref{sec:task}, we can add some heuristics based on neuroscientific observations to constrain our model and its strategies to solve the task. We set \note{arbitrarily} the size of the kernels to $(9, 17, 17)$ and define as many classes as the number of motion direction: $N_\class = 8$. Because receptive fields of biological neurons are mainly circular and can be more or less elongated, we apply a circular mask on the spatial dimensions of the kernels. And because the synaptic delay is linked, by physical principles, to the distance between the presynaptic neuron and the postsynaptic one, we apply a linear mask on the temporal axis such that the connectivity depends on the delay: the lower the delay the lower the circular mask radius (see Figure~\ref{fig:kernels} for an illustration). The second heuristics is based on the observation that biological neurons have a sparse spiking activity. From this observation, we set an output firing rate for the layer of spiking neurons in order to make a sparse selection of the events at which the model makes a decision. It results in the selection of the coefficients with the maximum likelihood value. Therefore, we will only select a given proportion of the most active cells, which we set here to $.01\%$ of all output voxels. This threshold was found using cross-validation and future work should automate how this may be determined for various datasets. Given a stimulus input, the model thus yields a spike output in the postsynaptic address space.
+Once explained the general framework used to solve the ecological task described in section~\ref{sec:task}, we can add some heuristics based on neuroscientific observations to constrain our model and its strategies to solve the task. Note that the general framework is the same as the one presented in~\cite{grimaldi_learning_2022} and that, appart from the task to solve and a deeper analysis of the results, these priors, inspired by neuroscience, are the main methodological differences with this previous study. We set \note{arbitrarily} the size of the kernels to $(9, 17, 17)$ and define as many classes as the number of motion direction: $N_\class = 8$. Because receptive fields of biological neurons are mainly circular and can be more or less elongated, we apply a circular mask on the spatial dimensions of the kernels. And because the synaptic delay is linked, by physical principles, to the distance between the presynaptic neuron and the postsynaptic one, we apply a linear mask on the temporal axis such that the connectivity depends on the delay: the lower the delay the lower the circular mask radius (see Figure~\ref{fig:kernels} for an illustration). The second heuristics is based on the observation that biological neurons have a sparse spiking activity. From this observation, we set an output firing rate for the layer of spiking neurons in order to make a sparse selection of the events at which the model makes a decision. It results in the selection of the coefficients with the maximum likelihood value. Therefore, we will only select a given proportion of the most active cells, which we set here to $.01\%$ of all output voxels. This threshold was found using cross-validation and future work should automate how this may be determined for various datasets. Given a stimulus input, the model thus yields a spike output in the postsynaptic address space.
 
 \note{describe the heuristics inspired by neuroscience}
 
