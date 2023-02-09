@@ -520,28 +520,24 @@ $\event_\postsynaddr = \{(\presynaddr_\arank, \timev_\arank+\synapticdelay_\rank
 \subsubsection{Applied on this detection task}
 
 From the perspective of simulating such event-based computations on standard CPU- or GPU-based computers and then using parallel computing, it is useful to transform this event-based representation into a dense representation. Indeed, by discretization of time, we may transform any event-based input as the boolean matrix $A \in \{0, 1 \}^{N\times T}$, where $N$ is the number of neurons in $\presynaddrspace$ and $T$ is the number of time bins. In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. Using this dense representation, the integration of the spike train as input by the synapses of neuron $\postsynaddr$ is:
-\begin{equation*}
-\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
+%
+\begin{equation}\label{eq:kernel_b}
+\forall \presynaddr \in \presynaddrspace^{\synapse^\postsynaddr}, \forall \timev \in T, \; \;
 \mathcal{C}^\postsynaddr(\presynaddr,\timev)
-= \sum_{\ranksyn  \in \synapse^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
-\end{equation*}
+= \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
+\end{equation}
 %
-This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
-This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
+where $\presynaddrspace^{\synapse^\postsynaddr}$ is the address space of the receptive field of neuron $\postsynaddr$ and $N_{\synapse^\postsynaddr}$ is the number of synapses belonging to neuron $\postsynaddr$. To benefit from invariance to location observed in CNN and to simplify the implementation of the model, one assumes that kernels should be similar across different positions and define a convolution operator. The characteristics of the kernels are shared among one class of neurons such that $\forall i,j \in [1, N_\class]^2, \; \kernel^i_\class = \kernel^j_\class$. The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$:
 %
-
-\note{formalize the following:}
-More generally, every cause may be considered as occurring independently and one might write the generative model for the generation of the presynaptic events as:
-
-Using this formalization, one might now deduce an optimal algorithm for the detection of such temporal motifs.
-
-
-By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights.
-
-
-Following the observations of~\citet{izhikevich_polychronization_2006}, let us assume that such precise discharge motif defines a polychronous group (PG). Assuming that we know there exists $M$ such groups, we will define as $b \in [1, M]$ the address of a PG and as $W_b$ the corresponding weight matrices. This allows then to derive a generative model for raster plots (see Figure~\ref{fig:model}-(b)).
-
- 
+\begin{equation}\label{eq:conv}
+\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
+\mathcal{C}_\class(\presynaddr,\timev)
+= \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
+\end{equation}
+%
+This shows that $\mathcal{C}_\class$ is a spatiotemporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$.
+This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
+%
 This generative model defined above allows to determine this inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the spiking motifs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider kernels with similar decreasing exponential time profile, we can prove that this is similar to the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it is possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. Equivalently, this consists in using the emitting field $\synapse_\presynaddr$ of presynaptic neurons in place of the receptive field $\synapse^\postsynaddr$ of postsynaptic neurons. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. This assumption hold as long as the kernels are uncorrelated, a condition which is met here numerically by chosing a relatively sparse set of synapses (approximately $1\%$ of active synapses).
 
 \subsubsection{Implementation using spiking neurons with heterogeneous delays}
@@ -561,9 +557,6 @@ In particular, we expect that some specific motifs may become tightly synchroniz
 
  \note{say that it is effortless in biology but difficult on conventional computers}
  In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the heterogeneous delays model. 
-
-
-
 
 Now that our motion detection task is defined in visual space, we can define the model that will be trained to solve the task. The use of spatio-temporal filters on an event stream has improved the performance of CNNs for an action recognition task in a model by~\citet{ghosh_spatiotemporal_2019} and here we will use a similar strategy, but focus on using an event-based representation.
 For this purpose, we design 3D kernels of shape $(\Kx, \Ky, \Ktime) = (9, 9, 11)$, representing the two spatial dimensions and the range of time delays, respectively.
