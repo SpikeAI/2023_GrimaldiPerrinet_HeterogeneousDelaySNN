@@ -470,7 +470,7 @@ $\event_\postsynaddr = \{(\presynaddr_\arank, \timev_\arank+\synapticdelay_\rank
 
 \note{I can make a small figure with event streams of different colors for the input one, the multiplexed one etc and the response in the bottom}
 
-\subsubsection{Applied on this detection task}
+\subsubsection{Application to the motion detection task}
 
 From the perspective of simulating such event-based computations on standard CPU- or GPU-based computers and then using parallel computing, it is useful to transform this event-based representation into a dense representation. Indeed, by discretization of time, we may transform any event-based input as the boolean matrix $A \in \{0, 1 \}^{N\times T}$, where $N$ is the number of neurons in $\presynaddrspace$ and $T$ is the number of time bins. In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ of size $(N_{tb}, N_x, N_y)$, where $N_{tb}$ is the number of time bins, $N_x$ and $N_y$ are the number of pixels in both spatial dimensions. For each neuron $\postsynaddr$, $\kernel^\postsynaddr$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. Using this dense representation, the integration of the spike train as input by the synapses of neuron $\postsynaddr$ is:
 
@@ -479,7 +479,6 @@ From the perspective of simulating such event-based computations on standard CPU
 \mathcal{C}^\postsynaddr(\presynaddr,\timev)
 = \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel^\postsynaddr(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
 \end{equation}
-
 where $\presynaddrspace^{\synapse^\postsynaddr}$ is the address space of the receptive field of neuron $\postsynaddr$ and $N_{\synapse^\postsynaddr}$ is the number of synapses belonging to neuron $\postsynaddr$. To benefit from invariance to location observed in CNN and to simplify the implementation of the model, one assumes that kernels should be similar across different positions and define a convolution operator. The characteristics of the kernels are shared among one class of neurons such that $\forall i,j \in [1, N_\class]^2, \; \kernel^i_\class = \kernel^j_\class$. The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$:
 
 \begin{equation}\label{eq:conv}
