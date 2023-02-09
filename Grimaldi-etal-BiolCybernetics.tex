@@ -169,7 +169,7 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 \newcommand{\Npol}{N_\text{p}} % number of polarity
 \newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
 \newcommand{\arank}{r} % address index
-\newcommand{\bias}{b} % bias for the MLR model
+\newcommand{\bias}{\beta} % bias for the MLR model
 \newcommand{\synapse}{\mathcal{S}} % synapse
 \newcommand{\synapticweight}{w} % synaptic weight
 \newcommand{\synapticdelay}{\delta} % synaptic delay
@@ -535,17 +535,30 @@ where $\presynaddrspace^{\synapse^\postsynaddr}$ is the address space of the rec
 = \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
 \end{equation}
 %
-This shows that $\mathcal{C}_\class$ is a spatiotemporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$.
+This shows that $\mathcal{C}_\class$ is a spatiotemporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$ (see Figure~\ref{fig:model} for an illustration). Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time.
 This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
 %
-This generative model defined above allows to determine this inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the spiking motifs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider kernels with similar decreasing exponential time profile, we can prove that this is similar to the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it is possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. Equivalently, this consists in using the emitting field $\synapse_\presynaddr$ of presynaptic neurons in place of the receptive field $\synapse^\postsynaddr$ of postsynaptic neurons. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. This assumption hold as long as the kernels are uncorrelated, a condition which is met here numerically by chosing a relatively sparse set of synapses (approximately $1\%$ of active synapses).
+The same type of spatiotemporal filtering is used as a preprocessing stage of a pattern recognition algorithm~\cite{ghosh_spatiotemporal_2019}. And in \cite{sekikawa_constant_2018}, an efficient 3D convolutional algorithm succeeds a motion estimation task. By assuming a locally constant velocity the 3D kernel can be decomposed into a 2D kernel representing the shapes and a 3D kernel representing the velocity. Here, we keep the analogy with spiking neurons and we try to use as few heuristics as possible to observe the emergence of spiking motifs in the spatiotemporal kernels. If so, this precise spatiotemporal patterns prove to be of interest for neural computations and one can assume that biological neurons make use of this information as well. 
+
+The 3D convolution represents the linear integration of the spike train as input. The activation function of our model is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
+It transforms this list of weights into a probability with the following formula:
+\begin{equation}\label{eq:mlr}
+\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \forall \class \in [1, N_\class], \; \;
+Pr(k=\class \; \vert \; \presynaddr, \timev) =
+\frac 1 Z
+{\exp  (\mathcal{C}_\class(\presynaddr, \timev) +\bias_\class) }
+\end{equation} 
+where $\bias^\postsynaddr$ is the bias linked to class $\class$. 
+In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
+%This generative model defined above allows to determine this inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the spiking motifs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider kernels with similar decreasing exponential time profile, we can prove that this is similar to the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it is possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. Equivalently, this consists in using the emitting field $\synapse_\presynaddr$ of presynaptic neurons in place of the receptive field $\synapse^\postsynaddr$ of postsynaptic neurons. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. This assumption hold as long as the kernels are uncorrelated, a condition which is met here numerically by chosing a relatively sparse set of synapses (approximately $1\%$ of active synapses).
 
 \subsubsection{Implementation using spiking neurons with heterogeneous delays}
 
-The activation function of our spiking neural is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}.
+The activation function of our spiking neural is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}.
 It transforms this list of weights into a probability with the following formula:
 $
-Pr(k=\postsynaddr \; \vert \; \timev) =
+\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
+Pr(k=\class \; \vert \; \timev) =
 \frac 1 Z
 {\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
 $ 
