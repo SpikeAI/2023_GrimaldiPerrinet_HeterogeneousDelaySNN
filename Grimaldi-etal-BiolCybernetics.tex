@@ -548,38 +548,21 @@ Pr(k=\class \; \vert \; \presynaddr, \timev) =
 \frac 1 Z
 {\exp  (\mathcal{C}_\class(\presynaddr, \timev) +\bias_\class) }
 \end{equation} 
-where $\bias^\postsynaddr$ is the bias linked to class $\class$. 
-In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
-%This generative model defined above allows to determine this inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the spiking motifs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider kernels with similar decreasing exponential time profile, we can prove that this is similar to the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it is possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. Equivalently, this consists in using the emitting field $\synapse_\presynaddr$ of presynaptic neurons in place of the receptive field $\synapse^\postsynaddr$ of postsynaptic neurons. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. This assumption hold as long as the kernels are uncorrelated, a condition which is met here numerically by chosing a relatively sparse set of synapses (approximately $1\%$ of active synapses).
+where $\bias_\class$ is the bias linked to class $\class$ and $Z$ is the partition function. 
+In our MLR model, a probability value, for each class (i.e. each motion direction), is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the HD-SNN model. 
+In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike. The spiking output of the model corresponds to an event with the highest probability class, keeping the same timing as the input event. 
 
-\subsubsection{Implementation using spiking neurons with heterogeneous delays}
+\note{describe the heuristics inspired by neuroscience}
 
-The activation function of our spiking neural is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}.
-It transforms this list of weights into a probability with the following formula:
-$
-\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
-Pr(k=\class \; \vert \; \timev) =
-\frac 1 Z
-{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
-$ 
-where $\mathcal{C}^\postsynaddr(\timev) = \sum
-\activeweights^\postsynaddr(t)
-$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
-In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
-%
+\note{describe the parameters of the model}
 
- \note{say that it is effortless in biology but difficult on conventional computers}
- In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the heterogeneous delays model. 
+\note{describe the learning -> analogy with hebbian learning from TPAMI}
 
-Now that our motion detection task is defined in visual space, we can define the model that will be trained to solve the task. The use of spatio-temporal filters on an event stream has improved the performance of CNNs for an action recognition task in a model by~\citet{ghosh_spatiotemporal_2019} and here we will use a similar strategy, but focus on using an event-based representation.
-For this purpose, we design 3D kernels of shape $(\Kx, \Ky, \Ktime) = (9, 9, 11)$, representing the two spatial dimensions and the range of time delays, respectively.
-The computations are performed on the spatio-temporal windows that are defined by the kernels and are ``moving'' around the events, i.e. the spatial center of the spatio-temporal window around the current event $\epsilon_\arank$. Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time.
-%
 \begin{figure}%[h!]%[ht!]
     \centering
     \includegraphics[width=\linewidth]{figures/HD-SNN.png}
     \caption{
-    \textbf{- HD-SNN illustration. From left to right:} A 3D representation of the event stream as output of the DVS. A 3D convolution is applied, on the dense representation of the input, along the $X$ and $Y$ spatial axes (defining the DVS pixel grid) and the temporal axis. There are as many kernels as the possible number of motion classes in the recording. For clarity, only $4$ kernels are illustrated and some weights are not represented in the voxel grid. For each voxel on the dense representation of the event stream as input, the output of the 3D convolution is processed by the non-linearity of the MLR model (i.e. softmax function). The output of the MLR gives a probability for each class, associated to a specific kernel, to emit an output event, or spike. With an appropriate spiking mechanism, here the winner-takes-all mechanism, we obtained, as output of the HD-SNN model, a new spike train with the different spikes associated to a specific motion class. }
+    \textbf{- HD-SNN illustration. From left to right:} A 3D representation of the event stream as output of the DVS. A 3D convolution is applied, on the dense representation of the input, along the $X$ and $Y$ spatial axes (defining the DVS pixel grid) and the temporal axis. There are as many kernels as the possible number of motion classes in the recording. For clarity, only $4$ kernels are illustrated and some weights are not represented in the voxel grid. For each voxel on the dense representation of the event stream as input, the output of the 3D convolution is processed by the non-linearity of the MLR model (i.e. softmax function). The output of the MLR gives a probability for each class, associated to a specific kernel, to emit an output event, or spike. With an appropriate spiking mechanism, here a winner-takes-all, we obtain, as output of the HD-SNN model, a new spike train with the different spikes associated to a specific motion class. }
     \label{fig:model}
 \end{figure}
 %
