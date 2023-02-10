@@ -495,11 +495,13 @@ From the perspective of simulating such event-based computations on standard CPU
 % Here, we will consider that heterogeneous delays are limited in range
 In particular, the whole synaptic set can be represented as a one kernel for each class $\class$ of the supervision task as the dense matrix $\kernel_\class$ of size $(\Npol, \Ktime, \Kx, \Ky)$, where  $\Ktime$ is the number of delays and $\Kx$ and $\Ky$ are the number of pixels in both spatial dimensions. To keep an analogy with the HD-SNN model, for each neuron $\postsynaddr$ of position $(x, y)$ and class $\class$, $\kernel_\class$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. %Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. 
 Using this dense representation, the processing of $A$ by the model can be written as:
+
 \begin{equation}\label{eq:kernel_b}
 \forall x, y, \timev, \; \;
 \mathcal{C}_\class(x, y, \timev)
 = \sum_{p, \delta_x, \delta_y, \synapticdelay} \kernel_\class(p, \delta_x, \delta_y, \synapticdelay) \cdot A(p, x - \delta_x, y - \delta_y, \timev-\synapticdelay)
 \end{equation}
+
 % The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$: equation~\eqref{eq:stream_b}
 % \begin{equation}\label{eq:conv}
 % \forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
