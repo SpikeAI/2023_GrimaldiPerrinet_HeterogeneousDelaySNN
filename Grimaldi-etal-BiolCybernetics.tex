@@ -504,12 +504,12 @@ Using this dense representation, the processing of $A$ by the model can be writt
 = \sum_{p, \delta_x, \delta_y, \synapticdelay} \kernel_\class(p, \delta_x, \delta_y, \synapticdelay) \cdot A(p, x - \delta_x, y - \delta_y, \timev-\synapticdelay)
 \end{equation}
 
-% The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$: equation~\eqref{eq:stream_b}
-% \begin{equation}\label{eq:conv}
-% \forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
-% \mathcal{C}_\class(\presynaddr,\timev)
-% = \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
-% \end{equation}
+%The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$: equation~\eqref{eq:stream_b}
+%\begin{equation}\label{eq:conv}
+%\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
+%\mathcal{C}_\class(\presynaddr,\timev)
+%= \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
+%\end{equation}
 This shows that $\mathcal{C}_\class$ is a spatio-temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$ (see Figure~\ref{fig:model} for an illustration). Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time.
 This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream. The same type of spatio-temporal filtering is used as a preprocessing stage of a pattern recognition algorithm~\citep{ghosh_spatiotemporal_2019}. Also,~\citet{sekikawa_constant_2018} developed an efficient 3D convolutional algorithm which implements a motion estimation task. By assuming a locally constant velocity, the authors assume the 3D kernel can be decomposed into a 2D kernel representing the shapes and a 3D kernel representing the velocity. 
 
