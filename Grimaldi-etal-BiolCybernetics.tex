@@ -5,6 +5,18 @@
 % -*- coding: UTF-8; -*-
 % vim: set fenc=utf-8
 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% public
+% https://github.com/SpikeAI/pyTERtorch/
+% https://www.zotero.org/groups/4776796/fastmotiondetection
+%
+% private
+% https://framateam.org/spikeai/channels/fast-motion-biolcyb
+% https://www.overleaf.com/project/630f9044c38e7a3cea81a7b2
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % Guest Editors:
 % 
 % Kexin Chen - Department of Cognitive Sciences, University of California, Irvine
@@ -21,7 +33,7 @@
 % public
 % https://github.com/SpikeAI/pyTERtorch/
 % https://www.zotero.org/groups/4776796/fastmotiondetection
-
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 2022-09-30
 % Learning heterogeneous delays in a layer of spiking neurons for fast motion detection
@@ -75,13 +87,14 @@ Learning heterogeneous delays of spiking neurons for motion detection
 \newcommand{\Country}{France}%
 \newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
 \newcommand{\Abstract}{
-The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neural code is essential to understand information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neural models do not take advantage of this important temporal dimension of the neural code. Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of spiking neurons with heterogeneous synaptic delays, which we apply to the computer vision task of motion detection. Indeed, the diversity of synaptic delays on the dendritic tree allows for the synchronization of specific arrangments of synaptic inputs as they reach the basal dendritic tree. We show that this can be formalized as a time-invariant logistic regression that can be trained on labeled data. We demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of event-based cameras. In particular, we quantify how the accuracy of the model can vary as a function of the overall computational load. This end-to-end, event-driven computational building block could improve the performance of future spiking neural network (SNN) algorithms and in particular their implementation in neuromorphic chips.
+The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neural code is essential to understand information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neural models do not take advantage of this important temporal dimension of the neural code. Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of spiking neurons with heterogeneous synaptic delays. The model uses the property that the diversity of synaptic delays on the dendritic tree allows for the synchronization of specific arrangements of synaptic inputs as they reach the basal dendritic tree. We show that this can be formalized as a time-invariant logistic regression that can be trained on labeled data. We demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of the retina or to event-based cameras and for which we will characterize the accuracy of the model in detecting visual motion. In particular, we quantify how the accuracy can vary as a function of the overall computational load showing it is still efficient at very low workloads. This end-to-end, event-driven computational building block could improve the performance of future spiking neural network (SNN) algorithms and in particular their implementation in neuromorphic chips.
 }
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
 }
 \newcommand{\Funding}{
 This research was funded by the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{APROVIS3D}{http://aprovis3d.eu/}''). % Agence Nationale de la Recherche %HL and 
 LP received funding from the ANR project  N° ANR-20-CE23-0021 ``\href{AgileNeuroBot}{https://laurentperrinet.github.io/grant/anr-anr/}''
+
 % LP received funding 
 and from A*Midex grant number AMX-21-RID-025
 ``\href{Polychronies}{https://laurentperrinet.github.io/grant/polychronies/}''. 
@@ -89,88 +102,17 @@ and from A*Midex grant number AMX-21-RID-025
 %
 }
 \newcommand{\Acknowledgments}{
-Thanks to Thomas Schatz, Rosa Cossart, Hugo Ladret, Camille Besnainou and Jean-Nicolas Jérémie for useful discussions prior to the elaboration of this work. %Thanks to HL  for participating to Mustache November ©. %
+Thanks to % Thomas Schatz, Rosa Cossart,
+Hugo Ladret, Camille Besnainou and Jean-Nicolas Jérémie for useful discussions prior to the elaboration of this work. %Thanks to HL  for participating to Mustache November ©. %
 \Funding %
 %For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission. This research was funded, in whole or in part, by [Organisation name, Grant #]. 
 A CC-BY public copyright license has been applied by the authors to the present document and will be applied to all subsequent versions up to the Author Accepted Manuscript arising from this submission, in accordance with the grant’s open access conditions. 
 }
 \newcommand{\DataAvailability}{
-This works is made reproducible using the following tools. First the code reproducing all figures is available on~\href{ https://github.com/SpikeAI/pyTERtorch}{GitHub}. % todo: make a new repo
-
-\noindent %The paper is available a an~\href{https://arxiv.org/abs/2205.03635}{arXiv preprint} with links to previous versions ands to the code. 
+This works is made reproducible using the following tools. First the code reproducing all figures is available on~\href{ https://github.com/SpikeAI/pyTERtorch}{GitHub}. % todo: open-up the repo
 Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiondetection}{zotero group} used to gather relevant literature on the subject.
-
-% public
-% https://github.com/SpikeAI/pyTERtorch/tree/main/2022-09-30_BiolCybernetics
-% https://www.zotero.org/groups/4776796/fastmotiondetection
-
-% private
-% https://framateam.org/spikeai/channels/2022-10_icip-bordeaux
-% https://www.overleaf.com/project/630f9044c38e7a3cea81a7b2
-
-%In this section, please provide details regarding where data supporting reported results can be found, including links to publicly archived datasets analyzed or generated during the study. Please refer to suggested Data Availability Statements in section ``MDPI Research Data Policies'' at \url{https://www.mdpi.com/ethics}. If the study did not report any data, you might add ``Not applicable'' here. Chen
 }
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% NOTATIONS
-\newcommand{\ms}{\si{\milli\second}}%
-\newcommand{\us}{\si{\micro\second}}%
-\newcommand{\presynaddr}{a} % pre address
-\newcommand{\postsynaddr}{b} % post address
-\newcommand{\numevent}{N_{ev}} % total number of events
-\newcommand{\presynaddrspace}{\mathcal{A}} %presynaptic address space
-\newcommand{\postsynaddrspace}{\mathcal{B}} %postsynaptic address space
-\newcommand{\Npol}{N_\text{p}} % number of polarity
-\newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
-\newcommand{\arank}{r} % address index
-\newcommand{\bias}{\beta} % bias for the MLR model
-\newcommand{\synapse}{\mathcal{S}} % synapse
-\newcommand{\synapticweight}{w} % synaptic weight
-\newcommand{\synapticdelay}{\delta} % synaptic delay
-\newcommand{\ranksyn}{s} % synapse index
-\newcommand{\Nsyn}{N_{s}} % total number of synapses
-\newcommand{\activeweights}{\mathcal{W}} 
-\newcommand{\timev}{t} % time
-\newcommand{\polev}{p} % polarity
-\newcommand{\event}{\epsilon} % event
-\newcommand{\eventstream}{\xi} % stream of events
-\newcommand{\TS}{S} % time surface
-\newcommand{\neuron}{\mathbf{n}} % neuron in the SNN (defined by the spatial position and the channel)
-\newcommand{\postneuron}{\mathbf{m}} % post synaptic neuron in the SNN (defined by the spatial position and the kernel)
-\newcommand{\channel}{\mathbf{p}} % channel
-\newcommand{\layer}{\mathbf{L}} % layer
-% \newcommand{\timecontext}{T} % time context (cf HOTS) matrice gathering last event times
-\newcommand{\current}{I} % post synaptic current
-\newcommand{\volt}{u} % membrane potential
-\newcommand{\volts}{V} % matrix of membrane potentials
-\newcommand{\gain}{\gamma} % homeostatic gain
-% \newcommand{\simil}{\beta} % similarity value
-\newcommand{\Nclass}{N_\text{class}} % number of classes for MLR:
-\newcommand{\Nx}{N_\text{X}}
-\newcommand{\Ny}{N_\text{Y}}
-\newcommand{\Ntime}{N_\text{T}}
-\newcommand{\kernel}{\mathcal{K}} % convolution kernel
-%\newcommand{\kernelind}{\mathbf{k}} % indice of the kernel
-\newcommand{\kernelind}{k} % indice of the kernel
-\newcommand{\Kx}{K_\text{X}}
-\newcommand{\Ky}{K_\text{Y}}
-\newcommand{\Ktime}{K_\text{T}}
-\newcommand{\classiflayer}{\mathbf{C}}
-\newcommand{\class}{c} % class k of the MLR
-\newcommand{\lrweights}{\theta} % matrix of MLR weights
-\newcommand{\lrtrue}{y} % true value of the prediction for MLR
-\newcommand{\loss}{J} % cost function for MLR
-\newcommand{\softmax}{\sigma}
-\newcommand{\actfreq}{f}
-\newcommand{\decision}{\hat{y}}
-\newcommand{\colorsec}{black}
-\newcommand{\colorsubsec}{black}
-\newcommand{\speed}{v}
-\newcommand{\Nspeed}{N_v}
-% Example definitions.
-% --------------------
-\def\x{{\mathbf x}}
-\def\L{{\cal L}}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                                                                 %%
@@ -233,7 +175,7 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 %%%%  template package for technical guidance.
 %%%%%=============================================================================%%%%
 
-\jyear{2022}%
+\jyear{2023}%
 
 %% as per the requirement new theorem styles can be included as shown below
 \theoremstyle{thmstyleone}%
@@ -279,7 +221,67 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 %\AtBeginDocument{\RenewCommandCopy\qty\SI}
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTATIONS
+\newcommand{\ms}{\si{\milli\second}}%
+\newcommand{\us}{\si{\micro\second}}%
+\newcommand{\presynaddr}{a} % pre address
+\newcommand{\postsynaddr}{b} % post address
+\newcommand{\numevent}{N_{ev}} % total number of events
+\newcommand{\presynaddrspace}{\mathcal{A}} %presynaptic address space
+\newcommand{\postsynaddrspace}{\mathcal{B}} %postsynaptic address space
+\newcommand{\Npol}{N_\text{p}} % number of polarity
+\newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
+\newcommand{\arank}{r} % address index
+\newcommand{\bias}{\beta} % bias for the MLR model
+\newcommand{\synapse}{\mathcal{S}} % synapse
+\newcommand{\synapticweight}{w} % synaptic weight
+\newcommand{\synapticdelay}{\delta} % synaptic delay
+\newcommand{\ranksyn}{s} % synapse index
+\newcommand{\Nsyn}{N_{s}} % total number of synapses
+\newcommand{\activeweights}{\mathcal{W}} 
+\newcommand{\timev}{t} % time
+\newcommand{\polev}{p} % polarity
+\newcommand{\event}{\epsilon} % event
+\newcommand{\eventstream}{\xi} % stream of events
+\newcommand{\TS}{S} % time surface
+\newcommand{\neuron}{\mathbf{n}} % neuron in the SNN (defined by the spatial position and the channel)
+\newcommand{\postneuron}{\mathbf{m}} % post synaptic neuron in the SNN (defined by the spatial position and the kernel)
+\newcommand{\channel}{\mathbf{p}} % channel
+\newcommand{\layer}{\mathbf{L}} % layer
+% \newcommand{\timecontext}{T} % time context (cf HOTS) matrice gathering last event times
+\newcommand{\current}{I} % post synaptic current
+\newcommand{\volt}{u} % membrane potential
+\newcommand{\volts}{V} % matrix of membrane potentials
+\newcommand{\gain}{\gamma} % homeostatic gain
+% \newcommand{\simil}{\beta} % similarity value
+\newcommand{\Nclass}{N_\text{class}} % number of classes for MLR:
+\newcommand{\Nx}{N_\text{X}}
+\newcommand{\Ny}{N_\text{Y}}
+\newcommand{\Ntime}{N_\text{T}}
+\newcommand{\kernel}{\mathcal{K}} % convolution kernel
+%\newcommand{\kernelind}{\mathbf{k}} % indice of the kernel
+\newcommand{\kernelind}{k} % indice of the kernel
+\newcommand{\Kx}{K_\text{X}}
+\newcommand{\Ky}{K_\text{Y}}
+\newcommand{\Ktime}{K_\text{T}}
+\newcommand{\classiflayer}{\mathbf{C}}
+\newcommand{\class}{c} % class k of the MLR
+\newcommand{\lrweights}{\theta} % matrix of MLR weights
+\newcommand{\lrtrue}{y} % true value of the prediction for MLR
+\newcommand{\loss}{J} % cost function for MLR
+\newcommand{\softmax}{\sigma}
+\newcommand{\actfreq}{f}
+\newcommand{\decision}{\hat{y}}
+\newcommand{\colorsec}{black}
+\newcommand{\colorsubsec}{black}
+\newcommand{\speed}{v}
+\newcommand{\Nspeed}{N_v}
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % a simpler annotation system:
 \usepackage{soulutf8}
@@ -319,21 +321,24 @@ Find also the associated~\href{https://www.zotero.org/groups/4776796/fastmotiond
 %%%-----------------------------------------------------------------
 %%%-----------------------------------------------------------------
 \label{sec:intro}
+%
+The human brain has the remarkable property of being able to react at any time while consuming a reasonable amount of energy, about tens of watts. This system is the result of millions of years of natural selection, and a striking difference with artificial neural networks is the representation both use. Artificial convolutional neural networks (CNNs), for example, represent the flow of information from one layer to another as tensors, storing visual information densely across the visual topography, with different properties represented in different channels. These networks are known to mimic many properties of biological systems, such that each can be attributed a ``Brain Score''~\citep{schrimpf_brain-score_2020}, yet this score takes no account of inference speed or energy consumption. CNNs have achieved state-of-the-art performance for some computer vision tasks, such as image recognition. However, they do not take advantage of the dynamics inherent in the way we perceive our natural environment. In the vast majority of biological neural networks, on the other hand, information is represented as \emph{spikes}, prototypical all-or-nothing events whose only parameters are their timing and the address of the neuron that fired the spike~\citep{paugam-moisy_computing_2012}. The third generation of artificial neural networks, known as spiking neural networks (SNNs), incorporates this temporal dimension into the way they perform their computations. They are of interest for computational neuroscience because they provide a better model of the biological neuron. Some approaches have developed normative models of SNNs that aim to have applications in machine learning. One of these is the SpikeNet algorithm, which uses a purely temporal approach by encoding information using one spike per neuron~\citep{delorme_spikenet_1999}. Another type of SNN that uses accurate timing of spikes attempts to determine the structure of the network to minimize a cost function. This was implemented in the SpikeProp algorithm~\citep{bohte_error-backpropagation_2002} and has been recently extended. This method uses a surrogate gradient and is now widely used in attempts to transfer the performance of CNNs to SNNs~\citep{zenke_remarkable_2021}. However, the performance of SNNs still lags behind that of firing-rate based networks. The question of the advantage of using spikes in machine learning and computer vision remains open.
 
-The human brain has the remarkable property of being able to react at any time while consuming a reasonable amount of energy, about tens of watts. This system is the result of millions of years of natural selection, and a striking difference between biological and artificial neural networks is the representation they use. Convolutional neural networks (CNNs), for example, represent the flow of information from one layer to another as tensors, storing visual information densely across the visual topography, with different properties represented in different channels. These networks are known to mimic many properties of biological systems, such that each can be attributed a ``Brain Score''~\citep{schrimpf_brain-score_2020}, yet this score takes no account of inference speed or energy consumption. CNNs have achieved state-of-the-art performance for some computer vision tasks, such as image recognition. However, they do not take advantage of the dynamics inherent in the way we perceive our natural environment. In the vast majority of biological neural networks, on the other hand, information is represented as \emph{spikes}, prototypical all-or-nothing events whose only parameters are their timing and the address of the neuron that fired the spike~\citep{paugam-moisy_computing_2012}. The third generation of artificial neural networks, known as spiking neural networks (SNNs), incorporates this temporal dimension into the way they perform their computations. They are of interest for computational neuroscience because they provide a better model of the biological neuron. Some approaches have developed normative models of SNNs that aim to have applications in machine learning. One of these is the SpikeNet algorithm, which uses a purely temporal approach by encoding information using one spike per neuron~\citep{delorme_spikenet_1999}. Another type of SNN that uses accurate timing of spikes attempts to determine the structure of the network to minimize a cost function. This was implemented in the SpikeProp algorithm~\citep{bohte_error-backpropagation_2002} and has been recently extended in gradient-based methods. This surrogate gradient method is now widely used in attempts to transfer the performance of CNNs to SNNs~\citep{zenke_remarkable_2021}. However, the performance of SNNs still lags behind that of firing rate based networks. The question of the advantage of using spikes in machine learning and computer vision remains open.
-
-In a recent review paper, we reported experimental evidence for the presence of precise spiking motifs embedded in recordings from biological neural tissues~\cite{grimaldi_precise_2023}. These spatio-temporal motifs within the neural activity may be useful representations to perform computations for various cognitive tasks. In 1982, Abeles asked whether the role of cortical neurons is the integration of synaptic inputs or rather the detection of coincidences in temporal spiking motifs~\citep{abeles_role_1982}. While the first possibility favors the theory of rate coding, the second one emphasizes the function of temporal precision in the neural code. Since then, numerous studies have demonstrated the emergence of synchronicity of activity within a neuronal population~\citep{riehle_spike_1997, davis_spontaneous_2021}, efficient coding thanks to the use of spike latencies~\citep{perrinet_coding_2004, gollisch_rapid_2008} or precise timing in the auditory system~\citep{deweese_binary_2002, carr_circuit_1990}. All these findings, and more~\citep{bohte_evidence_2004}, highlight the importance of the temporal aspect of the neural code and suggest the existence of spatio-temporal spiking motifs in biological spike trains. In neural models, the integration of heterogeneous delays~\citep{guise_bayesian_2014, zhang_supervised_2020, nadafian_bio-plausible_2020} allows for the efficient exploitation or detection of these spatio-temporal motifs embedded in the spike train. In particular,~\citet{izhikevich_polychronization_2006} introduced the notion of the polychronous group as a repetitive motif of spikes defined by a subset of neurons with different, but precise, relative spiking delays, i.e., the time between the arrival of an afferent spike at a given synapse and the contribution of the associated postsynaptic potential to the neuron's soma. Due to the variety of configurations and the possible coexistence of multiple superimposed motifs, representation with polychronous groups has a much higher information capacity than a firing rate-based approach to neural coding.
+In a recent review paper, we reported experimental evidence for the presence of precise spiking motifs embedded in recordings from biological neural tissues~\cite{grimaldi_precise_2023}. These spatio-temporal motifs within the neural activity may be useful representations to perform computations for various cognitive tasks. Notably, \citet{abeles_role_1982} asked whether the role of cortical neurons is the integration of synaptic inputs or rather the detection of coincidences in temporal spiking motifs. While the first possibility favors the firing-rate coding theory, the second one emphasizes the function of temporal precision in the neural code. Since then, numerous studies have demonstrated the emergence of synchronicity of activity within a neuronal population~\citep{riehle_spike_1997, davis_spontaneous_2021}, efficient coding using spike latencies~\citep{perrinet_coding_2004, gollisch_rapid_2008} or precise timing in the auditory system~\citep{deweese_binary_2002, carr_circuit_1990}. All these findings, and more~\citep{bohte_evidence_2004}, highlight the importance of the temporal aspect of the neural code and suggest the existence of spatio-temporal spiking motifs in biological spike trains. In neural models, the integration of heterogeneous delays~\citep{guise_bayesian_2014, zhang_supervised_2020, nadafian_bio-plausible_2020} allows for the efficient exploitation or detection of these spatio-temporal motifs embedded in the spike train. In particular,~\citet{izhikevich_polychronization_2006} introduced the notion of the polychronous group as a repetitive motif of spikes defined by a subset of neurons with different, but precise, relative spiking delays, i.e., the time between the arrival of an afferent spike at a given synapse and the contribution of the associated postsynaptic potential to the neuron's soma. Due to the variety of configurations and the possible coexistence of multiple superimposed motifs, representation with polychronous groups has a much higher information capacity than a firing rate-based approach to neural coding.
 
 The present paper proposes additional experiments extending a recent model of spiking neurons with heterogeneous synaptic delays~\cite{grimaldi_learning_2022}. This model was trained to solve a motion detection task on a synthetic event-based dataset generated by moving parameterized textures. Once trained, the volume of event-driven computations could be drastically reduced by pruning the synapses, while maintaining top performance for the classification task. This was a demonstration that formal neurons can exploit the precise timing of spikes to improve neural computations. In the present work, we extend motion detection to a more ecological task. Instead of the synthetic textures that have been used to generate motion-driven stimuli, we use natural images and random movements that mimic biological saccades. Using an ecological motion detection task, we study the emergence of spatio-temporal spiking motifs when a single layer of spiking neurons is trained on a supervised classification task. First, we define the ecological cognitive task the model has to solve with the different datasets it will be tested on. Then, we develop a theoretically defined Heterogeneous Delays Spiking Neural Network (HD-SNN) model capable of learning these heterogeneous synaptic delays. We will investigate the efficiency of the motion detection mechanism and in particular its resilience to synaptic weight pruning. In this way, we will be able to show how such a model can provide an efficient solution to the trade-off between energy and accuracy.
 %
+%%%-----------------------------------------------------------------
+%%%-----------------------------------------------------------------
 \section{Methods}
 \label{sec:methods}
 %%%-----------------------------------------------------------------
-The goal is to test the model in a motion detection task using a realistic event-based data stream. This type of signal is typically recorded by a Dynamic Vision Sensor (DVS) and is inspired by the signal sent by retinal ganglion cells through the optic nerve. Events are binary and allow to capture the dynamics of the natural scene and perform various cognitive tasks quickly and effectively. Here, we will first describe the definition of the task and then the model we use to infer motion. %%%-----------------------------------------------------------------
+Our objective in this paper is to test whether the HD-SNN model is capable to efficiently learn a motion detection task as defined by a realistic event-based data stream. This type of signal is typically recorded by a Dynamic Vision Sensor (DVS) and is inspired by the signal sent by retinal ganglion cells through the optic nerve. Events are binary and should be sufficient to perform the motion detection task quickly and effectively. Here, we will first describe the definition of the task and then of the HD-SNN model we use to infer motion. 
+%%%-----------------------------------------------------------------
 %
 \subsection{Task definition: motion detection in a synthetic naturalistic event stream}\label{sec:task}
 %%%-----------------------------------------------------------------
-To train and test our model, we need to define a dataset for which we control the direction and speed of motion. Let us now define a procedure for animating a natural scene with virtual eye movements, similar to those used in neurobiological~\citep{vinje_sparse_2000, baudot_animation_2013} and computational neuroscience~\citep{kremkow_push-pull_2016} studies. First, we draw a trajectory inspired by the biological movements of the eyes. Indeed, these movements allow us to dynamically actuate the center of vision, or gaze, in the visual field. In animals with a fovea, this is particularly useful because it allows the area with the highest density of photoreceptors in the environment to be moved, for example to a point of interest. A specific mechanism for this is called saccades, which are rapid eye movements that reposition the center of vision. In humans, saccades are very frequent (on average $2$ per second~\citep{dandekar_neural_2012}). They are generated very quickly (about $80~\ms$) and have a wide range of speeds. On a more microscopic scale, the human gaze moves with a continuous drift similar to a Brownian trajectory~\citep{poletti_head-eye_2015}. In order to maintain the full generality of the task, we will define eye movements using a form of random walk~\citep{engbert_integrated_2011}.This approach first defines a finite set of possible 2D movements in polar coordinates. Based on the distribution of biological movements, we simplified it by selecting a set of eye movements as the Cartesian product of $8$ linearly spaced movement directions \note{and 3 geometrically spaced speeds}. Next, we define a gaze trajectory as segments whose duration is drawn from a Poisson distribution with a mean block length of $20~\ms$, similar to a Lévy flight~\citep[p. 289]{mandelbrot_fractal_1982}. Finally, the trajectory is integrated, assuming first that the velocities are sampled uniformly and independently from the set of different motion sets, and second that the motion is uniform during a time segment. The resulting instances yield trajectories that are qualitatively similar to those observed for human eye movements (\seeFig{motion_task}-(left)).
+To train and test our model, we need to define a visual dataset for which we control the direction and speed of motion. Let us now define a procedure for animating a natural visual scene with virtual eye movements, similar to those used in neurobiological~\citep{vinje_sparse_2000, baudot_animation_2013} and computational neuroscience~\citep{kremkow_push-pull_2016} studies. First, we draw a trajectory inspired by the biological movements of the eyes. Indeed, these movements allow us to dynamically actuate the center of vision, or gaze, in the visual field. In animals with a fovea, this is particularly useful because it allows the area with the highest density of photoreceptors in the environment to be moved, for example to a point of interest. A specific mechanism for this function are saccades, which are rapid eye movements that reposition the center of vision. In humans, saccades are very frequent (on average $2$ per second~\citep{dandekar_neural_2012}). They are generated very quickly (about $80~\ms$) and have a wide range of speeds. On a more microscopic scale, the human gaze moves with a continuous drift similar to a Brownian trajectory~\citep{poletti_head-eye_2015}. In order to maintain the full generality of the task, we will define eye movements using a form of random walk~\citep{engbert_integrated_2011}. This approach first defines a finite set of possible 2D movements in polar coordinates. Based on the distribution of biological movements, we simplified it by selecting a set of eye movements as the Cartesian product of $8$ linearly spaced movement directions \note{and 3 geometrically spaced speeds}. Next, we define a gaze trajectory as segments whose duration is drawn from a Poisson distribution with a mean block length of $20~\ms$, similar to a Lévy flight~\citep[p. 289]{mandelbrot_fractal_1982}. Finally, the trajectory is integrated, assuming first that the velocities are sampled uniformly and independently from the set of different motion sets, and second that the motion is uniform during a time segment. The resulting instances yield trajectories that are qualitatively similar to those observed for human eye movements (\seeFig{motion_task}-(left)).
 
 %%%-----------------------------------------------------------------
 %: fig:motion_task
@@ -342,12 +347,12 @@ To train and test our model, we need to define a dataset for which we control th
     \centering
     \includegraphics[width=0.95\linewidth]{figures/motion_task.pdf}
     \caption{
-        {\bf - Motion Detection Task.} {\bf (Left)}~We use large natural images ($512\times512$) in which an aperture ($128\times128$) extracts a cropped image around the view axis. To mimic the effect of a saccadic eye movement, the view axis moves according to a stepwise random walk. We show an example path of the trajectory for $200$ time steps (green line). {\bf (Right)}~Snapshots of the synthetic event stream at different time steps. The dynamics of the sub-image as a function of time produces a naturalistic movie. This can be transformed into an event-based representation. Mimicking the retina, this representation encodes pixel-per-pixel proportional increases or decreases in luminance in the image, i.e. ON (red) and OFF (blue) events. In the lower left corner of the snapshots, the translation vector is shown in red as one of the possible classes of motion. Note the change in the direction of motion between the second and third image and that due to the aperture problems, contours parallel to the motion emit less spikes.}
+        {\bf - Motion Detection Task.} {\bf (Left)}~We use large natural images ($256\times256$) in which an aperture ($128\times128$) extracts a cropped image around the view axis. To mimic the effect of a saccadic eye movement, the view axis moves according to a step-wise random walk. We show an example path of the trajectory for $200$ time steps (green line). {\bf (Right)}~Snapshots of the synthetic event stream at different time steps. The dynamics of the sub-image as a function of time produces a naturalistic movie. This can be transformed into an event-based representation. Mimicking the retina, this representation encodes proportional increases or decreases in luminance, i.e. ON (red) and OFF (blue) events, in each pixel of the image. In the lower left corner of the snapshots, the translation vector is shown in red as one of the possible classes of motion. Note the change in the direction of motion between the second and third image and that due to the aperture problem, contours parallel to the motion emit relatively less spikes.}
     \label{fig:motion_task}
 \end{figure}
 %%%-----------------------------------------------------------------
 Once these eye trajectories are generated, we can apply them to a visual scene. % For this purpose, we selected a database of 10 natural grayscale images that are commonly used to study the statistics of natural images~\citep{olshausen_emergence_1996}. 
-For this purpose, we selected a database of 600 natural images that were previously used to study the statistics of natural images~\citep{perrinet_edge_2015}. Note that these have been pre-processed to be in grayscale and to equalize (i.e., whiten) the energy in each frequency band. This process is known to occur in the retino-thalamic pathway~\citep{dan_efficient_1996}. These images are $256 \times 256$ in size, and we will extract sub-images of size $64 \times 64$ positioned around the center of gaze at each time step. We will discretize time in $1~\ms$ bins and produce movies of duration $N_T = 128~\ms$. To avoid boundary effects, we will randomly position the full trajectory in image space such that the subimage is translated using the position given by the trajectory at each time step without touching the borders. The translation is computed using a coordinate roll in the horizontal and vertical dimensions, followed by a sub-pixel translation defined in Fourier space~\citep{perrinet_sparse_2015}. Note that the magnitude of the displacement is relative to the time bin, and we have defined the velocity to correspond to a movement of one pixel per frame (i.e., per time bin).
+For this purpose, we selected a database of $600$ natural images that were previously used to study the statistics of natural images~\citep{perrinet_edge_2015}. Note that these have been pre-processed to be in grayscale and to equalize (i.e., whiten) the energy in each frequency band. This process is known to occur in the retino-thalamic pathway~\citep{dan_efficient_1996}. These images are $256 \times 256$ in size, and we will extract sub-images of size $128 \times 128$ positioned around the center of gaze at each time step. We will discretize time in $1~\ms$ bins and produce movies of duration $N_T = 200~\ms$. To avoid boundary effects, we will randomly position the full trajectory in image space such that the subimage is translated using the position given by the trajectory at each time step without touching the borders. At each point in time, the translation is computed using a coordinate roll in the horizontal and vertical dimensions, followed by a sub-pixel translation defined in Fourier space~\citep{perrinet_sparse_2015}. Note that the magnitude of the displacement is relative to the time bin, and we have defined the unit velocity to correspond to a movement of one pixel per frame (i.e., per time bin).
 
 To transform each movie into events as the ones recorded by a DVS, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. For a specific pixel and timestamp, an event is generated if the absolute value of this gradient exceeds a threshold. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motion_task}-(Right)). The goal here is to infer the correct motion solely by observing these events. 
 % \note{ the task is full-field rigid translations, the model resolves it locally (analogy to the input from V1 to MT) }
@@ -466,68 +471,57 @@ To transform each movie into events as the ones recorded by a DVS, we compute a 
 \begin{figure}%[t!]
     \centering
     \includegraphics[width=0.980\linewidth]{figures/izhikevich.pdf}%png}% https://www.overleaf.com/5625872443qpcwrkssgbsf
-      \caption{\textbf{Core mechanism of the HD-SNN model.} \textit{(Left)}~In this example inspired by the polychronization model~\citep{izhikevich_polychronization_2006}, three presynaptic neurons denoted \textit{b}, \textit{c} and, \textit{d} are fully connected to two post-synaptic neurons \textit{a} and \textit{e}, with different delays of respectively $1$, $5$, and $9~\ms$ for \textit{a} and  $8$, $5$, and $1~\ms$ for \textit{e}. \textit{(Middle)}~If three synchronous pulses are emitted from presynaptic neurons, this will generate post-synaptic potentials that will reach \textit{a} and \textit{e} asynchronously because of the heterogeneous delays, and they may not be sufficient to reach the membrane threshold in either of the post-synaptic neurons, therefore no spike will be emitted as this is not sufficient to reach the membrane threshold of the post synaptic neuron, so no output spike is emitted.
-      %at these different delays, and these may not be sufficient to generate a spike in either neuron.
-      \textit{(Right)}~If the pulses are emitted from presynaptic neurons such that, taking into account the delays, they reach the post-synaptic neuron \textit{a} at the same time (here, at $t=10~\ms$),  the post-synaptic potentials evoked by the three pre-synaptic neurons sum up, causing the voltage threshold to be crossed and thus to the emission of an output spike (red color), while none is emitted from post-synaptic neuron \textit{e}. Figure reproduced from~\cite{grimaldi_precise_2023} under a CC-BY licence.
-       }
-    \label{fig:izhikevich}
-  \end{figure}
-  % 
-  %----------------------------%
+  \caption{\textbf{Core mechanism of the HD-SNN model.} \textit{(Left)}~In this example inspired by the polychronization model~\citep{izhikevich_polychronization_2006}, three pre-synaptic neurons denoted~\textit{b},~\textit{c} and~\textit{d} are fully connected to two post-synaptic neurons~\textit{a} and~\textit{e}, with different delays of respectively $1$, $5$, and $9~\ms$ for~\textit{a} and $8$, $5$, and $1~\ms$ for~\textit{e} (in this schematics, we consider unitary synaptic weights). \textit{(Middle)}~If three synchronous pulses are emitted from pre-synaptic neurons, this will generate post-synaptic potentials that will reach \textit{a} and \textit{e} asynchronously because of the heterogeneous delays, and they may not be sufficient to reach the membrane threshold in either of the post-synaptic neurons, therefore no spike will be emitted as this is not sufficient to reach the membrane threshold of the post synaptic neuron, so no output spike is emitted.
+  %at these different delays, and these may not be sufficient to generate a spike in either neuron.
+  \textit{(Right)}~If the pulses are emitted from pre-synaptic neurons such that, taking into account the delays, they reach the post-synaptic neuron~\textit{a} at the same time (here, at $t=10~\ms$), the post-synaptic potentials evoked by the three pre-synaptic neurons sum up, causing the voltage threshold to be crossed and thus to the emission of an output spike (red color), while none is emitted from the post-synaptic neuron~\textit{e}. Figure reproduced from~\cite{grimaldi_precise_2023} under a CC-BY licence.}%
+    \label{fig:izhikevich}%
+\end{figure}%
+% 
+%----------------------------%
+In a neurobiological recording or in the sensory signal obtained from an event-based camera, the input consists of a stream of \emph{spikes} or \emph{events}. This can be formalized as a list of neural addresses and timestamps tuples $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event in the list of events. Events are typically ordered by their time of occurrence. Each event has a time of occurrence $\timev_\arank$ and an associated address $\presynaddr_\arank$. This defines an address space $\presynaddrspace$ which consists of the set of possible addresses. In a neurobiological recording, this can be the identified set of presynaptic neurons. For neuromorphic hardware, this can be defined as $[1, \Npol] \times [1, \Nx]\times[1, \Ny] \subset \mathbb{N}^3$ where $\Npol$ is the number of polarities ($\Npol=2$ for the ON and OFF polarities coded in event-based cameras) and $(\Nx, \Ny)$ is the height and width of the image in pixels. As such, an address $\presynaddr_\arank$ is typically in the form $(\polev_\arank, x_\arank, y_\arank)$ for event-based cameras.
 
-In neurobiological recordings or in the sensory signal obtained from an event-based camera, any generic raster plot consists of a stream of \emph{spikes} or \emph{events}. This can be formalized as a list of neural addresses and timestamps tuples $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event in the list of events. Events are typically ordered by their time of occurrence. Each event has a time of occurrence $\timev_\arank$ and an associated address $\presynaddr_\arank$. This defines an address space $\presynaddrspace$ which consists of the set of possible addresses. In a neurobiological recording, this can be the identified set of presynaptic neurons. For event-based cameras, this can be defined as $[1, \Npol] \times [1, \Nx]\times[1, \Ny] \subset \mathbb{N}^3$ where $\Npol$ is the number of polarities ($\Npol=2$ for the ON and OFF polarities coded in event-based cameras) and $(\Nx, \Ny)$ is the size of the sensor in pixels. As such, an address $\presynaddr_\arank$ is typically in the form $(\polev_\arank, x_\arank, y_\arank)$ for event-based cameras.
+In the HD-SNN model, each neuron $\postsynaddr \in \postsynaddrspace$ connects to pre-synaptic afferents from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses. Each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the pre-synaptic neuron's soma to that of the post-synaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a pre-synaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. Scanning all neurons $\postsynaddr$, we thus define the full set of $\Nsyn$ synapses, 
+as $\synapse = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn)\}_{\ranksyn \in [1,\Nsyn]}$, where each synapse is associated to a pre-synaptic address $\presynaddr_\ranksyn$, a post-synaptic address $\postsynaddr_\ranksyn$, a weight $\synapticweight_\ranksyn$, and a delay $\synapticdelay_\ranksyn$. This defines the full connectivity of the HD-SNN model. 
 
-In the HD-SNN, each neuron $\postsynaddr \in \postsynaddrspace$ connects to presynaptic afferents from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses. Each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. Scanning all neurons $\postsynaddr$, we thus define the full set of $\Nsyn$ synapses, 
-as  $\synapse = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn)\}_{\ranksyn \in [1,\Nsyn]}$, where each synapse is associated to a presynaptic address $\presynaddr_\ranksyn$, a postsynaptic address $\postsynaddr_\ranksyn$, a weight $\synapticweight_\ranksyn$, and a delay $\synapticdelay_\ranksyn$. This defines the full connectivity of the HD-SNN model. 
-
-Of interest is to define the receptive field of a postsynaptic neuron $\synapse^\postsynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \postsynaddr_\ranksyn=\postsynaddr\}_{\ranksyn \in [1,\Nsyn]}  \subset \synapse$, or the emitting field of a presynaptic neuron $\synapse_\presynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \presynaddr_\ranksyn=\presynaddr\}_{\ranksyn \in [1,\Nsyn]} \subset \synapse$. As a consequence, a postsynaptic neuron $\postsynaddr$ receives an event stream which is multiplexed by the synapses of its receptive field. It results in a weighted event stream for each  postsynaptic neuron $\postsynaddr$: 
-
+Of interest is to define the receptive field of a post-synaptic neuron $\synapse^\postsynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \postsynaddr_\ranksyn=\postsynaddr\}_{\ranksyn \in [1,\Nsyn]}  \subset \synapse$, or the emitting field of a pre-synaptic neuron $\synapse_\presynaddr = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \presynaddr_\ranksyn=\presynaddr\}_{\ranksyn \in [1,\Nsyn]} \subset \synapse$. As a consequence, a post-synaptic neuron $\postsynaddr$ receives an event stream which is multiplexed by the synapses of its receptive field. It results in a weighted event stream for each  post-synaptic neuron $\postsynaddr$: 
 \begin{equation}\label{eq:stream_b}
 \event_\postsynaddr = \{(\presynaddr_\arank, \synapticweight_\arank, \timev_\arank+\synapticdelay_\ranksyn) \| \presynaddr_\arank = \presynaddr_\ranksyn \}_{\arank \in [1,\numevent], \ranksyn \in \synapse^\postsynaddr}
 \end{equation}
+In biology, this new stream of events is naturally ordered in time as events reach the soma of post-synaptic neurons. However, it should be properly reordered in simulations. Crucially, when post-synaptic neurons are activated on their soma by a specific spatio-temporal motif which is imprinted in the set of synapses, the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner while the activation function of the neurons of the HD-SNN can be selected among the whole range of spiking neuron response functions (see Figure~\ref{fig:izhikevich}). We defined the HD-SNN model in this subsection in all generality and in the next subsection we describe an implementation of our model adapted for the motion detection task. 
+%
+\subsection{Application of the HD-SNN model to the motion detection task}
+%
+Such event-based model can be adapted to computer vision tasks. In particular, from the perspective of simulating such event-based computations on standard CPU- or GPU-based computers and then using parallel computing, it is useful to transform this event-based representation into a dense representation. Indeed, by discretization of time, we may transform any event-based input from an event-based camera as a Boolean matrix $A \in \{0, 1 \}^{\Npol \times \Ntime \times \Nx \times \Ny}$, defined for all polarities $p$, times $t$ and space coordinates $x$ and $y$. The values are by definition equal to zero except at the occurrences of events: $\forall \arank \in [1,\numevent]$, $A(\polev_\arank, t_\arank, x_\arank, y_\arank)=1$. First, one can note that by using a discretization, the computational brick used in equation~\eqref{eq:kernel_b} corresponds to a temporal convolution which transforms the input $A$ using one kernel per postsynaptic neuron~\citep{grimaldi_learning_2022}. To benefit from invariance to location observed in images and exploited in Convolutional Neural Networks, one may further assume that synaptic motifs should be similar across different positions such that we may define a spatio-temporal convolution operator. % The characteristics of the kernels are shared among one class of neurons such that $\forall i,j \in [1, N_\class]^2, \; \kernel^i_\class = \kernel^j_\class$. 
 
-% Unlike the binary stream of events from the signal as input, the postsynaptic neurons receive a weighted stream of event such that for each event $\arank$ its value is $\synapticweight_\arank = \synapticweight_\ranksyn$ when $\presynaddr_\arank = \presynaddr_\ranksyn$.
-This new stream of events is ordered in time in biology as events reach the soma of post-synaptic neurons but should be reordered in simulations. Crucially, when post-synaptic neurons are activated on their soma by a specific spatio-temporal motif which is imprinted in the set of synapses, the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner while the activation function of the neurons of the HD-SNN can be selected among the whole range of spiking neuron response functions (see Figure~\ref{fig:izhikevich}). We defined the HD-SNN model in this subsection in all generality and in the next subsection we describe an implementation of our model adapted for the motion detection task. 
-%
-% \note{I can make a small figure with event streams of different colors for the input one, the multiplexed one etc and the response in the bottom}
-%
-\subsection{Application of HD-SNN to the motion detection task}
-%
-From the perspective of simulating such event-based computations on standard CPU- or GPU-based computers and then using parallel computing, it is useful to transform this event-based representation into a dense representation. Indeed, by discretization of time, we may transform any event-based input as a boolean matrix $A \in \{0, 1 \}^{\Npol \times \Ntime \times \Nx \times \Ny}$, defined for all polarities $p$, times $t$ and space coordinates $x$ and $y$. The values are by definition equal to zero except at the occurrences of events: $\forall \arank \in [1,\numevent]$, $A(\polev_\arank, t_\arank, x_\arank, y_\arank)=1$. First, one can note that by using a discretization, the computational brick used in equation~\eqref{eq:kernel_b} corresponds to a temporal convolution which transforms the input $A$ using one kernel per postsynaptic neuron~\citep{grimaldi_learning_2022}. To benefit from invariance to location observed in images and exploited in Convolutional Neural Networks, one may further assume that synaptic motifs should be similar across different positions such that we may define a spatio-temporal convolution operator. % The characteristics of the kernels are shared among one class of neurons such that $\forall i,j \in [1, N_\class]^2, \; \kernel^i_\class = \kernel^j_\class$. 
 % Here, we will consider that heterogeneous delays are limited in range
-In particular, the whole synaptic set can be represented as a one kernel for each class $\class$ of the supervision task as the dense matrix $\kernel_\class$ of size $(\Npol, \Ktime, \Kx, \Ky)$, where  $\Ktime$ is the number of delays and $\Kx$ and $\Ky$ are the number of pixels in both spatial dimensions. To keep an analogy with the HD-SNN model, for each neuron $\postsynaddr$ of position $(x, y)$ and class $\class$, $\kernel_\class$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. %Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. 
+In particular, the whole synaptic set can be represented as one kernel for each class $\class$ of the supervision task as the dense matrix $\kernel_\class$ of size $(\Npol, \Ktime, \Kx, \Ky)$, where  $\Ktime$ is the number of delays and $\Kx$ and $\Ky$ are the number of pixels in both spatial dimensions. To keep an analogy with the HD-SNN model, for each neuron $\postsynaddr$ of position $(x, y)$ and class $\class$, $\kernel_\class$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. %Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. 
 Using this dense representation, the processing of $A$ by the model can be written as:
-
 \begin{equation}\label{eq:kernel_b}
 \forall x, y, \timev, \; \;
 \mathcal{C}_\class(x, y, \timev)
 = \sum_{p, \delta_x, \delta_y, \synapticdelay} \kernel_\class(p, \delta_x, \delta_y, \synapticdelay) \cdot A(p, x - \delta_x, y - \delta_y, \timev-\synapticdelay)
 \end{equation}
-
 %The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$: equation~\eqref{eq:stream_b}
 %\begin{equation}\label{eq:conv}
 %\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
 %\mathcal{C}_\class(\presynaddr,\timev)
 %= \sum_{\ranksyn  \in [1, N_{\synapse^\postsynaddr}]} \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn)
 %\end{equation}
-This shows that $\mathcal{C}_\class$ is a spatio-temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$ (see Figure~\ref{fig:model} for an illustration). Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time.
-This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream. The same type of spatio-temporal filtering is used as a preprocessing stage of a pattern recognition algorithm~\citep{ghosh_spatiotemporal_2019}. Also,~\citet{sekikawa_constant_2018} developed an efficient 3D convolutional algorithm which implements a motion estimation task. By assuming a locally constant velocity, the authors assume the 3D kernel can be decomposed into a 2D kernel representing the shapes and a 3D kernel representing the velocity. 
+This shows that $\mathcal{C}_\class$ is the result of a spatio-temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}_\class = \kernel_\class \ast A$ (see Figure~\ref{fig:model} for an illustration). Note that to remain within the framework of a causal calculation, the kernels are shifted in time such that only past information gives an answer at the present time. This well-known computation defines a differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream. The same type of spatio-temporal filtering is used as a pre-processing stage of a pattern recognition algorithm~\citep{ghosh_spatiotemporal_2019}. Also,~\citet{sekikawa_constant_2018} developed an efficient 3D convolutional algorithm which implements a motion estimation task. By assuming a locally constant velocity, the authors assume the 3D kernel can be decomposed into a 2D kernel representing the shapes and a 3D kernel representing the velocity. 
 
-Here, we keep the analogy with spiking neurons, and we try to use as few heuristics as possible to observe the emergence of spiking motifs in the spatio-temporal kernels. If so, this precise spatio-temporal patterns prove to be of interest for neural computations and one can assume that biological neurons make use of this information as well. 
+Here, we keep the analogy with spiking neurons, and we try to use as few heuristics as possible to observe the detection of spiking motifs using the spatio-temporal kernels. If so, this precise spatio-temporal patterns prove to be of interest for neural computations and one can assume that biological neurons make use of this information as well. 
 % \note{plus de biblio sur la motion detection/segmentation ou optique flow avec les events? (reviewer 2)}
-The 3D convolution represents the linear integration of the spike train as input. The activation function of our model is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. In our MLR model, a probability value, for each class (i.e. each motion direction), is predicted for each event at position $x, y$ and at time $\timev$ as a softmax function of the linear combination of the list of events. % on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the HD-SNN model. 
-Using the kernels, it transforms the input raster plot into a probability with the following formula:
-
+The 3D convolution represents the linear integration of the spike train as the linear input to the neuron. Then, the activation function of our model is a softmax function implementing a form of Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. In our MLR model, a probability value for each class (i.e. each motion direction) is predicted for each position $x, y$ and time $\timev$ as a softmax function of the linear combination of the list of events. % on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the HD-SNN model. 
+Formally, using the kernels, it transforms the input raster plot into a probability with the following formula:
 \begin{equation}\label{eq:mlr}
     \forall x, y, \timev, \forall \class \in [1, N_\class], \; \;
 Pr(k=\class \; \vert \;  x, y, \timev) =
 \frac {\exp  (\mathcal{C}_\class(x, y, \timev) +\bias_\class) }{Z(x, y, \timev)}
 \end{equation} 
-
 where $Z(x, y, \timev)=\sum_{\class \in [1, N_\class]} \exp  (\mathcal{C}_\class(x, y, \timev) +\bias_\class)$ is the partition function and  $\bias_\class$ is the bias linked to class $\class$. 
 In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike. The spiking output of the model corresponds to an event with the highest probability class. 
 
-Once explained the general framework used to solve the ecological task described in section~\ref{sec:task}, we can add some heuristics based on neuroscientific observations to constrain our model and its strategies to solve the task. Note that the general framework is the same as the one presented in~\cite{grimaldi_learning_2022} and that, appart from the task to solve and a deeper analysis of the results, these priors, inspired by neuroscience, are the main methodological differences with this previous study. We set \note{arbitrarily} the size of the kernels to $(9, 17, 17)$ and define as many classes as the number of motion direction: $N_\class = 8$. Because receptive fields of biological neurons are mainly circular and can be more or less elongated, we apply a circular mask on the spatial dimensions of the kernels. And because the synaptic delay is linked, by physical principles, to the distance between the presynaptic neuron and the postsynaptic one, we apply a linear mask on the temporal axis such that the connectivity depends on the delay: the lower the delay the lower the circular mask radius (see Figure~\ref{fig:kernels} for an illustration). The second heuristics is based on the observation that biological neurons have a sparse spiking activity. From this observation, we set an output firing rate for the layer of spiking neurons in order to make a sparse selection of the events at which the model makes a decision. It results in the selection of the coefficients with the maximum likelihood value. Therefore, we will only select a given proportion of the most active cells, which we set here to $.01\%$ of all output voxels \note{change accordingly to the model's parameters}. This threshold was found using cross-validation and future work should automate how this may be determined for various datasets. Given a stimulus input, the model thus yields a spike output in the postsynaptic address space.
+Once the general framework used to solve the ecological task described in section~\ref{sec:task} explained, we can add some heuristics based on neuro-scientific observations to constrain our model and its strategies to solve the task. Note that the general framework is the same as the one presented in~\cite{grimaldi_learning_2022} and that, apart from the more complex task to solve and a deeper analysis of the results, these novel heuristics, inspired by neuroscience, are the main methodological differences with that previous study. In our simulations, We set the size of the kernels to $(9, 17, 17)$ and define as many classes as the number of motions (directions and speeds): $N_\class = 8 \times 3$. To avoid introducing biases in the directions, we apply a circular mask on the spatial dimensions of the kernels. And because the synaptic delay is linked, by physical principles, to the distance between the pre-synaptic neuron and the postsynaptic one, we apply a linear mask on the temporal axis such that the connectivity depends on the delay: the lower the delay, the lower the circular mask radius (see Figure~\ref{fig:kernels} for an illustration). The second heuristics is based on the observation that biological neurons have a sparse spiking activity. From this observation, we set an output firing rate for the layer of spiking neurons in order to make a sparse selection of the events at which the model makes a decision. It results in the selection of the coefficients with the maximum likelihood value. Therefore, we will only select a given proportion of the most active cells, which we set here to $0.1\%$ of all output voxels \note{change accordingly to the model's parameters}. This threshold was found using cross-validation and future work should automate how this may be determined for various datasets. Given a stimulus input, the model thus yields a spike output in the postsynaptic address space.
 
 \note{describe the heuristics inspired by neuroscience, remaining complex cells}
 
@@ -548,7 +542,7 @@ Once explained the general framework used to solve the ecological task described
 Since the model is fully differentiable, we can now implement a semi-supervised learning rule. The loss function of the MLR model is the binary cross entropy on the output of the classification layer. Supervision was implemented using the binary input events as defined above and the motion direction labels as the desired output. The labels were defined at each time point as a one-hot encoding of the current motion in the channel corresponding to the current motion for all positions. Since in this semi-supervised context the label is known but the timing is not, we used a selection of the temporal support in an unsupervised manner. It is important to note that we weighted the cost function by considering only active cells, so that the error is only propagated back to the spatial locations of these most active cells. This is reminiscent of previous methods that solve this problem using a winner-takes-all mechanism~\citep{masquelier_unsupervised_2007}. Simulations are performed with the \note{PyTorch library using gradient descent with Adam (for $2^{12}$ movies and a learning rate of $10^{-5}$)}. We have shown in a previous work on a simplified task using synthetic textures that this type of learning algorithm can be assimilated to a Hebbian learning mechanism~\cite{grimaldi_robust_2022}.
 
 Finally, the output of the MLR model is an event-based representation that predicts the probability of each motion at each position and time. Such an output provides a form of optical flow that can be exploited for non-rigid motion, but we have defined here, for simplicity, an evaluation method that applies to our full-field motion task. We have shown above that if different independent observations (here, the estimated motion at different spatial locations) are recognized as having a common cause (here, the rigid motion of the image), then an optimal estimate of the logit of this probability is the sum of the logits of the independent probabilities. Thus, by taking the logit of the probability of the output given by the model, we can calculate the probability of the output. This allows one to calculate the accuracy (as the percentage of times the motion is accurately predicted) or the squared error of the velocity estimate given by the mean estimate. 
-These calculations are performed on a different input data set than the one used in the training or validation steps. The complete code to reproduce the results of this paper is available at \url{https://github.com/SpikeAI/pyTERtorch}.  %\note{à rendre publique}
+These calculations are performed on a different input data set than the one used in the training or validation steps. The complete code to reproduce the results of this paper is available at \url{https://github.com/SpikeAI/pyTERtorch}. %
 %
 \section{Results}
 \label{sec:results}
@@ -564,7 +558,7 @@ These calculations are performed on a different input data set than the one used
     }
     %\vspace{-.5cm}
     \caption{
-    	Representation of the weights for $3$ of the $32$ different learned kernels of the model as learned on natural scenes. Each pair of line correspond to the OFF and ON polarities respectively, with excitatory weights in warm colors. Delays are represented in the horizontal axis from right (zero delay) to the left (delay of $11$ steps). Because of the symmetry observed between the ON and OFF event streams, we observed that kernels are very similar for the ON polarities. These weights are associated to a specific delay on the \textit{delays} axis and to a presynaptic address defined on the two other axes. %	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. 
+    	Representation of the weights for $3$ of the $32$ different learned kernels of the model as learned on natural scenes. Each pair of line correspond to the OFF and ON polarities respectively, with excitatory weights in warm colors. Delays are represented in the horizontal axis from right (zero delay) to the left (delay of $11$ steps). Because of the symmetry observed between the ON and OFF event streams, we observed that kernels are very similar for the ON polarities. These weights are associated to a specific delay on the \textit{delays} axis and to a pre-synaptic address defined on the two other axes. %	For the sake of clarity, the values in range $[-0.05, 0.05]$ are not shown. 
 	Different kernels are selective to the different motion directions and we observe some level of orientation selectivity, where ON and OFF subfields organized in a push-pull organization. 
 %        One sees positive (excitatory) coefficients for the specific direction of motion but also negative (inhibitory) coefficients for other directions.
 	}
@@ -574,12 +568,11 @@ These calculations are performed on a different input data set than the one used
 %
 After training our model, we first analyze the weights learned for the different neurons (\seeFig{kernels}). 
 We first observed a high dependence between the weights reaching the ON polarities and that reaching the OFF polarities. In particular, whenever a weight for a given position and delay is positive for one polarity, it will be negative in the other. This property comes from the way the events are generated and that the luminance can not at the same time increase and decrease. %ith the negative weights, one can observe an anti-selectivity for directions that do not correspond to the motion to which the kernel is selective to. 
-We also observe that these cells show an orientation selectivity, similar to that observed in MT neurons~\citep{deangelis_functional_1999}. Interestingly, the relative organization of the receptive fields in quadrature of phase follows a push-pull organization predicted by~\citet{kremkow_push-pull_2016} to explain neurophysiological results~\citep{baudot_animation_2013}.  
-Focusing on the positive weights, a strong selectivity is observed along specific axes of motion for each of the different kernels. These directions can be easily associated to the direction of motion controlled in the natural images. For instance, the first kernel shows a strong selectivity to horizontal motion directions.
+We also observe that these cells show an orientation selectivity, similar to that observed in MT neurons~\citep{deangelis_functional_1999}. Interestingly, the relative organization of the receptive fields in quadrature of phase follows a push-pull organization predicted by~\citet{kremkow_push-pull_2016} to explain neurophysiological results observed after showing similar natural scenes with synthetic eye movements~\citep{baudot_animation_2013}. Focusing on the positive weights, a strong selectivity is observed along specific axes of motion for each of the different kernels. These directions can be easily associated to the direction of motion controlled in the natural images. For instance, the first kernel shows a strong selectivity to horizontal motion directions.
 %
 %This qualitative look at the 3D kernels allows the reader to infer for the $8$ different motion directions used to generate our synthetic event streams.
 
-If one focuses on the interpretation of these kernels in terms of spatio-temporal motifs embedded in the event stream, it can lead to interesting outcomes. In~\citep{grimaldi_robust_2022}, a link between event-based MLR training and Hebbian learning is drawn, allowing to say that the present model will learn its weights according to a presynaptic activity associated to the different motion directions. Each neuron becomes selective to a specific motion direction through the learning of an associated prototypical spatio-temporal spike motif. Each voxel in the 3D kernels defines a specific timestamp and a specific address. Consequently, our model is able to detect precise spatio-temporal motifs embedded in the spike train and associated to the different motion directions. The cone shape for the positive weights distribution highlights a loss of precision for longer delays, i.e. events away in the past. For the directions not coherent to the class of a training sample, an anti-Hebbian learning is also observed through the negative weights in the kernels of Figure~\ref{fig:kernels}. 
+If one focuses on the interpretation of these kernels in terms of spatio-temporal motifs embedded in the event stream, it can lead to interesting outcomes. In~\citep{grimaldi_robust_2022}, a link between event-based MLR training and Hebbian learning is drawn, allowing to say that the present model will learn its weights according to a pre-synaptic activity associated to the different motion directions. Each neuron becomes selective to a specific motion direction through the learning of an associated prototypical spatio-temporal spike motif. Each voxel in the 3D kernels defines a specific timestamp and a specific address. Consequently, our model is able to detect precise spatio-temporal motifs embedded in the spike train and associated to the different motion directions. The cone shape for the positive weights distribution highlights a loss of precision for longer delays, i.e. events away in the past. For the directions not coherent to the class of a training sample, an anti-Hebbian learning is also observed through the negative weights in the kernels of Figure~\ref{fig:kernels}. 
 
 %
 % \note{kernel size has to be adapted to the characteristics of motion see Samonds %~\citep{samonds}
