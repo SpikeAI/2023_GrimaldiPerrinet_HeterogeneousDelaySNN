@@ -493,8 +493,8 @@ By pruning weights, we observe that the evolution of accuracy as a function of t
 %%%-----------------------------------------------------------------
 \begin{figure}%[h!]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/accuracy.pdf}
-    \caption{Accuracy as a function of the number of computation load for the model with heterogeneous delays (blue line) and for a method using 2D time surfaces (red dot)~\citep{grimaldi_robust_2022}. The relative computational load (on a log axis) is controlled by changing the percentage of active weights relative to the dense convolution kernel. We observe a similar accuracy than HOTS, yet that our model could achieve a similar accuracy with significantly fewer coefficients.}
+    \includegraphics[width=0.95\linewidth]{figures/quant_accuracy.pdf}
+    \caption{Accuracy as a function of the number of computation load for the HD-SNN model (blue dots) with errorbars giving the 5\% - 95\% quantiles  and a sigmoid fit (blue line). The relative computational load (on a log axis) is controlled by changing the percentage of nonzero weights relative to the dense convolution kernel. As we prune coefficients, we observe a stable accuracy value, with a drop observed with approximately 25 times less computations.}
     \label{fig:accuracy}
 \end{figure}
 %
