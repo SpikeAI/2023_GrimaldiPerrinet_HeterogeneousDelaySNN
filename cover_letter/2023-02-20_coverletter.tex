@@ -129,7 +129,7 @@ In the following we will give response to reviewers in \noteRev{framed boxes.}
  2. The MLR model used in the experimental part was presented in authors’ another work. Therefore, the changes on the MLR model are suggested to be highlighted and contrasted graphically.
 \end{quote} 
  
- \noteRev{The main differences with the previous study are in the task to solve (section 2.1) and in the analysis of the results. The response of the model is tested on different sets of motion cloud stimuli with a control of the parameters of such stimuli generation (section 3.2). Regarding the MLR model, main differences with the previous ones are reported in the methods (P8, L269).}
+ \noteRev{The main differences with the previous study are in the task to solve (section 2.1) and in the analysis of the results. The response of the model is tested on different sets of motion cloud stimuli with a control of the parameters of such stimuli generation (section 3.2). Regarding the MLR model, main differences with the previous ones are reported in the methods (P8, L285).}
 
 \begin{quote}
  3. The title of section 2.2.1 is ’’a generative model for rater plots’’, but actually this section introduces basic terms and symbols. Section 2.2.2 is named ‘’detecting spiking motifs’’, but most of the content seems to introduce the generation process of raster plots, while only the last paragraph introduces the detection of motif. It is recommended that the content of these two sections be reorganized and that references to Figure 1(b)(c)(d) be added where appropriate during the description.
@@ -141,13 +141,13 @@ In the following we will give response to reviewers in \noteRev{framed boxes.}
  4. The adjustment of weights and delays needs more detailed elaboration, preferably given in mathematical formulas.
 \end{quote} 
  
- \noteRev{We improved the mathematical formulation of the model in sections 2.2.1 and 2.2.2 and hope that it clarifies the general framework we use. Regarding training, it is described more clearly in P8, L295. Demonstration of the mechanism and the analogy with Hebbian learning was done in~\cite{grimaldi_robust_2022} and was not reproduced here. We hope this new version offers a clearer methodology.}
+ \noteRev{We improved the mathematical formulation of the model in sections 2.2.1 and 2.2.2 and hope that it clarifies the general framework we use. Regarding training, it is described more clearly in P9, L313. Demonstration of the mechanism and the analogy with Hebbian learning was done in~\cite{grimaldi_robust_2022} and was not reproduced here. We hope this new version offers a clearer methodology.}
 
 \begin{quote}
  5. In Figure 4, it is claimed that the kernels are very similar for the ON polarities, and different kernels are selective to the different motion directions. However, in terms of these two observations, I think they are not very significant, so I suggest a more intuitive way to reflect them, such as quantifying the similarity between the ON kernels, and the angle between the kernels and the vector of the standard motion directions. 
 \end{quote} 
  
- \noteRev{We gave a better explanation of the symmetry assumption in the methods (P8, L293) an how this new model uses this invariance in its computation like observed in complex cells. Indded, we don't want the polarity to have an impact on the classification and then this observation does not apply to the revised manuscript as it is a prior and not an emergent property.}
+ \noteRev{We gave a better explanation of the symmetry assumption in the methods (P9, L303) an how this new model uses this invariance in its computation like observed in complex cells. Indded, we don't want the polarity to have an impact on the classification and then this observation does not apply to the revised manuscript as it is a prior and not an emergent property.}
 
 \begin{quote}
  6. There are few experiments and lack of comparative experiments. Since the model has an improvement based on MLR model, it is suggested to increase the comparison with MLR model and HOTS model on other datasets, such as N-MNIST and other neuromorphic datasets, so as to show the advantages of the proposed model in computational consumption.
@@ -187,7 +187,7 @@ In the following we will give response to reviewers in \noteRev{framed boxes.}
  There are also a number of citations that could have been added that did appear in the other publication, while also including other motion detection/ segmentation or previous work on event-based optical flow, which is a very similar problem.
 \end{quote} 
 
-\noteRev{In fact, there was no mention of this previous work in the original manuscript, as this 4-page paper had not yet been published in the proceedings of the conference at which it had been presented. As mentioned in the responses to reviewer \#1 in this cover letter, we have now added this citation~\cite{grimaldi_learning_2022}. In addition, in this submitted manuscript we describe the main differences from that previous study: the use of a more ecological task (Section 2.1), a complete formulation of the model (Section 2.2), and the improvements made in this particular model (P8, L269). We also provide citations to studies using similar methods (P7, L243). Further results are presented, especially the testing of the learned model with parametric textures.}
+\noteRev{In fact, there was no mention of this previous work in the original manuscript, as this 4-page paper had not yet been published in the proceedings of the conference at which it had been presented. As mentioned in the responses to reviewer \#1 in this cover letter, we have now added this citation~\cite{grimaldi_learning_2022}. In addition, in this submitted manuscript we describe the main differences from that previous study: the use of a more ecological task (Section 2.1), a complete formulation of the model (Section 2.2), and the improvements made in this particular model (P8, L285). We also provide citations to studies using similar methods (P8, L259). Further results are presented, especially the testing of the learned model with parametric textures.}
 
 \bibliographystyle{plainnat}
 \bibliography{FastMotionDetection}
