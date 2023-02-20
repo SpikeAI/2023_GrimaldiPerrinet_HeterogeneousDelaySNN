@@ -330,129 +330,20 @@ To train and test our model, we need to define a visual dataset for which we con
     \label{fig:motion_task}
 \end{figure}
 %%%-----------------------------------------------------------------
-Once these eye trajectories are generated, we can apply them to a visual scene. % For this purpose, we selected a database of 10 natural grayscale images that are commonly used to study the statistics of natural images~\citep{olshausen_emergence_1996}. 
+Once these eye trajectories are generated, we can apply them to a visual scene.  
 For this purpose, we selected a database of $600$ natural images that were previously used to study the statistics of natural images~\citep{perrinet_edge_2015}. Note that these have been pre-processed to be in grayscale and to equalize (i.e., whiten) the energy in each frequency band. This process is known to occur in the retino-thalamic pathway~\citep{dan_efficient_1996}. These images are $256 \times 256$ in size, and we will extract sub-images of size $128 \times 128$ positioned around the center of gaze at each time step. We will discretize time in $1~\ms$ bins and produce movies of duration $N_T = 200~\ms$. To avoid boundary effects, we will randomly position the full trajectory in image space such that the subimage is translated using the position given by the trajectory at each time step without touching the borders. At each point in time, the translation is computed using a coordinate roll in the horizontal and vertical dimensions, followed by a sub-pixel translation defined in Fourier space~\citep{perrinet_sparse_2015}. Note that the magnitude of the displacement is relative to the time bin, and we have defined the unit velocity to correspond to a movement of one pixel per frame (i.e., per time bin).
 
-To transform each movie into events as the ones recorded by a DVS, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. For a specific pixel and timestamp, an event is generated if the absolute value of this gradient exceeds a threshold. The event has either an OFF or ON polarity, respectively whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motion_task}-(Right)). The goal here is to infer the correct motion solely by observing these events. 
+To transform each movie into events as the ones recorded by a DVS, we compute a gradient image (initialized at zero) by adding the gradient of the pixels' intensity over two successive frames. For a specific pixel and timestamp, an event is generated if the absolute value of this gradient exceeds a threshold. The event has either an OFF or ON polarity respectively, whether the gradient is negative or positive. This signed threshold value is then subtracted from the residual gradient image. When applied to the whole movie, the event stream is similar to the output of a neuromorphic camera~\citep{rasetto_challenges_2022}, that is, a list of events defined by $x_\arank$ and $y_\arank$ (their position on the pixel grid), their polarity $\polev_\arank$ (ON or OFF) and time $\timev_\arank$  (\seeFig{motion_task}-(Right)). The goal here is to infer the correct motion solely by observing these events. 
 % \note{ the task is full-field rigid translations, the model resolves it locally (analogy to the input from V1 to MT) }
-%
-%\subsection{Detecting event-based motifs using spiking neurons with heterogeneous delays}% model as a Logistic Regression with a temporal convolution}
-%%%%-----------------------------------------------------------------
-%%
-%\begin{figure}%[t!]
-%    \centering
-%    \includegraphics[width=0.490\linewidth]{figures/THC_1a_k.pdf}
-%    \includegraphics[width=0.490\linewidth]{figures/THC_1c.pdf}
-%    \includegraphics[width=0.490\linewidth]{figures/THC_1b.pdf}
-%    \includegraphics[width=0.490\linewidth]{figures/THC_1a.pdf}
-%	    \caption{Detecting event-based motifs using spiking neurons with heterogeneous delays. 
-%	    {\bf (a)}~Given a generic raster plot defined by a set of spikes occurring on specific neural addresses and at specific times, one may consider that this information consists of the repeated occurrence of precise spiking motifs. 
-%	    {\bf (b)}~We show the motifs used in this example, each identified at the top by a different color. To each of the $10$ neural adresses and $71$ different possible delays is assigned an evidence of activation (red) or deactivation (blue). Note that each afferent may be connected with multiple weights at different delays.
-%	    {\bf (c)}~The activation in time of the different motifs is then used to define a generative model for drawing a raster plot on the multi-unit address space: The propagation of the afferent information through these delays generates the raster plot seen in (a). 
-%	    {\bf (d)}~The inversion of the generative model provides with a model which gives the predicted probability of occurrence of each motif at any time and which may be used to generate a spike as a Bernoulli trial. The detection model yields in this particular case with an exact identification of the occurrence of motifs. Knowing the results of this detection, one may for illustration purposes highlight them by different colors in the raster plots, showing that in this synthetic examples, all spikes can be annotated with each identified spiking motif. 
-%	    }
-%    \label{fig:model}
-%\end{figure}
-%% 
-%\subsubsection{A generative model for raster plots}
-%%
-%In neurobiological recordings or in the sensory signal obtained from an event-based camera, any generic raster plot consists of a stream of \emph{spikes} or \emph{events} (see Figure~\ref{fig:model}-(a)). This can be formalized as a list of neural addresses and timestamps tuples $\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$ where $\numevent \in \mathbb{N} $ is the total number of events in the data stream and the rank $\arank$ is the index of each event in the list of events. Events are typically ordered by their time of occurrence. Each event has a time of occurrence $\timev_\arank$  and an associated address $\presynaddr_\arank$ (which is typically in the form $(x_\arank, y_\arank, \polev_\arank)$ for event-based cameras). This defines an address space $\presynaddrspace$ which consists of the set of possible addresses. In a neurobiological recording, this can be the identified set of neurons. For event-based cameras, it is denoted by $[1, \Nx]\times[1, \Ny] \times [1, \Npol] \subset \mathbb{N}^3$ where $(\Nx, \Ny)$ is the size of the sensor in pixels and $\Npol$ is the number of polarities ($\Npol=2$ for the ON and OFF polarities coded in event-based cameras). 
-%
-%% This raster plot is generated by spiking neurons which are defined on the one hand by the equations governing the evolution of its membrane potential dynamics on its soma and on the other hand by the characterization of the synaptic contacts on its dendritic tree, or on the sensory processes (such as the pixel on the sensor of a camera, or the photoreceptors in the retina). A classical characterization consists in detailing the synaptic weights of each synaptic contact on the dendritic tree, the so-called weight matrix. A more detailed description of these synaptic contacts reveals the added importance of heterogeneous delays, i.e., the precise timing from one afferent neuron's firing to its arrival in the soma, and how this changes the network's dynamics~\citep{izhikevich_polychronization_2006}. In that description, we can parameterize each neuron by the set of tuples defining both the weight and the delay of each synaptic contact. As a consequence, a set of input presynaptic spikes $\event$ will be processed by the dendrites defined by this synaptic set and notably by the respective delays, which will multiplex in time all events. 
-%
-%Let's formalize a layer of spiking neurons with heterogeneous delays (HD-SNN). Each neuron $\postsynaddr \in \postsynaddrspace$  connects to presynaptic afferent from $\presynaddrspace$. In biology, a single cortical neuron has generally several thousands of synapses. Each synapse may be defined by its synaptic weight and its delay, that is, the time it takes for one spike to travel from the presynaptic neuron's soma to that of the postsynaptic neuron. A postsynaptic neuron $\postsynaddr \in \postsynaddrspace$ is then described by the synaptic weights connecting it to a presynaptic afferent from $\presynaddrspace$ but also by the set of possible delays. Note that a neuron may contact an afferent neuron with multiple different delays. Scanning all neurons $\postsynaddr$, we thus define the full set of $\Nsyn$ synapses, 
-%as  $\synapse = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn)\}_{\ranksyn \in [1,\Nsyn]}$, where each synapse is associated to a presynaptic address $\presynaddr_\ranksyn$, a postsynaptic address $\postsynaddr_\ranksyn$,  a weight $\synapticweight^\ranksyn$, and a delay $\synapticdelay_\ranksyn$. This defines the full connectivity of the HD-SNN model. Of interest is to define the receptive field of a postsynaptic neuron $\synapse^\postsynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \postsynaddr_\ranksyn=\postsynaddr\}_{\ranksyn \in [1,\Nsyn]} $, or the emitting field of a presynaptic neuron $\synapse_\presynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \presynaddr_\ranksyn=\presynaddr\}_{\ranksyn \in [1,\Nsyn]}$. As a consequence, an event stream which evokes neurons in the presynaptic address space is multiplexed by the synapses into a new event stream which is defined by the union of the sets generated by each emitting field from the presynaptic space: 
-%$ \cup_{\arank \in [1,\numevent]} \{ \{(\postsynaddr_\ranksyn, \synapticweight_\ranksyn, \timev_\arank + \synapticdelay_\ranksyn) \}_{ \ranksyn \in \synapse_{\presynaddr_\arank}} \}$. This new stream of events is by nature ordered in time as events reach the soma of post-synaptic neurons. In particular, when post-synaptic neurons are activated on their soma by this spatio-temporal motif, the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner. 
-%% \note{ TODO: show why this formula implements a polychrony detector }
-%
-%% \note{ éclaircir }
-%
-%Taking the argument the other way around, one may from a generative model for generic raster plots. Indeed, any spike in the presynaptic address space is generated by sensory neurons (for instance photoreceptors in the retina, sensors in a CMOS chip) or by afferent spiking neurons. In the latter case, these are connected to the spiking cell by a set of weights and delays, whose structure is stable relatively to the coding timescale. When these connections are high and sparsely distributed, this firing will cause a specific temporal motif. Another example is given for the barn owl auditory system: As it hears the sound of a mouse, this sound will generate a specific spiking response in both ears, and specifically, the precise timing between the signal generated by the left relative to the right ear can be for instance used to determine the position of the prey~\citep{goodman_spike-timing-based_2010}. Overall, these examples show that raster plots may be considered as a mixture of the effects of different elementary causes, and that each event triggers a specific spatio-temporal spiking motif. 
-%%
-%\subsubsection{Detecting spiking motifs}
-%%: Detection model
-%
-%From the perspective of simulating such event-based computations on standard CPU- or GPU-based computers, it is useful to transform this event-based representation into a dense representation. Indeed, we may transform any event-based input as the boolean matrix $A \in \{0, 1 \}^{N\times T}$, where $N$ is the number of neurons in $\presynaddrspace$ and $T$ is the number of time bins. In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$. 
-%The probability of firing of a neuron $a$ at a given time $t$ can be understood as a Bernoulli trial whose (only) parameter is a bias $p(t, a) \in [0, 1]$. Assuming that the presence of spiking motifs conditions the probability on all efferents, the logit (inverse of the sigmoid) of this probability bias can be written as the sum of the logit of each of these factors, whose values are defined by the corresponding weights. Spiking motifs may be activated independently and at random times, such that  we write this activity as $B(b, t)=1$ if $b$ is activated at $t$ and else $B(b, t)=0$. We can thus write the probability bias as the accumulated evidence given these factors as 
-%\begin{equation*}
-%p(t, a) = \sigma\big(W_0 + \sum_{b, t} B(b, t) \cdot W_b(a, t-d) \big)  
-%\end{equation*}
-%where $\sigma$ is the sigmoid function. We will further assume that the weights are balanced (their mean is zero) and that $W_0$ is a bias such that $p_0=\sigma(W_0)$ is the average background firing rate. Conveniently, one can write this summation as a one-dimensional temporal convolution operator such that we may simply write
-%\begin{equation*}
-%p = \sigma(W_0 + B \ast W )
-%\end{equation*}
-%where  $p\in [ 0, 1]^{N\times T}$ and $B\in \{0, 1\}^{M\times T}$ is the raster plot corresponding to the temporal activation of the PGs. Finally, we obtain the raster plot $A\in \{0, 1\}^{N\times T}$ by drawing spikes using independent Bernoulli trials $A \sim \mathcal{B}(p)$. Note that, depending on the shape of the kernels, the generative model can model a discretized Poisson process, generate rhythmic activity or more generally propagating waves. This formulation thus defines a simple generative model for raster plots as a combination of independent PGs. 
-%
-%Using this dense representation, the counting defined above becomes:
-%\begin{equation*}
-%\mathcal{C}^\postsynaddr(a,t)
-%= \sum_{\presynaddr, \synapticdelay_\ranksyn^\postsynaddr} \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) \cdot A(\presynaddr, \timev-\synapticdelay_\ranksyn^\postsynaddr)
-%\end{equation*}
-%%
-%This shows that $\mathcal{C}^\postsynaddr$ is a temporal convolution of the dense representation of the event stream with the dense kernels formed by the set of synapses:  $\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast A$.
-%This well-known computation defines a time-invariant, differentiable measure which is very efficiently implemented for GPUs and which we will use for learning the classification of different motifs in the event stream.
-%%
-%
-%\note{formalize the following:}
-%More generally, every cause may be considered as occurring independently and one might write the generative model for the generation of the presynaptic events as:
-%
-%
-%Using this formalization, one might now deduce an optimal algorithm for the detection of such temporal motifs.
-%
-%
-%By discretization of time (with here an arbitrary unitary time unit), we can also define the dendrite as a matrix giving the weight corresponding to the different delays $d \in [0, D]$ (where $D$ is the maximum delay) on different pre-synaptic addresses $a \in [1, N]$ defining the list of the $N$ dendrites. We will denote as $W(a, d)$ these weights.
-%
-%
-%Following the observations of~\citet{izhikevich_polychronization_2006}, let us assume that such precise discharge motif defines a polychronous group (PG). Assuming that we know there exists $M$ such groups, we will define as $b \in [1, M]$ the address of a PG and as $W_b$ the corresponding weight matrices. This allows then to derive a generative model for raster plots (see Figure~\ref{fig:model}-(b)).
-
-% 
-%This generative model defined above allows to determine this inference model for guessing sources $B$ when observing a raster plot $A$. This assumes that we know the spiking motifs as defined by the $W_b$ matrices. The underlying metric is the binary cross-entropy, as used in the logistic regression model. In particular, if we consider kernels with similar decreasing exponential time profile, we can prove that this is similar to the method of~\citet{berens_fast_2012}. In our specific case, the difference is that the regression is performed in both dendritic and delay space by extending the summation using a temporal convolution operator. Using this forward model, it is possible to estimate the logit (inverse of a sigmoid) $\hat{B}(b, t)$ for the presence of a PG of address $b$ and at time $t$ by using the transpose convolution operator. Equivalently, this consists in using the emitting field $\synapse_\presynaddr$ of presynaptic neurons in place of the receptive field $\synapse^\postsynaddr$ of postsynaptic neurons. It thus comes that when observing $A$, then one may infer $\hat{B} = A \ast W^T$ and select the most activated items. This assumption hold as long as the kernels are uncorrelated, a condition which is met here numerically by chosing a relatively sparse set of synapses (approximately $1\%$ of active synapses).
-
-
-%\subsubsection{Implementation using spiking neurons with heterogeneous delays}
-%
-% The activation function of our spiking neural is a softmax function implementing a form of  Multinomial Logistic Regression (MLR)~\citep{grimaldi_robust_2022}, in analogy to a spiking Winner-Take-All network~\citep{nessler_bayesian_2013}. 
-%It transforms this list of weights into a probability with the following formula:
-%$
-%Pr(k=\postsynaddr \; \vert \; \timev) =
-%\frac 1 Z
-%{\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }
-%$ 
-%where $\mathcal{C}^\postsynaddr(\timev) = \sum
-%\activeweights^\postsynaddr(t)
-%$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$. 
-%In particular, we expect that some specific motifs may become tightly synchronized as they reach the basal dendritic tree, leading to a high postsynaptic activity which makes it progressively more likely to generate an output spike.
-%%
-%
-% \note{say that it is effortless in biology but difficult on conventional computers}
-% In our MLR model with $\Nclass=\Nspeed$ classes, a probability value is predicted for each event at address $\presynaddr_\arank$ and at time $\timev_\arank$ as a softmax function of the linear combination of the list of events on the basal dendrite of a neuron $\postsynaddr$ in association to a specific class. The linear combination can be defined by a set of synapses $\synapse^\postsynaddr$ as described in the heterogeneous delays model. 
-%
-%\subsubsection{Performance on synthetic data}
-%%
-%\begin{figure}%[t!]
-%    \centering
-%    \includegraphics[width=0.490\linewidth]{figures/THC_N_PGs.pdf}
-%    \includegraphics[width=0.490\linewidth]{figures/THC_N_PG_time.pdf}
-%	    \caption{Detecting event-based motifs using spiking neurons with heterogeneous delays. 
-%	    {\bf (a)}~Accuracy of detection as a function of the number of kernels.
-%	    {\bf (b)}~Accuracy of detection as a function of the temporal depth $D$ of kernels among $M=144$ kernels.
-%	    }
-%    \label{fig:model_results}
-%\end{figure}
-%
-%To quantify the efficiency of this operation, we generated $M=144$ synthetic spiking motifs as random independent kernels over $128$ presynaptic inputs and $D=71$ possible delays. We drew random independent instances of $B$ with a length of $T=1000$ time steps and with on average $1.0$ occurrences in each draw. This allowed us to generate raster plots which we use to infer $\hat{B}$. We compute the accuracy as the rate of true positive detections (both for inferring the address and its exact timing) and observe on average $\approx 98\%$ correct detections. We further extended this result by showing how the accuracy would evolve as a function of the number of simultaneous PGs, while keeping the same frequency of occurrence. We show in Figure~\ref{fig:model_results}~(a) that the accuracy of finding the right PG is still above $80\%$ accuracy with more than $1364$ overlapping PGs. Moreover, we show in Figure~\ref{fig:model_results}~(b) that (with $M=144$ PGs fixed) the accuracy increases notably as the temporal depth $D$ of the PG kernel increased, demonstrating quantitatively the computational advantage of using heterogeneous delays. These results were obtained while assuming that we know $W$. However, this is in general not the case, for instance when observing the raster plot of a population of neurons. In the following, we will define a generic visual task and determine a learning algorithm to solve that challenging task. %Inspired by the k-means algorithm, it is possible to devise a self-supervised learning algorithm. Our preliminary results show that it is possible to retrieve PGs embedded in the data, yet that further analysis is necessary to improve the convergence of the algorithm. In particular, it seems promising to use a sparseness constraint in the inference mechanism such as to remove spurious correlations in the inference.
-%
-% \subsection{Description of the model}
 %%%-----------------------------------------------------------------
 \subsection{The Heterogeneous Delays SNN (HD-SNN) model}
 %----------------------------%
 %
 \begin{figure}%[t!]
     \centering
-    \includegraphics[width=0.980\linewidth]{figures/HDSNN_graph.pdf}%png}% https://www.overleaf.com/5625872443qpcwrkssgbsf
-  \caption{\textbf{Core mechanism of the HD-SNN model.} \textit{(Left)}~In this example inspired by the polychronization model~\citep{izhikevich_polychronization_2006}, three pre-synaptic neurons denoted~\textit{b},~\textit{c} and~\textit{d} are fully connected to two post-synaptic neurons~\textit{a} and~\textit{e}, with different delays of respectively $1$, $5$, and $9~\ms$ for~\textit{a} and $8$, $5$, and $1~\ms$ for~\textit{e} (in this schematics, we consider unitary synaptic weights). \textit{(Middle)}~If three synchronous pulses are emitted from pre-synaptic neurons, this will generate post-synaptic potentials that will reach \textit{a} and \textit{e} asynchronously because of the heterogeneous delays, and they may not be sufficient to reach the membrane threshold in either of the post-synaptic neurons, therefore no spike will be emitted as this is not sufficient to reach the membrane threshold of the post synaptic neuron, so no output spike is emitted.
-  %at these different delays, and these may not be sufficient to generate a spike in either neuron.
-  \textit{(Right)}~If the pulses are emitted from pre-synaptic neurons such that, taking into account the delays, they reach the post-synaptic neuron~\textit{a} at the same time (here, at $t=10~\ms$), the post-synaptic potentials evoked by the three pre-synaptic neurons sum up, causing the voltage threshold to be crossed and thus to the emission of an output spike (red color), while none is emitted from the post-synaptic neuron~\textit{e}. Figure reproduced from~\cite{grimaldi_precise_2023} under a CC-BY licence.}%
+    \includegraphics[width=0.980\linewidth]{figures/HDSNN_graph.pdf}
+  \caption{\textbf{Core mechanism of the HD-SNN model.} \textit{(Top-Left)}~Two spiking motifs are emitted by four presynaptic neurons. Once integrated by the synapses of the postsynaptic neuron~\textit{(Right)}, the spiking motifs are shifted in time by the synaptic delays and weighted by the synaptic weights~\textit{(Middle-Left)}. When they reach the soma of the postsynaptic neuron, the different spikes contribute to a modification of its membrane potential according to an activation function. In this example, we use the same activation function as a Leaky Integrate and Fire neuron~\textit{(Bottom-Left)}. The first spiking motif is synchronized by the synaptic delays and leads to a sudden increase of the membrane potential of the postsynaptic neuron. An output spike is emitted when reaching the threshold. 
+  \textit{(Right)}~An illustration of a spiking neuron with different synaptic weights (represented by the thickness of the synapses) and different synaptic delays (represented by the length of the synapses). }%
     \label{fig:izhikevich}%
 \end{figure}%
 % 
@@ -463,10 +354,12 @@ In the HD-SNN model, each neuron $\postsynaddr \in \postsynaddrspace$ connects t
 as $\synapse = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn)\}_{\ranksyn \in [1,\Nsyn]}$, where each synapse is associated to a pre-synaptic address $\presynaddr_\ranksyn$, a post-synaptic address $\postsynaddr_\ranksyn$, a weight $\synapticweight_\ranksyn$, and a delay $\synapticdelay_\ranksyn$. This defines the full connectivity of the HD-SNN model. 
 
 Of interest is to define the receptive field of a post-synaptic neuron $\synapse^\postsynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \postsynaddr_\ranksyn=\postsynaddr\}_{\ranksyn \in [1,\Nsyn]}  \subset \synapse$, or the emitting field of a pre-synaptic neuron $\synapse_\presynaddr = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \presynaddr_\ranksyn=\presynaddr\}_{\ranksyn \in [1,\Nsyn]} \subset \synapse$. As a consequence, a post-synaptic neuron $\postsynaddr$ receives an event stream which is multiplexed by the synapses of its receptive field. It results in a weighted event stream for each  post-synaptic neuron $\postsynaddr$: 
+
 \begin{equation}\label{eq:stream_b}
 \event_\postsynaddr = \{(\presynaddr_\arank, \synapticweight_\arank, \timev_\arank+\synapticdelay_\ranksyn) \| \presynaddr_\arank = \presynaddr_\ranksyn \}_{\arank \in [1,\numevent], \ranksyn \in \synapse^\postsynaddr}
 \end{equation}
-In biology, this new stream of events is naturally ordered in time as events reach the soma of post-synaptic neurons. However, it should be properly reordered in simulations. Crucially, when post-synaptic neurons are activated on their soma by a specific spatio-temporal motif which is imprinted in the set of synapses, the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner while the activation function of the neurons of the HD-SNN can be selected among the whole range of spiking neuron response functions (see Figure~\ref{fig:izhikevich}). We defined the HD-SNN model in this subsection in all generality and in the next subsection we describe an implementation of our model adapted for the motion detection task. 
+
+In biology, this new stream of events is naturally ordered in time as events reach the soma of post-synaptic neurons. However, it should be properly reordered in simulations. Crucially, when post-synaptic neurons are activated on their soma by a specific spatio-temporal motif which is imprinted in the set of synapses, the discharge probability will increase, notably when these spikes converge on the soma in a synchronous manner while the activation function of the neurons of the HD-SNN can be selected among the whole range of spiking neuron response functions (see Figure~\ref{fig:izhikevich}). We defined the HD-SNN model in this subsection in all generality, and in the next subsection, we describe an implementation of our model adapted for the motion detection task. 
 %
 \subsection{Application of the HD-SNN model to the motion detection task}
 %
@@ -475,11 +368,13 @@ Such event-based model can be adapted to computer vision tasks. In particular, f
 % Here, we will consider that heterogeneous delays are limited in range
 In particular, the whole synaptic set can be represented as one kernel for each class $\class$ of the supervision task as the dense matrix $\kernel_\class$ of size $(\Npol, \Ktime, \Kx, \Ky)$, where  $\Ktime$ is the number of delays and $\Kx$ and $\Ky$ are the number of pixels in both spatial dimensions. To keep an analogy with the HD-SNN model, for each neuron $\postsynaddr$ of position $(x, y)$ and class $\class$, $\kernel_\class$ gives the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in \synapse^\postsynaddr}, \kernel_\class(\presynaddr_\ranksyn, \synapticdelay_\ranksyn) = \synapticweight_\ranksyn$. %Therefore, if we make the approximation that one neuron integrates only on the temporal window given by its variety of synaptic delays, the integration of the spike train as input can be formalized by a 3D convolution operation. The longest synaptic delay defines the depth of the kernel $\kernel^\postsynaddr$ and all possible delays associated to the different presynaptic addresses are represented. 
 Using this dense representation, the processing of $A$ by the model can be written as:
+
 \begin{equation}\label{eq:kernel_b}
 \forall x, y, \timev, \; \;
 \mathcal{C}_\class(x, y, \timev)
 = \sum_{p, \delta_x, \delta_y, \synapticdelay} \kernel_\class(p, \delta_x, \delta_y, \synapticdelay) \cdot A(p, x - \delta_x, y - \delta_y, \timev-\synapticdelay)
 \end{equation}
+
 %The computational brick used in equation~\eqref{eq:kernel_b} can be extended to every position, in space and time, of the boolean matrix $A$: equation~\eqref{eq:stream_b}
 %\begin{equation}\label{eq:conv}
 %\forall \presynaddr \in \presynaddrspace, \forall \timev \in T, \; \;
