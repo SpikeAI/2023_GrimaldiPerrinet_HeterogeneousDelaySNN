@@ -446,7 +446,7 @@ If one focuses on the interpretation of these kernels in terms of spatio-tempora
 %
 \subsection{Testing with natural-like textures}
 %%%-----------------------------------------------------------------
-To test our model, we will quantify its ability to categorize different motions. Before applying the model on natural images, we will first test the model on simpler, parameterized stimuli. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motion_clouds})~\citep{vacher_bayesian_2018}. In particular, we will set the spatial size and duration similarly to the motion task defined above.
+To test our model, we will quantify its ability to categorize different motions, that is on event streams for which the ground truth motion is known at every instant in time. Before applying the model on natural images, we will first test the model on simpler, parameterized stimuli. In that order, we use a set of synthetic visual stimuli, \textit{Motion Clouds}~\citep{leon_motion_2012} which are natural-like random textures for which we can control for velocity, among other parameters (\seeFig{motion_clouds})~\citep{vacher_bayesian_2018}. In particular, we will set the spatial size and duration similarly to the motion task defined above. 
 This procedure defines a set of textures with different spatial properties and different motions $\va{v}_k$ with  $1 \le k \le \Nclass$ and $\Nclass=8$ defined by a constant speed and linearly spaced directions $
 \speed_\kernelind = 
   ( 
@@ -460,8 +460,8 @@ For any given velocity, we also varied the parameters of the textures, such as t
 %%%-----------------------------------------------------------------
 \begin{figure}%[h!]
     \centering
-    \includegraphics[width=0.99\linewidth]{figures/2022-09-27_MotionDetection_motion_clouds.png}%motion_clouds.pdf} % 2022-09-27_MotionDetection_motion_clouds.png}%
-    \caption{{\bf Role of stimulus parameters in the motion detection accuracy.} Accuracy as a function of {\bf (a)} the mean spatial frequency, {\bf (b)} the bandwidth in orientation: from a grating-like (left) to isotropic textures (right)), {\bf (c)} the bandwidth in speed, from a rigid motion (left) to independent frames (right). Note that these accuracy is computed both in the case where orientation of the synthetic texture is necessarily perpendicular to the motion (no aperture) or arbitrary (aperture), showing that accuracy decreases in the latter case.}
+    \includegraphics[width=0.99\linewidth]{figures/motion_clouds.pdf} %
+    \caption{{\bf Role of stimulus parameters in the motion detection accuracy.} Accuracy as a function of (from left to right) the mean spatial frequency, the bandwidth in orientation (from a grating-like (left) to isotropic textures (right)), the bandwidth in spatial frequency, the bandwidth in speed, from a rigid motion (left) to independent frames (right). Note that these accuracy is computed both in the case where orientation of the synthetic texture is necessarily perpendicular to the motion ('no aperture' condition) or in the arbitrary case where orientation is independent of direction ('aperture').}
     \label{fig:motion_clouds}
 \end{figure}
 %%%-----------------------------------------------------------------
