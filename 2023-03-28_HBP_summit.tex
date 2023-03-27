@@ -31,13 +31,13 @@ Learning heterogeneous delays of spiking neurons for motion detection
 \newcommand{\CityLP}{Marseille, France}%
 \newcommand{\WebsiteLP}{https://laurentperrinet.github.io}%
 \newcommand{\Abstract}{
+\begin{itemize}
+\item In a recent review paper, we reported experimental evidence for the presence of precise spiking motifs embedded in recordings from biological neural tissues and neuromorphic data~\cite{grimaldi_precise_2023}. 
 
-In a recent review paper, we reported experimental evidence for the presence of precise spiking motifs embedded in recordings from biological neural tissues and neuromorphic data~\cite{grimaldi_precise_2023}. 
+\item Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of spiking neurons with heterogeneous synaptic delays.
 
-Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of spiking neurons with heterogeneous synaptic delays.
-
-We show that this can be formalized as a time-invariant logistic regression that can be trained on labeled data. We demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of the retina or to event-based cameras and for which we will characterize the accuracy of the model in detecting visual motion.
-
+\item We show that this can be formalized as a time-invariant logistic regression that can be trained on labeled data. We demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of the retina or to event-based cameras and for which we will characterize the accuracy of the model in detecting visual motion.
+\end{itemize}
 %The response of a biological neuron depends on the precise timing of afferent spikes. This temporal aspect of the neural code is essential to understand information processing in neurobiology and applies particularly well to the output of neuromorphic hardware such as event-based cameras. However, most artificial neural models do not take advantage of this important temporal dimension of the neural code. Inspired by this neuroscientific observation, we develop a model for the efficient detection of temporal spiking motifs based on a layer of spiking neurons with heterogeneous synaptic delays. The model uses the property that the diversity of synaptic delays on the dendritic tree allows for the synchronization of specific arrangements of synaptic inputs as they reach the basal dendritic tree. We show that this can be formalized as a time-invariant logistic regression that can be trained on labeled data. We demonstrate its application to synthetic naturalistic videos transformed into event streams similar to the output of the retina or to event-based cameras and for which we will characterize the accuracy of the model in detecting visual motion. In particular, we quantify how the accuracy can vary as a function of the overall computational load showing it is still efficient at very low workloads. This end-to-end, event-driven computational building block could improve the performance of future spiking neural network (SNN) algorithms and in particular their implementation in neuromorphic chips.
 }
 \newcommand{\Keywords}{time code, event-based computations, spiking neural networks, motion detection, efficient coding, logistic regression
@@ -45,7 +45,7 @@ We show that this can be formalized as a time-invariant logistic regression that
 \newcommand{\Acknowledgments}{AG and LP received funding from the European Union ERA-NET CHIST-ERA 2018 research and innovation program under grant agreement N° ANR-19-CHR3-0008-03 (``\href{http://aprovis3d.eu/}{APROVIS3D}''). HL and LP received funding from the ANR project  N° ANR-20-CE23-0021 (''\href{https://laurentperrinet.github.io/grant/anr-anr/}{AgileNeuroBot}''). %HL received funding from a University of Montreal Artificial Intelligence scholarship. For the purpose of open access, the author has applied a CC BY public copyright licence to any Author Accepted Manuscript version arising from this submission.
 }
 \newcommand{\presynaddr}{a} % pre address
-\newcommand{\postsynaddr}{n} % post address
+\newcommand{\postsynaddr}{b} % post address
 \newcommand{\numevent}{N_{ev}} % total number of events
 \newcommand{\presynaddrspace}{\mathcal{A}} %presynaptic address space
 \newcommand{\postsynaddrspace}{\mathcal{B}} %postsynaptic address space
@@ -53,9 +53,9 @@ We show that this can be formalized as a time-invariant logistic regression that
 \newcommand{\Nneuron}{N_\text{n}} % number of output neurons in the layer
 \newcommand{\arank}{r} % address index
 \newcommand{\bias}{b} % bias for the MLR model
-\newcommand{\synapse}{\sigma} % synapse
+\newcommand{\synapse}{\mathcal{S}} % synapse
 \newcommand{\synapticweight}{w} % synaptic weight
-\newcommand{\synapticdelay}{d} % synaptic delay
+\newcommand{\synapticdelay}{\delta} % synaptic delay
 \newcommand{\ranksyn}{s} % synapse index
 \newcommand{\Nsyn}{N_{s}} % total number of synapses
 \newcommand{\activeweights}{\mathcal{W}}
@@ -143,7 +143,7 @@ sortcites=false,
 %articletitle=false
 ]{biblatex}%
 
-\bibliography{references.bib}
+\bibliography{FastMotionDetection.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \columnsep=2cm % This is the amount of white space between the columns in the poster
@@ -265,7 +265,7 @@ sortcites=false,
 \textbf{Event stream:}
 %The spikes reaching our SNN can be formalized as:
 $$
-\mybox{$\event = \{(\presynaddr_\arank, \timev_\arank)\}_{\arank \in [1,\numevent]}$}
+\mybox{$\event = \{(\presynaddr_\arank, 1, \timev_\arank)\}_{\arank \in [1,\numevent]}$}
 $$
 where $\numevent \in \mathbb{N} $ is the total number of events, $\timev_\arank$ is the time occurrence of event number $\arank$ and $\presynaddr_\arank$ an associated address , which is typically in the form $\presynaddr_\arank=(x_\arank, y_\arank, \polev_\arank)$. \\
 %
@@ -273,31 +273,53 @@ where $\numevent \in \mathbb{N} $ is the total number of events, $\timev_\arank$
 \textbf{Spiking neuron with hetero-synaptic delays:}
 %
 $$
-\mybox{$\synapse^\postsynaddr = \{(\presynaddr^\postsynaddr_\ranksyn, \synapticweight^\postsynaddr_\ranksyn, \synapticdelay^\postsynaddr_\ranksyn)\}_{\ranksyn \in [1,\Nsyn^\postsynaddr]}$}
+\mybox{$\synapse = \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn)\}_{\ranksyn \in [1,\Nsyn]}$}
 $$
-is a set of $\Nsyn^\postsynaddr$ synapses, associated to neuron $\postsynaddr$, where each synapse $\synapse^\postsynaddr_\ranksyn$ is associated to a weight $\synapticweight^\postsynaddr_\ranksyn$, a delay $\synapticdelay^\postsynaddr_\ranksyn$ and a presynaptic address $\presynaddr^\postsynaddr_\ranksyn$.\\
+is a set of $\Nsyn$ synapses, where each synapse $\synapse_\ranksyn$ is associated to a presynaptic address $\presynaddr_\ranksyn$, a postsynaptic address $\postsynaddr_\ranksyn$, a weight $\synapticweight_\ranksyn$ and a delay $\synapticdelay_\ranksyn$. We can define the synapses of the receptive field of neuron $\postsynaddr$ as such: $\synapse^\postsynaddr =  \{(\presynaddr_\ranksyn, \postsynaddr_\ranksyn, \synapticweight_\ranksyn, \synapticdelay_\ranksyn) \| \postsynaddr_\ranksyn=\postsynaddr\}_{\ranksyn \in [1,\Nsyn]}  \subset \synapse$.
+They transform the event stream as input into: 
+$$
+\mybox{$\event_\postsynaddr = \{(\presynaddr_\arank, \synapticweight_\arank, \timev_\arank+\synapticdelay_\ranksyn) \| \presynaddr_\arank = \presynaddr_\ranksyn \}_{\arank \in [1,\numevent], \ranksyn \in \synapse^\postsynaddr}$}
+$$
+
+%
+\columnbreak
+%
+\noindent
+\textbf{Temporal convolution:}
+
+\noindent By discretizing time, we can transform any event-based input from an event-based camera into a Boolean matrix $A \in \{0, 1 \}^{\Npol \times \Ntime \times \Nx \times \Ny}$ where the ones define the events. Using this dense representation, the processing of $A$ by neuron $\postsynaddr$ can be written as: %
+%
+$$
+\mybox{$\forall \timev, \; \;
+\mathcal{C}_\postsynaddr(x_\postsynaddr, y_\postsynaddr, \timev)
+= \sum_{p, \delta_x, \delta_y, \synapticdelay_\timev} \kernel_\postsynaddr(p, \delta_x, \delta_y, \synapticdelay_\timev) \cdot A(p, x - \delta_x, y - \delta_y, \timev-\synapticdelay_\timev)
+$}
+$$
+%
+where $\kernel_\postsynaddr$ gives the weights as a function of relative addresses, $\delta_x$ and $\delta_y$, and synaptic delays $\delta_\timev$.\\
 %
 \\
-\textbf{Active weights:}
+\textbf{Multinomial logistic regression:}
+
+To take advantage of the position invariance observed in images and exploited in convolutional neural networks, we can further assume that synaptic motifs should be similar across different positions, so we can define a spatio-temporal convolutional operator: $\mathcal{C}_\class = \kernel_\class \ast A$, where $\class$ combines different postsynaptic neurons sharing the same class. Then, the activation function of our model is a softmax function implementing a form of Multinomial Logistic Regression, in analogy to a spiking Winner-Takes-All network~\cite{nessler_bayesian_2013}:
+$$
+\mybox{
+$ \forall x, y, \timev, \forall \class \in [1, N_\class], \; \;
+Pr(k=\class \; \vert \;  x, y, \timev) =
+\frac {\exp  (\mathcal{C}_\class(x, y, \timev) +\bias_\class) }{Z(x, y, \timev)}
+$
+}
+$$
 %
-$$
-\mybox{$\activeweights^\postsynaddr(t) = \{\synapticweight_\ranksyn^\postsynaddr | \presynaddr_\arank = \presynaddr_\ranksyn^\postsynaddr \; \text{and} \; \timev=\timev_\arank + \synapticdelay_\ranksyn^\postsynaddr\}_{\arank \in [1,\numevent]\text{, }\ranksyn \in [1,\Nsyn^\postsynaddr]}$}
-$$
-%
-\textbf{Activation function (Multinomial Logistic Regression):}
-%
-$$
-\mybox{$Pr(k=\postsynaddr \; | \; \timev) =\frac 1 Z \cdot {\exp  (\mathcal{C}^\postsynaddr(\timev) +\bias^\postsynaddr) }$}
-$$
-where $\mathcal{C}^\postsynaddr(\timev) = \sum \activeweights^\postsynaddr(t)
-$ is the sum of the synaptic weights and $\bias^\postsynaddr$ is the bias linked to neuron $\postsynaddr$ and $Z= \sum_{c=1}^{\Nclass} Pr(k=c \; | \; \timev)$.\\
-%
-\\
-\textbf{Temporal convolution:}\\
-In this simplified model, we will consider that heterogeneous delays are limited in range such that the synaptic set can be represented by the dense matrix $\kernel^\postsynaddr$ giving for each neuron $\postsynaddr$ the weights as a function of presynaptic address and delay: $\forall {\ranksyn \in [1,\Nsyn^\postsynaddr]}, \kernel^\postsynaddr(\presynaddr_\ranksyn^\postsynaddr, \synapticdelay_\ranksyn^\postsynaddr) = \synapticweight_\ranksyn^\postsynaddr$ (see Figure~\ref{fig:kernels}). Using this dense representation, the counting $\mathcal{C}^\postsynaddr(\timev)$ defined above can be computed as a temporal convolution of the dense representation of the event stream $E$ with the dense kernels formed by the set of synapses:
-$$
-\mybox{$\mathcal{C}^\postsynaddr = \kernel^\postsynaddr \ast E$}
-$$
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{figures/HDSNN_conv.pdf}
+    % \includegraphics[width=\linewidth]{figures/HD-SNN.png}
+    \caption{
+    % \textbf{- HD-SNN illustration. From left to right:} A 3D representation of the event stream as output of the DVS. A 3D convolution is applied, on the dense representation of the input, along the $X$ and $Y$ spatial axes (defining the DVS pixel grid) and the temporal axis. There are as many kernels as the possible number of motion classes in the recording. For clarity, only $4$ kernels are illustrated and some weights are not represented in the voxel grid. For each voxel on the dense representation of the event stream as input, the output of the 3D convolution is processed by the non-linearity of the MLR model (i.e. softmax function). The output of the MLR gives a probability for each class, associated to a specific kernel, to emit an output event, or spike. With an appropriate spiking mechanism, here a winner-takes-all, we obtain, as output of the HD-SNN model, a new spike train with the different spikes associated to a specific motion class. }
+    \textbf{Applying HD-SNN to the task of motion detection.} \textit{(Left)}~We plot here as a raster plot a 2D representation of the input event stream (showing ON spikes in red and OFF spikes in blue for each presynaptic address and time). A spatio-temporal convolution is applied to the dense representation of the input with $2$ distinct convolutional kernels (the green and orange kernels) that will define the output channels. The convolution is summed over the two polarities. If you have two axes $X$ and $Y$ to represent the presynaptic addresses as for the pixel grid of a DVS, you obtain a 3D convolution. We restrict the illustration to a 2D representation and to 2 possible classes (green and orange) that are associated with different motion directions. \textit{(Middle)}~For each position (address, time), one can compute the activation resulting from the convolution. The output of the convolution is processed by the nonlinearity of the MLR model (i.e., the softmax function). The output of the MLR gives a probability for each class associated with a particular kernel (colored bars in the highlighted pixel). \textit{(Right)}~By adding a spiking mechanism, here a winner-takes-all associated to a thresholding, we obtain as output of the HD-SNN model a new spike train with the different spikes associated to a specific motion class. Note that the position of the output spikes does not systematically correspond to the position of the input spikes but only when enough evidence is obtained.}
+    \label{fig:model}
+\end{figure}
 %----------------------------------------------------------------------------------------
 %	MOTION CLOUDS
 %----------------------------------------------------------------------------------------
@@ -358,7 +380,7 @@ To test our model, we will quantify its ability to categorize different motions.
 \section*{\color{\colorsec}Conclusion \vspace{.2cm} \hrule}
 \vspace{-2.5cm}
 %
-We have introduced a generic SNN using hetero-synaptic delays and shown how it compares favorably with a state-of-the-art event-based algorithm used for classification~\cite{Lagorce17}. This shows that we may use the precise timing of a spike to enhance neural computations.
+We have introduced a generic SNN using hetero-synaptic delays and shown how it compares favorably with a state-of-the-art event-based algorithm used for classification~\cite{lagorce_hots_2017}. This shows that we may use the precise timing of a spike to enhance neural computations.
 %
 One advantage of our model is the generality of the approach.
 Indeed, this supervised learning scheme can be extended to a novel task by defining a new set of supervision pairs (for instance supervised by local orientation) which would lead to the emergence of new kernels adapted to this new task.
