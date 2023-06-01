@@ -9,3 +9,4 @@ saccades
 softmax
 logit
 Hebbian
+spatiotemporal
