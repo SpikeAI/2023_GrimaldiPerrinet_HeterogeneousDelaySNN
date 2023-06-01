@@ -3,3 +3,6 @@ neuromorphic
 subimage
 soma
 HD-SNN
+SNNs
+polychronous
+saccades
