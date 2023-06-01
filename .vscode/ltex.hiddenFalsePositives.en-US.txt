@@ -1,0 +1,1 @@
+{"rule":"INDEPENDENTLY_FROM_OF","sentence":"^\\QFinally, the trajectory is integrated, assuming first that the velocities are sampled uniformly and independently from the set of different motions, and second that the motion is uniform during a time segment.\\E$"}
