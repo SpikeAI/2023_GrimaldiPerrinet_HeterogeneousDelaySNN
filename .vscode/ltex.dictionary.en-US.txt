@@ -10,3 +10,4 @@ softmax
 logit
 Hebbian
 spatiotemporal
+Perrinet
