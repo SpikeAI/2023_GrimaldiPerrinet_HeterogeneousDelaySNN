@@ -15,8 +15,12 @@ LATEXMK = latexmk -bibtex -pdf
 #  -pdflatex=pdflatex
 ################################################
 
+
+$(SRC).pdf: $(SRC).tex FastMotionDetection.bib
+	$(LATEXMK) $(SRC).tex
+	
 # post-production
-$(SRC)_trackedchanges.tex: $(SRC).tex $(SRC).bib $(SRC_rev).tex
+$(SRC)_trackedchanges.tex: $(SRC).tex FastMotionDetection.bib $(SRC_rev).tex
 	latexdiff --flatten --graphics-markup=both $(SRC_rev).tex $(SRC).tex > $(SRC)_trackedchanges.tex
 
 response_to_reviewers.pdf: response_to_reviewers.tex $(SRC).tex $(SRC).bib
