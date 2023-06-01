@@ -6,3 +6,4 @@ HD-SNN
 SNNs
 polychronous
 saccades
+softmax
