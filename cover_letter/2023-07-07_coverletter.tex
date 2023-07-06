@@ -1,0 +1,147 @@
+% !TEX encoding = UTF-8 Unicode
+% !TeX TS-program = pdfLaTeX
+% !TeX spellcheck = en-US
+% !BIB TS-program = bibtex
+% -*- coding: UTF-8; -*-
+% vim: set fenc=utf-8
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+\documentclass[10pt,english]{article}
+
+\usepackage{charter,graphicx}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{natbib}
+
+\usepackage{hyperref,tabularx}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{.4pt}% Default header rule
+\renewcommand{\footrulewidth}{0pt}% No footer rule
+\fancyhf{}% Clear header/footer
+\fancypagestyle{plain}{
+  \renewcommand{\headrulewidth}{0pt}% No header rule
+  \renewcommand{\footrulewidth}{.4pt}% Default footer rule
+  \fancyhf{}% Clear header/footer
+}
+\usepackage%[disable]	% uncomment to hide all the notes
+	{todonotes}
+\newcommand{\noteRev}[1]{\todo[color=blue!10, inline]{#1}}
+
+\AtBeginDocument{\thispagestyle{plain}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.5\baselineskip plus 1pt minus 1pt}
+\usepackage[utf8]{inputenc}%
+\usepackage{babel}%
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@zfancyhead}{\fancy@reset}{\f@nch@reset}{}{}
+\patchcmd{\@set@em@up}{\f@ncyolh}{\f@nch@olh}{}{}
+\patchcmd{\@set@em@up}{\f@ncyolh}{\f@nch@olh}{}{}
+\patchcmd{\@set@em@up}{\f@ncyorh}{\f@nch@orh}{}{}
+\makeatother
+%\usepackage{kpfonts}
+%\usepackage{babel}
+%\usepackage{csquotes}
+\usepackage{url}
+\usepackage{charter} % Use the Charter font for the document text
+%----------------------------------------------------------------------------------------
+%	YOUR NAME AND CONTACT INFORMATION
+%----------------------------------------------------------------------------------------
+%Jean-Nicolas Jérémie\\
+%Institute of Neuroscience of la Timone\\
+%CNRS - Aix Marseille University\\
+%27, boulevard Jean Moulin\\
+%13005 Marseille, France
+\newcommand{\LastName}{Grimaldi}%{Perrinet}%
+\newcommand{\FirstName}{Antoine}%{Laurent U.}%
+\newcommand{\Institute}{Institut de Neurosciences de la Timone, CNRS / Aix-Marseille Universit\'e}%
+\newcommand{\Address}{27, Bd. Jean Moulin, 13385 Marseille Cedex 5, France}%
+\newcommand{\Website}{\url{https://laurentperrinet.github.io/}}%
+\newcommand{\Email}{\url{antoine.grimaldi@univ-amu.fr}}%
+%----------------------------------------------------------------------------------------
+%	YOUR DOCUMENT
+%----------------------------------------------------------------------------------------
+\usepackage[document]{ragged2e}
+\begin{document}
+%\centerline{
+\includegraphics[width=.4\textwidth]{troislogos.png}
+%}
+\\
+\vspace{.1\baselineskip}
+\hrulefill
+\vspace{.1\baselineskip}
+
+\begin{flushright}
+	\FirstName\  \LastName\  \\
+	\Institute\\[6pt]
+	\Address\\%[6pt]
+	\Website \\
+	  Email: \Email \\[6pt]
+\end{flushright}
+\justifying
+\vspace{1\baselineskip}
+%----------------------------------------------------------------------------------------
+%	ADDRESSEE AND GREETING/CLOSING
+%----------------------------------------------------------------------------------------
+%À qui de droit,\\
+Marseille, 
+% February 20th, 2023%
+\today
+\\[12pt] % Date
+	
+Dear editor,
+
+%----------------------------------------------------------------------------------------
+%	LETTER CONTENT
+%----------------------------------------------------------------------------------------
+Please find enclosed the revised manuscript entitled ``Learning heterogeneous delays in a layer of spiking neurons for fast motion detection'' for your consideration as an article in \emph{Biological Cybernetics}. Both authors have been involved with the work, have approved the manuscript and agreed to its revision. The original submission ID is a7f45f8e-87d6-4a30-ac7f-9f0c94e2592a. 
+
+Our manuscript describes a novel method inspired by neuroscience to overcome some challenges faced in computer vision, notably when dealing with large amounts of data, by using an event-based representation. By using heterogeneous delays on different synapses, this novel spiking neuron method is able to detect spiking motifs and we validate the method on synthetic event-based data. Results show that this method could provide a path for future spiking neural network algorithms using less energy for a similar performance as their analog counterparts. This work is the extension of a previous study on a simpler event-based dataset with a simplified model. Our contribution here is to offer a better formal description of the model, an application on a more ecological task and testing of the influence of various parameters of the validation dataset.
+
+We thank the reviewer for the positive assesment which encouraged us to further improve our manuscript. Given the substantial modifications we did to the original manuscript to reduce and clarify the different sections we do not provide a tracked changes version of the revision (such a document can be provided if needed). We provide below a point by point response to the reviewers with references to the manuscript.  
+
+%\vspace{.2\baselineskip}
+%----------------------------------------------------------------------------------------
+Sincerely yours,%\vspace{.1cm}
+
+\FirstName\ \LastName \\
+
+\newpage
+
+\textbf{REVIEWER REPORTS}
+
+In the following we will give response to reviewers using: \noteRev{framed boxes.}
+
+\textbf{Reviewer \#1}
+
+\begin{quote}
+	The author's organization of the paper is much clearer than last time, and I suggest making the following modifications:
+	1. For the natural-like texture images used, the author carried out some operations, such as changing texture parameters, etc. I suggest that the authors give 1-2 examples of these images corresponding to the different subgraphs in Figure 5, such as isotropic textures and grating-like textures.
+\end{quote} 
+
+ \noteRev{We thank the reviewer for his constructive comment. This encouraged us to extend our task from using natural-like textures to actual natural images. This was further extended by using biologically inspired eye movements. We have kept the use of the synthetic textures in order to assess the relevant image parameters that are relevant for motion detection and we have drawn the analogies of our model with that found in the neurophysiological and psychophysical literature. We have added subgraph inset to illustrate the changes in parameters to the generation of figures.}
+
+\begin{quote}
+	2. Experiments that assess accuracy should be repeated many times (and give deviation) to eliminate data uncertainty.
+\end{quote} 
+ 
+ \noteRev{The main differences with the previous study are in the task to solve (section 2.1) and in the analysis of the results. The response of the model is tested on different sets of motion cloud stimuli with a control of the parameters of such stimuli generation (section 3.2). Regarding the MLR model, main differences with the previous ones are reported in the methods (P8, L285).}
+
+\begin{quote}
+	3. I would still recommend that the authors add experiments on other data sets, or compare with other works  on the current data set.
+\end{quote} 
+ 
+ \noteRev{We removed these sections to have a more concise explanation of the model and focused on resolving the motion detection task. We hope the manuscript is now more concise and clear to the point.}
+
+\begin{quote}
+	4. There are two “observe” in line 355.
+\end{quote} 
+ 
+ \noteRev{Fixed.}
+
+
+\end{document}
+
