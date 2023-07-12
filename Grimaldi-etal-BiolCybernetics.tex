@@ -457,11 +457,11 @@ If we now widen our focus on the interpretation of these kernels in terms of spa
 %%%-----------------------------------------------------------------
 \begin{figure}%[h!]
     \centering
-    \includegraphics[width=0.95\linewidth]{figures/quant_accuracy.pdf}
+    \includegraphics[width=0.95\linewidth]{figures/conv_HD-SNN.pdf}
     \caption{
-        Accuracy as a function of computational load for the HD-SNN model (blue dots) with error bars indicating the 5\% - 95\% quantiles and a sigmoid fit (blue line). The relative computational load (on a logarithmic axis) is controlled by changing the percentage of nonzero weights relative to the dense convolution kernel. As we prune the coefficients, we observe a stable accuracy value, with a drop observed at about $250$ times fewer computations.
+        In response to an instance of the event-based input (Left), we show the neural activity of the HD-SNN model (Right). For visualization purposes, we show only one spatio-temporal slice for a given vertical position ($y = 32$), for a quarter of horizontal positions. The input spiking activity consists of ON and OFF spikes (as in~\seeFig{motion_task}) and illustrates the switching of the naturalistic event-based stream from one motion to another. The output activity consists of an analog component corresponding to the evidence accumulated by the model on the spatio-temporal kernels, and a spiking part (overlaid on this activity as vertical bars) which corresponds to instants when this evidence is above the spiking threshold. Note that this activity is consistent with the motion of the input stream. The class of each output neuron is represented by a similar color as in \seeFig{motion_task}. Finally, an accuracy can be computed by comparing the ground truth motion in the input movie with that predicted by the model.
         }
-    \label{fig:accuracy}
+    \label{fig:activity}
 \end{figure}
 %
 After training our MLR model, we obtain spatiotemporal kernels corresponding to the weights associated with the heterogeneous delays of our layer of spiking neurons, which can be used for detection. For this, we quantify its ability to categorize different motions, i.e. on event streams for which the ground truth motion is known at each instant. The accuracy was computed on a novel dataset of $200$ novel movies. The accuracy computed on the test set was approximately $91\%$ (with a chance level of $1 / 12/ 3 \approx 2\%$). %Moreover, we observed that the classification performance obtained for the model using time surfaces as in~\citep{grimaldi_robust_2022} gives similar results as our method.
@@ -470,6 +470,15 @@ We also observed that the distribution of the kernel's weights is sparse, with m
 
 In order to evaluate the resilience of the classification performance with respect to computational load, we adopt first a pruning approach, where we remove weights in $\kernel$ that fall below a specified threshold. The accuracy of classification is then plotted as a function of the relative number of computations or active weights per decision for each neuron in the layer (refer to Fig.~\ref{fig:accuracy}). To provide a basis for comparison and to account for the benefits of utilizing variable delays, we also present the accuracy achieved by an MLR model employing a shortening strategy. This strategy involves adjusting the temporal width by selecting only the weights associated with the shortest delays. In comparison to the inference performed using the complete 3D kernels without any pruning ($21\times17\times17$), both approaches demonstrate a reduction in computational requirements as indicated by the number of non-zero weights.
 
+\begin{figure}%[h!]
+    \centering
+    \includegraphics[width=0.95\linewidth]{figures/quant_accuracy.pdf}
+    \caption{
+        Accuracy as a function of computational load for the HD-SNN model (blue dots) with error bars indicating the 5\% - 95\% quantiles and a sigmoid fit (blue line). The relative computational load (on a logarithmic axis) is controlled by changing the percentage of nonzero weights relative to the dense convolution kernel. As we prune the coefficients, we observe a stable accuracy value, with a drop observed at about $250$ times fewer computations.
+        }
+    \label{fig:accuracy}
+\end{figure}
+%
 By selectively setting certain weights to zero, we observe that the accuracy's evolution, as a function of the logarithmic percentage of active weights, aligns well with a sigmoid curve for both pruning and shortening strategies. The shortening strategy (depicted in orange) demonstrates a rapid decline in accuracy, reaching half-saturation when approximately one-third of the weights are removed. On the other hand, the pruning strategy (shown in blue) exhibits a different behavior. It reaches half-saturation when the ratio of active weights is approximately $2.6\times 10^{-3}$, corresponding to around $375$ less computations compared to the dense scenario. In comparison to using the complete kernels, our method maintains accuracy close to its peak performance even when the number of computations is divided by a factor of up to around 31. This substantial reduction in computations showcases the robustness of the presented method.
 %
 %
