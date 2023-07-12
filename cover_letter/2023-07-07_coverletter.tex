@@ -97,11 +97,11 @@ Dear editor,
 %----------------------------------------------------------------------------------------
 %	LETTER CONTENT
 %----------------------------------------------------------------------------------------
-Please find enclosed the revised manuscript entitled ``Learning heterogeneous delays in a layer of spiking neurons for fast motion detection'' for your consideration as an article in \emph{Biological Cybernetics}. Both authors have been involved with the work, have approved the manuscript and agreed to its revision. The original submission ID is a7f45f8e-87d6-4a30-ac7f-9f0c94e2592a. 
+Please find attached the revised manuscript entitled ``Learning heterogeneous delays in a layer of spiking neurons for fast motion detection'' for consideration as an article in \emph{Biological Cybernetics}. Both authors were involved in the work, approved the manuscript, and agreed to revise it. The original submission ID is a7f45f8e-87d6-4a30-ac7f-9f0c94e2592a. 
 
-Our manuscript describes a novel method inspired by neuroscience to overcome some challenges faced in computer vision, notably when dealing with large amounts of data, by using an event-based representation. By using heterogeneous delays on different synapses, this novel spiking neuron method is able to detect spiking motifs and we validate the method on synthetic event-based data. Results show that this method could provide a path for future spiking neural network algorithms using less energy for a similar performance as their analog counterparts. 
+Our manuscript describes a novel method inspired by neuroscience to overcome some challenges in computer vision, especially when dealing with large amounts of data, by using an event-based representation. By using heterogeneous delays at different synapses, this novel spiking neuron method is able to detect spiking motifs, and we validate the method on synthetic event-based data. Results show that this method could provide a path for future spiking neural network algorithms to consume less energy for similar performance as their analog counterparts. 
 
-We thank the reviewer for the positive assesment which encouraged us to further improve our manuscript. As a result, this revision is a major overhaul of the manuscript which followed the comments from the reviewers. Notably, we have extended the results to natural scenes which gives a broader impact to the paper. Given the substantial modifications we did to the original manuscript to reduce and clarify the different sections we do not provide a tracked changes version of the revision (such a document can be provided if needed). We provide below a point by point response to the reviewers with references to the manuscript.  
+We thank the reviewer for the positive assessment, which encouraged us to further improve our manuscript. As a result, this revision is a major overhaul of the manuscript that follows the reviewers' comments. In particular, we have extended the results to natural scenes, which gives the paper a broader impact. Given the substantial changes we have made to the original manuscript to reduce and clarify the various sections, we do not provide a tracked changes version of the revision (such a document can be provided if needed). Below we provide a point-by-point response to the reviewers with references to the manuscript.
 
 %\vspace{.2\baselineskip}
 %----------------------------------------------------------------------------------------
@@ -122,19 +122,20 @@ In the following we will give response to reviewers using: \noteRev{framed boxes
 	1. For the natural-like texture images used, the author carried out some operations, such as changing texture parameters, etc. I suggest that the authors give 1-2 examples of these images corresponding to the different subgraphs in Figure 5, such as isotropic textures and grating-like textures.
 \end{quote} 
 
- \noteRev{We thank the reviewer for his constructive comment. While keeping the same computationnal framework, this encouraged us to extend our task from using natural-like textures to actual natural images. This was further extended by using biologically inspired eye movements to generate dynamical scenes with known ground truth. We have kept the use of the synthetic textures in order to assess the relevant image parameters that are relevant for motion detection and we have drawn the analogies of our model with that found in the neurophysiological and psychophysical literature. We have added subgraph inset to illustrate the changes in parameters to the generation of figures.}
+\noteRev{We thank the reviewer for his constructive comments. While keeping the same computational framework, this encouraged us to extend our task from using natural-like textures to actual natural images. This was further extended by using biologically inspired eye movements to generate dynamic scenes with known ground truth. We retained the use of synthetic textures to evaluate the relevant image parameters for motion detection, and we drew the analogies of our model to those found in the neurophysiological and psychophysical literature. We have added a subgraph inset to illustrate the changes in parameters for the generation of figures.}
 
 \begin{quote}
 	2. Experiments that assess accuracy should be repeated many times (and give deviation) to eliminate data uncertainty.
 \end{quote} 
  
- \noteRev{We have repeated the testing of our model using $200$ movies and report less variable estimates for the accuracy. Thanks for this suggestion.}
+\noteRev{We have repeated the testing of our model using $200$ movies and report less variable estimates for accuracy. Thank you for this suggestion.}
 
 \begin{quote}
 	3. I would still recommend that the authors add experiments on other data sets, or compare with other works  on the current data set.
 \end{quote} 
  
- \noteRev{By extending the learning and testing of our model on this newly defined motion detection task, we hope to have provided with a more thorough exploration of the capabilities of our model. The comparison of accuracy was also performed on the synthetic textures dataset in order to provide with a direct comparison with biological observations.}
+\noteRev{By extending the learning and testing of our model to this redefined motion detection task, we hope to have provided a more thorough exploration of the capabilities of our model. The accuracy comparison was also performed on the synthetic texture dataset to provide a direct comparison with biological observations.}
+
 
 \begin{quote}
 	4. There are two “observe” in line 355.
