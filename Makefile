@@ -29,6 +29,9 @@ response_to_reviewers.pdf: response_to_reviewers.tex $(SRC).tex $(SRC).bib
 touch:
 	touch *.tex
 
+blog:
+	cp Grimaldi-etal-BiolCybernetics.pdf /Users/laurentperrinet/metagit/blog/hugo_academic/content/publication/grimaldi-23-bc/grimaldi-23-bc.pdf
+
 git:
 	git pull
 	git commit -am'Another pass'
