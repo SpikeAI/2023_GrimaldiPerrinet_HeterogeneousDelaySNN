@@ -55,8 +55,8 @@
 %CNRS - Aix Marseille University\\
 %27, boulevard Jean Moulin\\
 %13005 Marseille, France
-\newcommand{\LastName}{Grimaldi}%{Perrinet}%
-\newcommand{\FirstName}{Antoine}%{Laurent U.}%
+\newcommand{\LastName}{Perrinet}%Grimaldi}%{
+\newcommand{\FirstName}{Laurent U.}%Antoine}%{
 \newcommand{\Institute}{Institut de Neurosciences de la Timone, CNRS / Aix-Marseille Universit\'e}%
 \newcommand{\Address}{27, Bd. Jean Moulin, 13385 Marseille Cedex 5, France}%
 \newcommand{\Website}{\url{https://laurentperrinet.github.io/}}%
@@ -97,17 +97,18 @@ Dear editor,
 %----------------------------------------------------------------------------------------
 %	LETTER CONTENT
 %----------------------------------------------------------------------------------------
-Please find enclosed the revised manuscript entitled ``Learning heterogeneous delays in a layer of spiking neurons for fast motion detection'' for your consideration as an article in \emph{Biological Cybernetics}. Both authors have been involved with the work, have approved the manuscript and agreed to its revision. The original submission ID is a7f45f8e-87d6-4a30-ac7f-9f0c94e2592a. 
+Please find attached the revised manuscript entitled ``Learning heterogeneous delays in a layer of spiking neurons for fast motion detection'' for consideration as an article in \emph{Biological Cybernetics}. Both authors were involved in the work, approved the manuscript, and agreed to revise it. The original submission ID is a7f45f8e-87d6-4a30-ac7f-9f0c94e2592a. 
 
-Our manuscript describes a novel method inspired by neuroscience to overcome some challenges faced in computer vision, notably when dealing with large amounts of data, by using an event-based representation. By using heterogeneous delays on different synapses, this novel spiking neuron method is able to detect spiking motifs and we validate the method on synthetic event-based data. Results show that this method could provide a path for future spiking neural network algorithms using less energy for a similar performance as their analog counterparts. This work is the extension of a previous study on a simpler event-based dataset with a simplified model. Our contribution here is to offer a better formal description of the model, an application on a more ecological task and testing of the influence of various parameters of the validation dataset.
+Our manuscript presents an innovative approach inspired by neuroscience to address challenges in computer vision, particularly when handling large datasets. We propose the use of an event-based representation and introduce a novel spiking neuron method that utilizes heterogeneous delays on different synapses. This method effectively detects spiking motifs, as demonstrated through experiments conducted on synthetic event-based data. Our results indicate that this approach has the potential to pave the way for future spiking neural network algorithms, offering comparable performance to their analog counterparts while consuming less energy.
 
-We thank the reviewer for the positive assesment which encouraged us to further improve our manuscript. Given the substantial modifications we did to the original manuscript to reduce and clarify the different sections we do not provide a tracked changes version of the revision (such a document can be provided if needed). We provide below a point by point response to the reviewers with references to the manuscript.  
+We express our gratitude to the reviewer for their positive assessment, which motivated us to further enhance our manuscript. In response to their valuable comments, we have undertaken a major revision of the paper. Notably, we have expanded our experimental results to include natural scenes, thereby increasing the broader impact of our work. As we have extensively modified and streamlined various sections of the manuscript for improved clarity, we have not provided a tracked changes version of the revision. However, we are prepared to furnish such a document upon request. To address the reviewer's comments, we have provided a detailed response below, referring to the relevant sections of the manuscript.
 
-%\vspace{.2\baselineskip}
 %----------------------------------------------------------------------------------------
-Sincerely yours,%\vspace{.1cm}
+Sincerely yours,
 
 \FirstName\ \LastName \\
+
+\includegraphics[height=3cm]{~/quantic/RTC/signature_LuP.jpg}
 
 \newpage
 
@@ -122,19 +123,20 @@ In the following we will give response to reviewers using: \noteRev{framed boxes
 	1. For the natural-like texture images used, the author carried out some operations, such as changing texture parameters, etc. I suggest that the authors give 1-2 examples of these images corresponding to the different subgraphs in Figure 5, such as isotropic textures and grating-like textures.
 \end{quote} 
 
- \noteRev{We thank the reviewer for his constructive comment. While keeping the same computationnal framework, this encouraged us to extend our task from using natural-like textures to actual natural images. This was further extended by using biologically inspired eye movements to generate dynamical scenes with known ground truth. We have kept the use of the synthetic textures in order to assess the relevant image parameters that are relevant for motion detection and we have drawn the analogies of our model with that found in the neurophysiological and psychophysical literature. We have added subgraph inset to illustrate the changes in parameters to the generation of figures.}
+\noteRev{We thank the reviewer for his constructive comments. While keeping the same computational framework, this encouraged us to extend our task from using natural-like textures to actual natural images. This was further extended by using biologically inspired eye movements to generate dynamic scenes with known ground truth. We retained the use of synthetic textures to evaluate the relevant image parameters for motion detection, and we drew the analogies of our model to those found in the neurophysiological and psychophysical literature. We have added a subgraph inset to illustrate the changes in parameters for the generation of figures.}
 
 \begin{quote}
 	2. Experiments that assess accuracy should be repeated many times (and give deviation) to eliminate data uncertainty.
 \end{quote} 
  
- \noteRev{We have repeated the testing of our model using $200$ movies and report less variable estimates for the accuracy. Thanks for this suggestion.}
+\noteRev{We have repeated the testing of our model using $200$ movies and report less variable estimates for accuracy. Thank you for this suggestion.}
 
 \begin{quote}
 	3. I would still recommend that the authors add experiments on other data sets, or compare with other works  on the current data set.
 \end{quote} 
  
- \noteRev{By extending the learning and testing of our model on this newly defined motion detection task, we hope to have provided with a more thorough exploration of the capabilities of our model. The comparison of accuracy was also performed on the synthetic textures dataset in order to provide with a direct comparison with biological observations.}
+\noteRev{By extending the learning and testing of our model to this redefined motion detection task, we hope to have provided a more thorough exploration of the capabilities of our model. The accuracy comparison was also performed on the synthetic texture dataset to provide a direct comparison with biological observations.}
+
 
 \begin{quote}
 	4. There are two “observe” in line 355.
