@@ -30,8 +30,8 @@ response_to_reviewers.pdf: response_to_reviewers.tex $(SRC).tex $(SRC).bib
 touch:
 	touch *.tex
 
-# blog:
-# 	cp Grimaldi-etal-BiolCybernetics.pdf /Users/laurentperrinet/metagit/blog/hugo_academic/content/publication/grimaldi-23-bc/grimaldi-23-bc.pdf
+	# blog:
+	# 	cp Grimaldi-etal-BiolCybernetics.pdf /Users/laurentperrinet/metagit/blog/hugo_academic/content/publication/grimaldi-23-bc/grimaldi-23-bc.pdf
 blog:
 	cp $(SRC).pdf ~/quantic/blog/hugo_academic/content/publication/$(SLUG)/$(SLUG).pdf
 git:
