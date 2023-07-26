@@ -162,8 +162,10 @@ This works is made reproducible. The code reproducing the manuscript and all fig
 %\usepackage{textcomp}
 \usepackage[utf8]{inputenc}
 %
-\usepackage{lineno}
-\linenumbers
+%\usepackage{lineno}
+%\linenumbers
+%\usepackage[switch]{lineno} % add line numbers
+%\modulolinenumbers[5]
 
 %%%% Standard Packages
 %%<additional latex packages if required can be included here>
@@ -207,8 +209,6 @@ This works is made reproducible. The code reproducing the manuscript and all fig
 \usepackage{amsmath,amssymb,amsfonts} % amsmath and amssymb packages, useful for mathematical formulas and symbols
 %%\usepackage{float} %allows me to use [H] with figures to insert figures in multicol env (poster)
 %\usepackage{ulem} %The package provides an \ul (underline) command which will break over line ends; this technique may be used to replace \em (both in that form and as the \emph command), so as to make output look as if it comes from a typewrite. Caution: with this package, bibliography will make unbreakable and underlined journal titles
-%\usepackage[switch]{lineno} % add line numbers
-%\modulolinenumbers[5]
 \usepackage{physics} %The  goal  of  this  package  is  to  make  typesetting  equations  for  physics  simpler,  faster,  and  more  human-readable.
 %\usepackage{hyperref} %The hyperref package is used to handle cross-referencing commands in LaTeX to produce hypertext links in the document
 %\hypersetup{
@@ -383,13 +383,13 @@ In fact, it is possible to adapt the HD-SNN model specifically for common comput
 
 Then, it can be noted that by using a discretization, the computational block used in the equation~\eqref{eq:stream_b} corresponds to a weighted reordering of the input $A$ with each kernels and positions assigned to the postsynaptic neurons~\citep{grimaldi_learning_2022}. Let's define \emph{evidence} as the logit of a probability, that is, the inverse sigmoid of that probability. By this definition of evidence, logistic regression takes advantage of the fact that if different independent observations (here, the estimated motion at different spatial locations and timings) share a common cause (here, the rigid local motion of the image on the receptive field), then an optimal estimate of the evidence of this motion is the sum of the evidences from the independent sources. Interpreting the weights of the kernel as evidences (also called factors in logistic regression), we may therefore define the activity $B$ of post-synaptic neurons as the integration of this activity in each voxel and for each channel $\class$ in order to infer the evidence of each motion:
 %
-\begin{linenomath*}
+%\begin{linenomath*}
 \begin{equation}\label{eq:kernel_b}
 \forall x, y, \timev, \; \;
 B(\class, \timev, x, y)
 = \sum_{p, \synapticdelay_\timev, \delta_x, \delta_y} \kernel(\class, p, \synapticdelay_\timev, \delta_x, \delta_y) \cdot A(p, \timev-\synapticdelay_\timev, x - \delta_x, y - \delta_y)
 \end{equation}
-\end{linenomath*}
+%\end{linenomath*}
 %
 where $\delta_x$ and $\delta_y$ are the relative addresses of the synapses within a kernel and $\delta_\timev$ is the synaptic delay. In this formulation, we recognize that it takes advantage of the position invariance observed in images and exploited in CNNs. Here, we further assume that synaptic motifs should be similar across different times as defined in the temporal convolution. As a consequence, this defines a 3D, spatiotemporal convolutional operator, in which the layers of neurons assigned to specific kernels form channels. Using this dense representation, the model's processing of the input $A$ can be written as layer-wise convolution: $B = \kernel \ast A$ (\seeFig{model} for an illustration). 
 
