@@ -1,4 +1,19 @@
 ################################################
+# CODE
+################################################
+
+J=jupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=0 --allow-errors --execute
+JN=$(J) --to markdown  --stdout # for dev
+# JN=$(J) --to notebook  --inplace # for the final touch
+
+#################@#################@#################@#################
+#################@#################@#################@#################
+run: 
+	$(JN) FastMotionDetection.ipynb
+
+################################################
+# MANUSCRIPT
+################################################
 SRC = Grimaldi-etal-BiolCybernetics
 # SRC_rev = Pasturel_etal2019
 DIR_rev = revision_0
@@ -14,7 +29,6 @@ diff: $(SRC)_trackedchanges.pdf
 LATEXMK = latexmk -bibtex -pdf
 #  -pdflatex=pdflatex
 ################################################
-
 
 $(SRC).pdf: $(SRC).tex FastMotionDetection.bib
 	$(LATEXMK) $(SRC).tex
@@ -36,6 +50,7 @@ git:
 	git pull
 	git commit -am'Another pass'
 	git push
+
 
 # macros
 %.pdf: %.tex

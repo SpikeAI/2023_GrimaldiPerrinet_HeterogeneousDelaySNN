@@ -1,0 +1,10 @@
+pip
+matplotlib
+cmocean
+numpy
+pandas
+jupyter
+nbconvert
+MotionClouds
+torch
+torchvision
