@@ -1,14 +1,19 @@
+default: all
+all: render pdf git
 ################################################
 # CODE
 ################################################
 
 J=jupyter nbconvert --ExecutePreprocessor.kernel_name=python3 --ExecutePreprocessor.timeout=0 --allow-errors --execute
-JN=$(J) --to markdown  --stdout # for dev
-# JN=$(J) --to notebook  --inplace # for the final touch
+JM=$(J) --to markdown  --stdout # for dev
+JN=$(J) --to notebook  --inplace # for the final touch
 
 #################@#################@#################@#################
 #################@#################@#################@#################
-run: 
+run:
+	$(JM) FastMotionDetection.ipynb
+
+render: 
 	$(JN) FastMotionDetection.ipynb
 
 ################################################
@@ -23,7 +28,6 @@ SRC_rev = $(DIR_rev)/$(SRC)
 LATEXMK = latexmk -pdf
 BIBTEX = bibtex
 ################################################
-default: pdf git
 pdf: $(SRC).pdf
 diff: $(SRC)_trackedchanges.pdf
 ################################################
