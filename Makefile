@@ -10,6 +10,9 @@ JN=$(J) --to notebook  --inplace # for the final touch
 
 #################@#################@#################@#################
 #################@#################@#################@#################
+install:
+	pip install -r requirements.txt
+	
 run:
 	$(JM) FastMotionDetection.ipynb
 
