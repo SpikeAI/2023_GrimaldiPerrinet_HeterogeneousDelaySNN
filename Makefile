@@ -45,6 +45,14 @@ $(SRC).pdf: $(SRC).tex FastMotionDetection.bib
 $(SRC)_trackedchanges.tex: $(SRC).tex FastMotionDetection.bib $(SRC_rev).tex
 	latexdiff --flatten --graphics-markup=both $(SRC_rev).tex $(SRC).tex > $(SRC)_trackedchanges.tex
 
+
+GROUPID = 4776796
+zotero_fetch_bib:
+	# limited to 100 items :-( 
+	wget "https://api.zotero.org/groups/4776796/items?format=bibtex&limit=100&start=0" -O FastMotionDetection.bib
+	# curl https://api.zotero.org/groups/$(GROUPID)/items?format=bibtex > FastMotionDetection.bib
+
+
 response_to_reviewers.pdf: response_to_reviewers.tex $(SRC).tex $(SRC).bib
 	$(LATEXMK) response_to_reviewers.tex
 
