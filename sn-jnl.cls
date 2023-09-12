@@ -745,7 +745,7 @@
 
 %% Article Header Definition
 \renewcommand{\@maketitle}{\newpage\null%
-    \if@remarkboxon\vbox to 0pt{\vspace*{-78pt}\hspace*{-18pt}\FMremark}\else\vskip21pt\fi%%\par%
+    \if@remarkboxon\vbox to 0pt{\vspace*{-78pt}\hspace*{-18pt}\FMremark}\else\vskip-56pt\fi%%\par%
     \hsize\textwidth\parindent0pt%%%\vskip7pt%
     %% Aritle Type
     {\hbox to \textwidth{{\Artcatfont\ArtType\hfill}\par}}
@@ -763,10 +763,10 @@
     %% Aritle Authors, Address and Correspondings
     \ifnum\aucount>0
         \global\punctcount\aucount%
-        \vskip20pt%
+        \vskip10pt%
         \artauthors\par%%     authors and emails
         {\vskip7pt\addressfont\auaddress\par%%      corresponding adress
-	 \removelastskip\vskip24pt%
+	 \removelastskip\vskip10pt%
 	\ifnum\emailcnt>0\relax%
            \ifx\corrauthemail\@empty\else{\ifnum\aucount>1*\fi}%
 	   Corresponding author(s). E-mail(s): \corrauthemail\par\fi%
@@ -849,11 +849,13 @@
       %%\def\@oddhead{{\headerfont\includegraphics{springer-nature-logo}\hfill\leftmark\qquad\thepage}}%
       \def\@evenhead{%
       \vbox to 0pt{\vspace*{-39pt}%
-         \hbox to \hsize{\hfill Springer Nature 2021 \LaTeX\ template\hfill}}\par%%
+         \hbox to \hsize{\hfill %Springer Nature 2021 \LaTeX\ template
+         \hfill}}\par%%
       \hspace*{-\textwidth}\hbox to \hsize{\headerfont\thepage\qquad\rightmark\hfill}}%
       \def\@oddhead{%
       \vbox to 0pt{\vspace*{-39pt}%
-         \hbox to \hsize{\hfill Springer Nature 2021 \LaTeX\ template\hfill}}\par%%
+         \hbox to \hsize{\hfill %Springer Nature 2021 \LaTeX\ template
+         \hfill}}\par%%
       \hspace*{-\textwidth}\hbox to \hsize{\headerfont\hfill\leftmark\qquad\thepage}}%
       \let\@mkboth\markboth%
       }%
@@ -878,7 +880,9 @@
      %%\let\@oddhead\@empty\let\@evenhead\@empty%
       \def\@oddhead{%
       \vbox to 0pt{\vspace*{-38pt}%
-         \hbox to \hsize{\hfill Springer Nature 2021 \LaTeX\ template\hfill}}}%%
+         \hbox to \hsize{\hfill 
+         %Springer Nature 2021 \LaTeX\ template
+         \hfill}}}%%
      \let\@evenhead\@oddhead%
      \def\@oddfoot{\vbox to 18pt{\vfill\reset@font\rmfamily\hfil\thepage\hfil}}%%
      \def\@evenfoot{}}%
