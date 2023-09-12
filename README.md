@@ -19,3 +19,10 @@ which appeared in the collection "What can Computer Vision learn from Visual Neu
 
 Get a reprint at https://laurentperrinet.github.io/publication/grimaldi-23-bc/ and directly to the [PDF](https://laurentperrinet.github.io/publication/grimaldi-23-bc/grimaldi-23-bc.pdf)
 
+
+
+## installation
+
+```
+pip install -U -r requirements.txt
+```
