@@ -124,7 +124,7 @@ chapters = [dict(title="Visual motion detection", color='green',
                 dict(figure='figures/2023-07-12_FastMotionDetection_kernel.png', duration=7, subtitle=[
                         "This architecture is differentiable and can be...", 
                         "...trained in an unsupervised manner, yielding...", 
-                        "...spatio-temporal kernels which ressmble those...", 
+                        "...spatio-temporal kernels which ressemble those...", 
                         "...observed in neurobiology."]),
                         ]), 
            dict(title="Benchmarking on textures", color='orange',
@@ -135,13 +135,14 @@ chapters = [dict(title="Visual motion detection", color='green',
                         "...titrate the role of visual parameters such as...", 
                         "...spatial frequency, motion or orientation."]),
                 dict(figure='figures/2023-07-12_FastMotionDetection_motion_clouds.png', duration=5, subtitle=[
-                        "Results show characteristic tuning curves for these parameters...", 
+                        "Results show characteristic tuning curves for these...", 
                         "...and especially a drop of accuracy when the orientation...", 
                         "...is not perpendicular to motion, aka the 'aperture problem'."]),
                         ]), 
            dict(title="Results of the detection", color='blue',
             content=[
-                dict(figure='figures/2023-07-12_FastMotionDetection_conv_HD-SNN.png', duration=7, subtitle=[
+                # dict(figure='figures/2023-07-12_FastMotionDetection_conv_HD-SNN.png', duration=7, subtitle=[
+                dict(figure='/Users/laurentperrinet/quantic/science/Polychronies/pyTERtorch/2023-06-09_BiolCybernetics/figures/2023-07-08_FastMotionDetection_conv_HD-SNN.png', duration=7, subtitle=[
                         "The output of the heterogeneous delays SNN (HD-SNN) is...", 
                         "...a stream of events transforming the input events (left)...", 
                         "...into events informing about the most likely motion (right)...", 
