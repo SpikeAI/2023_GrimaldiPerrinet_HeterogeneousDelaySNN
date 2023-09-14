@@ -20,6 +20,9 @@ from moviepy.editor import VideoFileClip, ImageClip, TextClip, CompositeVideoCli
 H, W = 500, 800
 H_fig, W_fig = int(H-H/(1.618*3)), int(W-W/(1.618*3))
 
+do_subtitle = False
+do_subtitle = True
+
 
 opt_t = dict(font="Arial", size=(W,H), method='caption')
 opt_st = dict(font="Arial", size=(W,H), method='caption')
@@ -194,9 +197,10 @@ for chapter in chapters:
         t_sub = t - duration
         sub_duration = duration / len(content['subtitle'])
         for subtitle in content['subtitle']:
-            sub = TextClip(subtitle, **sub_opts).set_start(t_sub).set_duration(sub_duration)
             t_sub += sub_duration
-            clip.append(sub)
+            if do_subtitle:
+                sub = TextClip(subtitle, **sub_opts).set_start(t_sub).set_duration(sub_duration)
+                clip.append(sub)
 
 #################################################################################
 #################################################################################
