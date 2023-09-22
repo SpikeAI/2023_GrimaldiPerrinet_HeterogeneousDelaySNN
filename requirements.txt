@@ -2,6 +2,7 @@ pip
 matplotlib
 cmocean
 numpy
+scipy
 pandas
 jupyter
 nbconvert
