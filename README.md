@@ -19,6 +19,8 @@ which appeared in the collection "What can Computer Vision learn from Visual Neu
 
 Get a reprint at https://laurentperrinet.github.io/publication/grimaldi-23-bc/ and directly to the [PDF](https://laurentperrinet.github.io/publication/grimaldi-23-bc/grimaldi-23-bc.pdf)
 
+Browse the notebook [`FastMotionDetection.ipynb`](FastMotionDetection.ipynb), rendered with its figures and outputs, in the [online documentation](https://spikeai.github.io/2023_GrimaldiPerrinet_HeterogeneousDelaySNN/).
+
 
 
 ## installation
