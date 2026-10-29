@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+message: "If you use this code or build on this work, please cite the article below."
+type: software
+title: "Learning heterogeneous delays in a layer of spiking neurons for fast motion detection"
+abstract: >-
+  Code for reproducing the results of the article: a layer of spiking neurons
+  equipped with heterogeneous synaptic delays, formalised as a time-invariant
+  logistic regression, detects temporal spiking motifs (visual motion) in
+  event streams.
+authors:
+  - family-names: Grimaldi
+    given-names: Antoine
+    orcid: "https://orcid.org/0000-0002-3107-4788"
+    email: antoine.grimaldi@univ-amu.fr
+    affiliation: "Institut de Neurosciences de la Timone, Aix Marseille Univ, CNRS"
+    city: Marseille
+    country: FR
+  - family-names: Perrinet
+    given-names: Laurent U
+    orcid: "https://orcid.org/0000-0002-9536-010X"
+    email: laurent.perrinet@univ-amu.fr
+    affiliation: "Institut de Neurosciences de la Timone, Aix Marseille Univ, CNRS"
+    city: Marseille
+    country: FR
+    website: "https://laurentperrinet.github.io"
+repository-code: "https://github.com/SpikeAI/2023_GrimaldiPerrinet_HeterogeneousDelaySNN"
+url: "https://laurentperrinet.github.io/publication/grimaldi-23-bc/"
+date-released: "2023-09-11"
+doi: "10.1007/s00422-023-00975-8"
+keywords:
+  - time code
+  - event-based computations
+  - spiking neural networks
+  - motion detection
+  - efficient coding
+  - logistic regression
+preferred-citation:
+  type: article
+  title: "Learning heterogeneous delays in a layer of spiking neurons for fast motion detection"
+  authors:
+    - family-names: Grimaldi
+      given-names: Antoine
+      orcid: "https://orcid.org/0000-0002-3107-4788"
+    - family-names: Perrinet
+      given-names: Laurent U
+      orcid: "https://orcid.org/0000-0002-9536-010X"
+  journal: "Biological Cybernetics"
+  doi: "10.1007/s00422-023-00975-8"
+  url: "https://laurentperrinet.github.io/publication/grimaldi-23-bc/"
+  date-published: "2023-09-11"
+  year: 2023
+  notes: "Appeared in the collection \"What can Computer Vision learn from Visual Neuroscience?\"."
+  keywords:
+    - time code
+    - event-based computations
+    - spiking neural networks
+    - motion detection
+    - efficient coding
+    - logistic regression
