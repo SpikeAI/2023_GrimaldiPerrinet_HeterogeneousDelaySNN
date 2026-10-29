@@ -7829,8 +7829,206 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Supervised-learning-of-heterogeneous-delays-in-a-single-layer-of-spiking-neurons-for-ultrafast-motion-detection">Supervised learning of heterogeneous delays in a single layer of spiking neurons for ultrafast motion detection<a class="anchor-link" href="#Supervised-learning-of-heterogeneous-delays-in-a-single-layer-of-spiking-neurons-for-ultrafast-motion-detection">¶</a></h1><p>We design a model based on heterogeneous delays. We will define in the assembly of neurons where each synapse
-is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
+<p><a id="top"></a></p>
+<h1 id="Supervised-learning-of-heterogeneous-delays-in-a-single-layer-of-spiking-neurons-for-ultrafast-motion-detection">Supervised learning of heterogeneous delays in a single layer of spiking neurons for ultrafast motion detection<a class="anchor-link" href="#Supervised-learning-of-heterogeneous-delays-in-a-single-layer-of-spiking-neurons-for-ultrafast-motion-detection">¶</a></h1><p>This notebook reproduces the results of the paper <em>Learning heterogeneous delays in a layer of spiking neurons for fast motion detection</em> (Grimaldi &amp; Perrinet, 2023, <em>Biological Cybernetics</em>, <a href="https://doi.org/10.1007/s00422-023-00975-8">doi:10.1007/s00422-023-00975-8</a>; <a href="https://laurentperrinet.github.io/publication/grimaldi-23-bc/">reprint</a> and <a href="https://laurentperrinet.github.io/publication/grimaldi-23-bc/grimaldi-23-bc.pdf">PDF</a>), published in the collection "What can Computer Vision learn from Visual Neuroscience?".</p>
+<p><strong>Question.</strong> The precise timing of spikes shapes the response of efferent neurons, yet many artificial neural models ignore it. Can a single layer of spiking neurons with <em>heterogeneous synaptic delays</em> detect the motion of natural scenes from an event stream, as produced by the retina or by an event-based camera, and remain efficient when most of its synapses are removed?</p>
+<p><strong>What the notebook does.</strong></p>
+<ol>
+<li><strong>Generates a naturalistic event stream with a known ground truth</strong> (section <a href="#world">Natural World model</a>). Natural images are translated along a saccade-like random walk. Each block of constant motion is drawn from $12$ directions $\times$ $3$ speeds (so $36$ classes). The resulting movie is converted into ON/OFF events, as a dynamic vision sensor would do.</li>
+<li><strong>Defines the HD-SNN as a 3D convolution</strong> (section <a href="#detection-model">Detection model</a>). Each synapse has a weight $K$ at a given delay. The delays are the temporal dimension of a PyTorch <code>Conv3d</code> kernel, and the readout is a multinomial logistic regression. Kernels are masked (circular in space, narrowing towards short delays), and ON and OFF polarities are treated symmetrically.</li>
+<li><strong>Trains the kernels</strong> by supervised gradient descent (section <a href="#training">Training</a>), then <strong>analyses the learned weights</strong>: each neuron becomes selective to one motion through a prototypical spatiotemporal spiking motif.</li>
+<li><strong>Tests the model</strong> (section <a href="#testing">Testing</a>) on new natural movies for several event densities, <strong>after pruning weights</strong> (accuracy <em>versus</em> number of active synapses), and on <strong>Motion Clouds</strong> (section <a href="#motion-clouds">Testing on Motion Clouds</a>), synthetic natural-like textures with controlled speed and spatial-frequency content.</li>
+<li><strong>Validates the learning</strong> (section <a href="#validation">Validation of the learning</a>) by scanning the learning rate, the use of a bias or of a mask, the kernel size, the temporal depth of the kernel, the initial weights and $p_B$.</li>
+</ol>
+<p>The parameters are set in <a href="#initialization">Initialization</a>. Long computations are cached (file names carry <code>datetag</code> and <code>DEBUG</code>). Set <code>DEBUG = 1</code> for the full-size run and a larger integer for a fast, reduced one. The dependencies are listed in <code>requirements.txt</code> (<code>pip install -U -r requirements.txt</code>).</p>
+<h2 id="The-model-in-short">The model in short<a class="anchor-link" href="#The-model-in-short">¶</a></h2><p><strong>Events.</strong> A movie $I(t, x, y)$ is turned into a Boolean raster $A \in \{0, 1\}^{N_{pola} \times N_T \times N_X \times N_Y}$. Writing $\partial_t I$ for the residual temporal gradient of the luminance, an ON (resp. OFF) event is emitted at a pixel when $\partial_t I &gt; \theta$ (resp. $&lt; -\theta$); the signed threshold is then subtracted from the residual. The threshold is $\theta = s \cdot \mathrm{std}(\partial_t I)$, where $s$ is the <em>selectivity</em>.</p>
+<p><strong>Heterogeneous delays as a convolution.</strong> Let $K(k, p, \tau, \delta_x, \delta_y)$ be the weight of the synapse of neuron class $k$ connected to polarity $p$ at the relative position $(\delta_x, \delta_y)$ with a delay $\tau$. The activity of the postsynaptic neurons is</p>
+<p>$$
+B(k, t, x, y) = \sum_{p, \tau, \delta_x, \delta_y} K(k, p, \tau, \delta_x, \delta_y) \cdot A(p, t - \tau, x - \delta_x, y - \delta_y),
+$$</p>
+<p>that is $B = K \ast A$. Since the ON and OFF polarities carry the same information on whitened natural images, the model keeps the larger of the two evidences, $\max(B, B^{\mathrm{flip}})$, where $B^{\mathrm{flip}}$ is computed with ON and OFF swapped in $A$. The probability of motion class $k$ at each position and time is then a logistic regression,</p>
+<p>$$
+\Pr(k \mid x, y, t) = \sigma\big(B(k, t, x, y) + b_k\big), \qquad \sigma(\beta) = \frac{1}{1 + e^{-\beta}},
+$$</p>
+<p>where $b_k$ is the bias of class $k$.</p>
+<p><strong>Kernel mask.</strong> With $t \in [0, 1]$ the normalised delay (the shortest delay is at $t = 1$) and $r \in [0, 1]$ the normalised distance to the centre of the kernel, the weights are multiplied by</p>
+<p>$$
+M(t, r) = \left[ \frac{1 + \cos \pi r}{2} \, \mathbb{1}_{r &lt; 1} \right]^{1/4} \exp\left( -\frac{r^2}{2\,\big(V_{max}(1 - t) + r_0\big)^2} \right),
+$$</p>
+<p>so that the spatial extent of the receptive field grows with the delay: an event that contributes to the detection of a motion at a voxel comes from all the farther away as it is earlier, at a distance bounded by the maximum speed.</p>
+<table>
+<thead>
+<tr>
+<th>Symbol</th>
+<th>Name in the code</th>
+<th>Default value</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$N_X, N_Y$</td>
+<td><code>N_X</code>, <code>N_Y</code></td>
+<td>$128$ px (<code>128//DEBUG</code>)</td>
+<td>size of the stimulus</td>
+</tr>
+<tr>
+<td>$N_T$</td>
+<td><code>N_T</code></td>
+<td>$200$ ms (<code>200//DEBUG</code>)</td>
+<td>duration of a movie (time bins of $1$ ms)</td>
+</tr>
+<tr>
+<td>$N_{pola}$</td>
+<td><code>N_pola</code></td>
+<td>$2$</td>
+<td>number of polarities (OFF, ON)</td>
+</tr>
+<tr>
+<td>$\ell$</td>
+<td><code>block_length</code></td>
+<td>$24$ ms</td>
+<td>mean duration of a block with constant motion</td>
+</tr>
+<tr>
+<td>$N_\varphi$</td>
+<td><code>N_V_phi</code></td>
+<td>$12$</td>
+<td>number of motion directions</td>
+</tr>
+<tr>
+<td>$N_v$</td>
+<td><code>N_V_speed</code></td>
+<td>$3$</td>
+<td>number of speeds</td>
+</tr>
+<tr>
+<td>$N_k$</td>
+<td><code>N_PGs</code></td>
+<td>$36$ ($= N_v N_\varphi$)</td>
+<td>number of classes (motions), i.e. of kernels</td>
+</tr>
+<tr>
+<td>$V_{max}$</td>
+<td><code>V_max</code></td>
+<td>$2.5$ px/ms</td>
+<td>maximum speed, sets the slope of the cone in the mask</td>
+</tr>
+<tr>
+<td>$r_0$</td>
+<td><code>r_0</code> (argument of <code>create_mask</code>)</td>
+<td>$0.05$ (normalised distance)</td>
+<td>radius of the mask at the shortest delay</td>
+</tr>
+<tr>
+<td>$\sigma_I$</td>
+<td><code>noise</code></td>
+<td>$0.001$ (luminance, same unit as the images)</td>
+<td>Gaussian noise added to the natural images</td>
+</tr>
+<tr>
+<td>$s$</td>
+<td><code>selectivity</code></td>
+<td>$1.0$</td>
+<td>event threshold in units of $\mathrm{std}(\partial_t I)$ (inversely related to the event rate)</td>
+</tr>
+<tr>
+<td>$(K_T, K_X, K_Y)$</td>
+<td><code>kernel_size</code></td>
+<td>$(21, 17, 17)$ (ms, px, px)</td>
+<td>depth in delays and spatial size of a kernel</td>
+</tr>
+<tr>
+<td>$b_k$</td>
+<td>bias of <code>conv_layer</code> (<code>do_bias</code>)</td>
+<td><code>True</code></td>
+<td>bias of each class</td>
+</tr>
+<tr>
+<td>$p_B$</td>
+<td><code>p_B</code></td>
+<td>$1$ for training, $0.15$ for tests (<code>p_B_test</code>)</td>
+<td>fraction of the output voxels with the highest evidence that are retained (quantile $1 - p_B$ of the top logit)</td>
+</tr>
+<tr>
+<td>$\eta$</td>
+<td><code>lr</code></td>
+<td>$2 \cdot 10^{-4}$</td>
+<td>learning rate of the Adam optimiser</td>
+</tr>
+<tr>
+<td>$\sigma_w$</td>
+<td><code>weight_init</code></td>
+<td>$10^{-2}$</td>
+<td>standard deviation of the random initial weights</td>
+</tr>
+<tr>
+<td>$w_c$</td>
+<td><code>weight_init_center</code></td>
+<td>$4$</td>
+<td>initial weight of the central synapse at the shortest delay ($+w_c$ for ON, $-w_c$ for OFF)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>N_epochs</code>, <code>N_train</code></td>
+<td>$200$, $80\,000$ (<code>80000//DEBUG</code>)</td>
+<td>number of epochs and of training samples</td>
+</tr>
+<tr>
+<td></td>
+<td><code>N_test</code></td>
+<td>$200$ (<code>200//DEBUG</code>)</td>
+<td>number of test samples</td>
+</tr>
+<tr>
+<td></td>
+<td><code>seed</code>, <code>seed_train</code></td>
+<td>$1973$, $2023$</td>
+<td>seeds of the world model and of the training</td>
+</tr>
+<tr>
+<td></td>
+<td><code>DEBUG</code></td>
+<td>$1$</td>
+<td>divides the sizes to run a quick test (set to $1$ in production)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Reference:</em> the equations and their derivation are detailed in Section "Methods" of the paper; the code of the paper is also described in the <a href="https://github.com/SpikeAI/2023_GrimaldiPerrinet_HeterogeneousDelaySNN#readme"><code>README.md</code></a> of the repository.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=e381e236">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p><a id="contents"></a></p>
+<h2 id="Contents">Contents<a class="anchor-link" href="#Contents">¶</a></h2><ul>
+<li><a href="#initialization">Initialization</a></li>
+<li><a href="#world">Natural World model</a><ul>
+<li><a href="#world-motion">motion domain</a></li>
+<li><a href="#world-parameters">parameters of the "world model"</a></li>
+<li><a href="#world-images">natural images</a></li>
+<li><a href="#world-move">make it move</a></li>
+<li><a href="#world-events">generative model from movies to events</a></li>
+<li><a href="#world-summary">sum up and plot</a></li>
+<li><a href="#world-firing">Control the input firing frequency</a></li>
+</ul>
+</li>
+<li><a href="#detection">Supervised motion detection</a><ul>
+<li><a href="#detection-model">Detection model</a></li>
+<li><a href="#training">Training</a></li>
+<li><a href="#testing">Testing</a></li>
+<li><a href="#motion-clouds">Testing on Motion Clouds</a></li>
+<li><a href="#validation">Validation of the learning</a></li>
+</ul>
+</li>
+<li><a href="#voila">Voilà!</a></li>
+</ul>
+<p><a href="#top">↑ back to top</a></p>
 </div>
 </div>
 </div>
@@ -7855,7 +8053,9 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Initialization">Initialization<a class="anchor-link" href="#Initialization">¶</a></h2><p>Let's first initialize the framework.</p>
+<p><a id="initialization"></a></p>
+<h2 id="Initialization">Initialization<a class="anchor-link" href="#Initialization">¶</a></h2><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p>Let's first initialize the framework.</p>
 </div>
 </div>
 </div>
@@ -8447,7 +8647,9 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Natural-World-model">Natural World model<a class="anchor-link" href="#Natural-World-model">¶</a></h2><p>We will define the world model as the full generative model from the input image to the classes that generated them.</p>
+<p><a id="world"></a></p>
+<h2 id="Natural-World-model">Natural World model<a class="anchor-link" href="#Natural-World-model">¶</a></h2><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p>We will define the world model as the full generative model from the input image to the classes that generated them.</p>
 </div>
 </div>
 </div>
@@ -8458,7 +8660,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="motion-domain">motion domain<a class="anchor-link" href="#motion-domain">¶</a></h3>
+<p><a id="world-motion"></a></p>
+<h3 id="motion-domain">motion domain<a class="anchor-link" href="#motion-domain">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -8702,7 +8905,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="parameters-of-the-%22world-model%22">parameters of the "world model"<a class="anchor-link" href="#parameters-of-the-%22world-model%22">¶</a></h3>
+<p><a id="world-parameters"></a></p>
+<h3 id="parameters-of-the-%22world-model%22">parameters of the "world model"<a class="anchor-link" href="#parameters-of-the-%22world-model%22">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -9056,7 +9260,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="natural-images">natural images<a class="anchor-link" href="#natural-images">¶</a></h3>
+<p><a id="world-images"></a></p>
+<h3 id="natural-images">natural images<a class="anchor-link" href="#natural-images">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -9251,7 +9456,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="make-it-move">make it move<a class="anchor-link" href="#make-it-move">¶</a></h3>
+<p><a id="world-move"></a></p>
+<h3 id="make-it-move">make it move<a class="anchor-link" href="#make-it-move">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -9688,7 +9894,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="generative-model-from-movies-to-events">generative model from movies to events<a class="anchor-link" href="#generative-model-from-movies-to-events">¶</a></h3>
+<p><a id="world-events"></a></p>
+<h3 id="generative-model-from-movies-to-events">generative model from movies to events<a class="anchor-link" href="#generative-model-from-movies-to-events">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -9851,7 +10058,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="sum-up-and-plot">sum up and plot<a class="anchor-link" href="#sum-up-and-plot">¶</a></h3>
+<p><a id="world-summary"></a></p>
+<h3 id="sum-up-and-plot">sum up and plot<a class="anchor-link" href="#sum-up-and-plot">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -10430,7 +10638,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Control-the-input-firing-frequency:">Control the input firing frequency:<a class="anchor-link" href="#Control-the-input-firing-frequency:">¶</a></h3>
+<p><a id="world-firing"></a></p>
+<h3 id="Control-the-input-firing-frequency:">Control the input firing frequency:<a class="anchor-link" href="#Control-the-input-firing-frequency:">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -10573,7 +10782,11 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Supervised-motion-detection">Supervised motion detection<a class="anchor-link" href="#Supervised-motion-detection">¶</a></h2><h3 id="Detection-model">Detection model<a class="anchor-link" href="#Detection-model">¶</a></h3><p>We can easily describe this model with a 3D convolution layer defined in PyTorch. Dimensions of the 3D kernels correspond to the spatial position of the synapse and the temporal dimension to represent the delays.</p>
+<p><a id="detection"></a></p>
+<h2 id="Supervised-motion-detection">Supervised motion detection<a class="anchor-link" href="#Supervised-motion-detection">¶</a></h2><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p><a id="detection-model"></a></p>
+<h3 id="Detection-model">Detection model<a class="anchor-link" href="#Detection-model">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p>We can easily describe this model with a 3D convolution layer defined in PyTorch. Dimensions of the 3D kernels correspond to the spatial position of the synapse and the temporal dimension to represent the delays.</p>
 </div>
 </div>
 </div>
@@ -10877,7 +11090,9 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Training">Training<a class="anchor-link" href="#Training">¶</a></h3><p>We then perform a supervised training on motion detection with the previously created dataset.</p>
+<p><a id="training"></a></p>
+<h3 id="Training">Training<a class="anchor-link" href="#Training">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p>We then perform a supervised training on motion detection with the previously created dataset.</p>
 </div>
 </div>
 </div>
@@ -12752,7 +12967,8 @@ is defined by a weight <em>ws</em> at different delays <em>τs</em>.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Testing">Testing<a class="anchor-link" href="#Testing">¶</a></h3>
+<p><a id="testing"></a></p>
+<h3 id="Testing">Testing<a class="anchor-link" href="#Testing">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -13306,7 +13522,9 @@ Fit for shortening: h, slope =  [-0.48707229  0.1514601 ] , cutoff gain 3.069532
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Testing-on-Motion-Clouds">Testing on Motion Clouds<a class="anchor-link" href="#Testing-on-Motion-Clouds">¶</a></h3><p>We use a set of synthetic stimuli, <a href="https://neuralensemble.github.io/MotionClouds/">Motion Clouds</a> which are natural-like random textures for which we can control for velocity, among other parameters. We choose N_PGs for the different possible velocities that will correspond to the labels for the supervised training of our model.</p>
+<p><a id="motion-clouds"></a></p>
+<h3 id="Testing-on-Motion-Clouds">Testing on Motion Clouds<a class="anchor-link" href="#Testing-on-Motion-Clouds">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
+<p>We use a set of synthetic stimuli, <a href="https://neuralensemble.github.io/MotionClouds/">Motion Clouds</a> which are natural-like random textures for which we can control for velocity, among other parameters. We choose N_PGs for the different possible velocities that will correspond to the labels for the supervised training of our model.</p>
 </div>
 </div>
 </div>
@@ -14644,7 +14862,8 @@ B_V=5.000e-01: 14.5%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="Validation-of-the-learning">Validation of the learning<a class="anchor-link" href="#Validation-of-the-learning">¶</a></h3>
+<p><a id="validation"></a></p>
+<h3 id="Validation-of-the-learning">Validation of the learning<a class="anchor-link" href="#Validation-of-the-learning">¶</a></h3><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
@@ -15808,7 +16027,8 @@ For p_B=1.000e+00, accuracy = 83.0%
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="Voil%C3%A0!">Voilà!<a class="anchor-link" href="#Voil%C3%A0!">¶</a></h2>
+<p><a id="voila"></a></p>
+<h2 id="Voil%C3%A0!">Voilà!<a class="anchor-link" href="#Voil%C3%A0!">¶</a></h2><p><a href="#top">↑ back to top</a> · <a href="#contents">contents</a></p>
 </div>
 </div>
 </div>
