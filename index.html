@@ -7820,7 +7820,38 @@ a.anchor-link {
     white-space: normal;
   }
 </style>
-<!-- End of mermaid configuration --></head>
+<!-- End of mermaid configuration --><!-- begin build_docs.py layout fix -->
+<style id="build-docs-layout">
+/*
+ * Layout fix for the tables of the rendered notebook.
+ *
+ * The Jupyter theme applies `table-layout: fixed` to `.jp-RenderedHTMLCommon table`
+ * but leaves `width: auto`, so the browser distributes the width of the table
+ * between the columns using the shrink-to-fit content of the table as a whole. A
+ * table mixing text and MathJax boxes (which are inline blocks and thus cannot
+ * wrap) ends up with one oversized column and headers that no longer match the
+ * cells. A definite width, together with the explicit <col> widths inserted by
+ * build_docs.py, restores a stable grid.
+ */
+.jp-RenderedMarkdown table {
+  width: 100%;
+  table-layout: fixed;
+  margin-left: 0;
+  margin-right: 0;
+}
+/* Keep long runs of code or of url inside their own column. */
+.jp-RenderedMarkdown table td,
+.jp-RenderedMarkdown table th {
+  overflow-wrap: anywhere;
+}
+/* The cells are left aligned, so the headers sit above them instead of
+ * floating in the middle of the column. */
+.jp-RenderedMarkdown table th {
+  text-align: left;
+}
+</style>
+<!-- end build_docs.py layout fix -->
+</head>
 <body class="jp-Notebook" data-jp-theme-light="true" data-jp-theme-name="JupyterLab Light">
 <main>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=211d7cca">
@@ -7856,7 +7887,7 @@ $$</p>
 M(t, r) = \left[ \frac{1 + \cos \pi r}{2} \, \mathbb{1}_{r &lt; 1} \right]^{1/4} \exp\left( -\frac{r^2}{2\,\big(V_{max}(1 - t) + r_0\big)^2} \right),
 $$</p>
 <p>so that the spatial extent of the receptive field grows with the delay: an event that contributes to the detection of a motion at a voxel comes from all the farther away as it is earlier, at a distance bounded by the maximum speed.</p>
-<table>
+<table><colgroup><col style="width: 11%" /><col style="width: 19%" /><col style="width: 25%" /><col style="width: 45%" /></colgroup>
 <thead>
 <tr>
 <th>Symbol</th>
@@ -7969,25 +8000,25 @@ $$</p>
 <td>initial weight of the central synapse at the shortest delay ($+w_c$ for ON, $-w_c$ for OFF)</td>
 </tr>
 <tr>
-<td></td>
+<td>$N_{\mathrm{epochs}}$, $N_{\mathrm{train}}$</td>
 <td><code>N_epochs</code>, <code>N_train</code></td>
 <td>$200$, $80\,000$ (<code>80000//DEBUG</code>)</td>
 <td>number of epochs and of training samples</td>
 </tr>
 <tr>
-<td></td>
+<td>$N_{\mathrm{test}}$</td>
 <td><code>N_test</code></td>
 <td>$200$ (<code>200//DEBUG</code>)</td>
 <td>number of test samples</td>
 </tr>
 <tr>
-<td></td>
+<td>—</td>
 <td><code>seed</code>, <code>seed_train</code></td>
 <td>$1973$, $2023$</td>
 <td>seeds of the world model and of the training</td>
 </tr>
 <tr>
-<td></td>
+<td>—</td>
 <td><code>DEBUG</code></td>
 <td>$1$</td>
 <td>divides the sizes to run a quick test (set to $1$ in production)</td>
