@@ -1,5 +1,5 @@
 default: all
-all: render pdf git
+all: render pdf html git
 ################################################
 # CODE
 ################################################
@@ -18,6 +18,32 @@ run:
 
 render: 
 	$(JN) FastMotionDetection.ipynb
+
+################################################
+# DOCUMENTATION (GitHub Pages)
+################################################
+# The online documentation is the notebook rendered as a single page, served by
+# GitHub Pages at
+# https://spikeai.github.io/2023_GrimaldiPerrinet_HeterogeneousDelaySNN/
+# It reuses the outputs of `make render`, so nothing is recomputed here.
+# `html` builds build/html/index.html, `docs` publishes it on the gh-pages branch.
+BUILD = build/html
+DOC = $(BUILD)/index.html
+# nbconvert without --execute: the page reuses the outputs left by `make render`.
+JH = jupyter nbconvert --to html
+PY = python3
+
+html: $(DOC)
+
+$(DOC): FastMotionDetection.ipynb build_docs.py
+	$(JH) $< --output index.html --output-dir $(@D)
+	$(PY) build_docs.py $@
+
+docs: $(DOC)
+	$(PY) build_docs.py $< --publish
+
+docs-check:
+	$(PY) build_docs.py --check --online
 
 ################################################
 # MANUSCRIPT
